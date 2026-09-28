@@ -82,7 +82,7 @@ Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 51 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 57 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -259,6 +259,43 @@ to catch it); and defectors are still only pushed toward the PTS ~ 0
 logistic midpoint, never the floor. Adversaries that best-respond to PTS's
 empirical prior remain untested.
 
+## Follow-up 4: a stealth (PTS-aware) adversary, and minority-label trust
+
+Follow-up 3 left "adversaries that best-respond to PTS" untested. The
+`whitewash` strategy (`agents.py`) lies *only* when its signal says
+"faulty": it reports "correct" with probability `whitewash_prob`, else is
+honest. Faulty steps are the minority label, so the lie touches few tasks.
+Two findings (14 honest + 8 whitewash, 1500 tasks, mean of 5 seeds):
+
+1. **PTS itself stays incentive-compatible** (a whitewasher earns less than
+   an honest verifier, ~0.22 vs ~0.44 per task at lie prob 0.5), but the
+   *averaged* PTS score used for trust barely notices: average trust weight
+   is still ~0.92 at lie prob 0.5. Trust-weighting therefore does nothing
+   (Brier 0.0046 plain vs 0.0046 trust-weighted).
+2. **Minority-label trust** (`stealth.py`) scores PTS only against peers who
+   reported "faulty", where the `1/p(0)` factor makes a mismatch expensive,
+   and centres trust at half the median verifier's score (no ground truth
+   needed). Whitewasher weight drops to ~0.12 (honest ~1.0).
+
+A subtlety worth recording: down-weighting trades alone *made things
+worse* (Brier 0.0107) -- it fixed faulty steps but left LMSR liquidity `b`
+fixed while total trade mass shrank, so clean steps became under-confident.
+Scaling `b` by mean trust weight (b is an inverse learning rate in the
+no-regret view) fixes it:
+
+| lie prob | plain | avg-PTS trust | minority trust | minority, fixed b |
+|---|---|---|---|---|
+| 0.25 | 0.0022 | 0.0023 | 0.0021 | 0.0029 |
+| 0.50 | 0.0046 | 0.0046 | **0.0023** | 0.0107 |
+| 1.00 | 0.0205 | 0.0097 | **0.0025** | 0.0133 |
+
+All-honest populations are unaffected (0.0017 either way). Caveats:
+calibration-window only, so a whitewasher who is honest until the window
+ends (sleeper + whitewash) is untested; it assumes an honest majority for
+the median baseline; and lie prob 0.25 is too rare to detect from ~450
+calibration tasks. Extending minority trust to the rolling scheme is the
+natural next step.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -295,7 +332,7 @@ explicit about:
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
    here. **Partially addressed** by Follow-up 2 (sleeper and intermittent
-   trust-farming; PTS-best-responding adversaries remain open, see Follow-up 3).
+   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash combos remain open).
 
 ## Citations
 

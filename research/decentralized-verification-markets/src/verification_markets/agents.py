@@ -26,7 +26,7 @@ def generate_tasks(n_tasks: int, corruption_rate: float, rng: random.Random) -> 
     return [0 if rng.random() < corruption_rate else 1 for _ in range(n_tasks)]
 
 
-STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent")
+STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent", "whitewash")
 
 
 @dataclass
@@ -56,6 +56,13 @@ class Verifier:
             rolling trust: defection is spread thin and interleaved with
             honest play, so a decayed PTS average may stay above the trust
             threshold.
+        whitewash: a stealth, PTS-aware adversary. Honest except that
+            when its private signal says "faulty" it reports "correct" with
+            probability ``whitewash_prob``. Faulty steps are the minority
+            label, so this deviation touches few tasks and barely moves an
+            averaged Peer Truth Serum score (and hence trust), yet it is
+            exactly the deviation that lets fraudulent training steps
+            through.
     """
 
     id: int
@@ -64,6 +71,7 @@ class Verifier:
     switch_task: int = 0
     period: int = 100
     defect_fraction: float = 0.5
+    whitewash_prob: float = 0.5
 
     def __post_init__(self) -> None:
         if self.strategy not in STRATEGIES:
@@ -74,6 +82,8 @@ class Verifier:
             raise ValueError("period must be >= 1")
         if not 0.0 <= self.defect_fraction <= 1.0:
             raise ValueError("defect_fraction must be in [0, 1]")
+        if not 0.0 <= self.whitewash_prob <= 1.0:
+            raise ValueError("whitewash_prob must be in [0, 1]")
 
     def is_defecting(self, task_index: int) -> bool:
         """Whether a sleeper / intermittent verifier defects on this task."""
@@ -100,4 +110,6 @@ class Verifier:
         signal = self._observe(ground_truth, rng)
         if self.strategy == "adversarial":
             return 1 - signal
+        if self.strategy == "whitewash" and signal == 0:
+            return 1 if rng.random() < self.whitewash_prob else 0
         return signal  # honest
