@@ -26,7 +26,8 @@ def generate_tasks(n_tasks: int, corruption_rate: float, rng: random.Random) -> 
     return [0 if rng.random() < corruption_rate else 1 for _ in range(n_tasks)]
 
 
-STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent", "whitewash", "late_whitewash")
+STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent", "whitewash", "late_whitewash",
+              "intermittent_whitewash")
 
 
 @dataclass
@@ -67,6 +68,11 @@ class Verifier:
             ``switch_task`` (so calibration-window trust of either kind
             looks honest), then behaves as ``whitewash`` for the rest of the
             stream. Targets calibration-only minority-label trust.
+        intermittent_whitewash: whitewash on an on/off schedule. Honest
+            before ``switch_task``; afterwards, in each ``period``-task cycle
+            it is honest for the first ``1 - defect_fraction`` and behaves as
+            ``whitewash`` for the rest. Targets rolling minority-label trust:
+            honest phases can buy trust back between bursts of lying.
     """
 
     id: int
@@ -98,6 +104,12 @@ class Verifier:
             return phase >= self.period * (1.0 - self.defect_fraction)
         return False
 
+    def _in_burst(self, task_index: int) -> bool:
+        if task_index < self.switch_task:
+            return False
+        phase = (task_index - self.switch_task) % self.period
+        return phase >= self.period * (1.0 - self.defect_fraction)
+
     def _observe(self, ground_truth: int, rng: random.Random) -> int:
         """Private noisy signal: correct w.p. 1 - signal_noise."""
         return ground_truth if rng.random() > self.signal_noise else 1 - ground_truth
@@ -114,8 +126,10 @@ class Verifier:
         signal = self._observe(ground_truth, rng)
         if self.strategy == "adversarial":
             return 1 - signal
-        stealth = self.strategy == "whitewash" or (
-            self.strategy == "late_whitewash" and task_index >= self.switch_task
+        stealth = (
+            self.strategy == "whitewash"
+            or (self.strategy == "late_whitewash" and task_index >= self.switch_task)
+            or (self.strategy == "intermittent_whitewash" and self._in_burst(task_index))
         )
         if stealth and signal == 0:
             return 1 if rng.random() < self.whitewash_prob else 0

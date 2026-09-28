@@ -97,5 +97,38 @@ class TestLateWhitewash(unittest.TestCase):
         self.assertLess(abs(rolling - plain), 5e-4)
 
 
+def _iw_cfg(seed=1, frac=0.5, period=100, n=8, nh=14):
+    return SimulationConfig(
+        n_tasks=1500, n_honest=nh, n_lazy=0, n_colluding=0, n_adversarial=0,
+        n_intermittent_whitewash=n, whitewash_prob=1.0,
+        intermittent_period=period, intermittent_defect_fraction=frac, seed=seed,
+    )
+
+
+class TestIntermittentWhitewash(unittest.TestCase):
+    def test_schedule(self):
+        v = Verifier(0, "intermittent_whitewash", signal_noise=0.0, switch_task=10,
+                     period=100, defect_fraction=0.5, whitewash_prob=1.0)
+        rng = random.Random(0)
+        self.assertEqual(v.report(0, rng, 5), 0)     # before switch: honest
+        self.assertEqual(v.report(0, rng, 20), 0)    # honest half of cycle
+        self.assertEqual(v.report(0, rng, 70), 1)    # burst: lies on faulty
+        self.assertEqual(v.report(1, rng, 70), 1)
+        self.assertEqual(v.report(0, rng, 120), 0)   # next cycle, honest again
+
+    def test_frozen_trust_blind_rolling_helps(self):
+        for seed in (1, 2, 3):
+            r = run_simulation(_iw_cfg(seed))
+            S = r.scoring_tasks
+            frozen = brier(minority_trust_market(r), r, S)
+            rolling = brier(rolling_minority_trust_market(r, 50, 0.5), r, S)
+            self.assertLess(rolling, 0.6 * frozen)
+
+    def test_rolling_no_harm_when_all_honest(self):
+        r = run_simulation(_iw_cfg(1, n=0, nh=22))
+        plain = brier(r.market_price_scoring, r, r.scoring_tasks)
+        self.assertLess(abs(brier(rolling_minority_trust_market(r, 50, 0.5), r, r.scoring_tasks) - plain), 5e-4)
+
+
 if __name__ == "__main__":
     unittest.main()
