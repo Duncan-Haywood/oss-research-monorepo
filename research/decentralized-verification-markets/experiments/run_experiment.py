@@ -129,6 +129,27 @@ def main() -> None:
         bound = theoretical_manipulation_bound(eps)
         print(f"{eps:>24.2f} | {empirical_err:>16.4f} | {bound:>18.4f}")
 
+    print_header("Trust-farming 'sleeper' adversary: frozen vs. rolling trust (5 seeds)")
+    from verification_markets.adaptive import brier, defection_lag, rolling_trust_market  # noqa: E402
+
+    print(f"{'block':>6} {'decay':>6} | {'frozen Brier':>12} | {'rolling Brier':>13} | mean lag (tasks)")
+    for block_size, decay in ((100, 0.5), (50, 0.5), (25, 0.5), (25, 0.2)):
+        frozen, rolling, lags = [], [], []
+        for seed in range(1, 6):
+            cfg = SimulationConfig(
+                n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0,
+                n_adversarial=0, n_sleeper=7, seed=seed,
+            )
+            r = run_simulation(cfg)
+            frozen.append(scoring_window_market_brier_scores(r)["trust_weighted"])
+            rr = rolling_trust_market(r, block_size, decay, seed)
+            rolling.append(brier(rr.market_price, r, r.scoring_tasks))
+            sid = next(v.id for v in r.verifiers if v.strategy == "sleeper")
+            lags.append(defection_lag(rr, sid, r.scoring_tasks[0]))
+        detected = [x for x in lags if x >= 0]
+        lag = f"{sum(detected) / len(detected):.0f} ({len(detected)}/5 detected)" if detected else "never"
+        print(f"{block_size:>6} {decay:>6.1f} | {sum(frozen)/5:>12.4f} | {sum(rolling)/5:>13.4f} | {lag}")
+
 
 if __name__ == "__main__":
     main()
