@@ -82,7 +82,7 @@ Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 42 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 47 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -198,6 +198,38 @@ result already flagged as one-directional: if PTS itself were compromised
 Limitation 4 below notes is unverified), the trust weights it produces would
 be unreliable too.
 
+## Follow-up 2: a trust-farming adversary, and rolling trust (Limitation 4)
+
+Limitation 4 asked whether the trust bootstrap survives a mechanism-aware
+adversary. It does not, against the most obvious one. `agents.py` now has a
+**sleeper** strategy: honest until `switch_task` (default: the end of the
+calibration window), then always reports "correct". Because
+`reputation.py` freezes trust after one calibration window, sleepers earn
+trust weight ~0.99 (indistinguishable from honest agents) and the
+trust-weighted market gains nothing over the plain one.
+
+`adaptive.py` adds **rolling (prequential) trust**: the scoring stream is
+cut into blocks; block *k*'s weights come only from PTS payoffs on earlier
+blocks (still out-of-sample), exponentially decayed by `decay`. Result
+(14 honest + 7 sleepers, 1500 tasks, mean of 5 seeds; run
+`experiments/run_experiment.py`):
+
+| block size | decay | frozen-trust Brier | rolling-trust Brier | mean detection lag |
+|---|---|---|---|---|
+| 100 | 0.5 | 0.0169 | 0.0114 | 700 tasks (3/5 seeds) |
+| 50 | 0.5 | 0.0169 | 0.0108 | 320 (5/5) |
+| 25 | 0.5 | 0.0169 | 0.0110 | 170 (5/5) |
+| 25 | 0.2 | 0.0169 | 0.0129 | 90 (5/5) |
+
+Faster forgetting detects defection sooner but is noisier for honest
+agents (Brier worsens at decay 0.2) -- the online-learning noise/latency
+trade-off. Caveats: trust is a lagging signal, so every sleeper still gets
+a window of undetected defection; a defector settles at weight ~0.5 (PTS ~
+0 for uninformative reporters), not the floor; and only this one adaptive
+strategy is tested. Adversaries that best-respond to PTS's prior estimate,
+or that defect intermittently to stay above the trust threshold, remain
+untested.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -233,7 +265,8 @@ explicit about:
    window PTS score just above the trust floor to blunt the Follow-up
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
-   here.
+   here. **Partially addressed** by Follow-up 2 (sleeper / trust-farming
+   only; intermittent and PTS-best-responding adversaries remain open).
 
 ## Citations
 

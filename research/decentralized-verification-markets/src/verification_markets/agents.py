@@ -26,7 +26,7 @@ def generate_tasks(n_tasks: int, corruption_rate: float, rng: random.Random) -> 
     return [0 if rng.random() < corruption_rate else 1 for _ in range(n_tasks)]
 
 
-STRATEGIES = ("honest", "lazy", "colluding", "adversarial")
+STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper")
 
 
 @dataclass
@@ -44,11 +44,17 @@ class Verifier:
         adversarial: observes the true signal but reports its negation,
             actively trying to flip the aggregate verdict (e.g. to get a
             fraudulent training update accepted).
+        sleeper: a mechanism-aware trust-farming adversary. Reports
+            honestly for tasks before ``switch_task`` (so any trust weight
+            bootstrapped from that early window looks honest), then always
+            reports "correct" like a colluder. Targets the one-shot
+            calibration window used by ``reputation.py``.
     """
 
     id: int
     strategy: str
     signal_noise: float = 0.1
+    switch_task: int = 0
 
     def __post_init__(self) -> None:
         if self.strategy not in STRATEGIES:
@@ -60,7 +66,11 @@ class Verifier:
         """Private noisy signal: correct w.p. 1 - signal_noise."""
         return ground_truth if rng.random() > self.signal_noise else 1 - ground_truth
 
-    def report(self, ground_truth: int, rng: random.Random) -> int:
+    def report(self, ground_truth: int, rng: random.Random, task_index: int = 0) -> int:
+        if self.strategy == "sleeper" and task_index >= self.switch_task:
+            # Still draw the signal so the rng stream matches honest play.
+            self._observe(ground_truth, rng)
+            return 1
         if self.strategy == "lazy":
             return 1
         if self.strategy == "colluding":

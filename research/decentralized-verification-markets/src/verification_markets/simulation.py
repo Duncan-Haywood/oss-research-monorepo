@@ -53,6 +53,9 @@ class SimulationConfig:
     n_lazy: int = 3
     n_colluding: int = 3
     n_adversarial: int = 2
+    n_sleeper: int = 0
+    # Task index at which sleepers defect; None -> end of calibration window.
+    sleeper_switch_task: int | None = None
     market_liquidity: float = 5.0
     market_trade_size: float = 1.0
     audit_fraction: float = 0.05
@@ -100,6 +103,12 @@ def _build_verifiers(config: SimulationConfig) -> List[Verifier]:
     for _ in range(config.n_adversarial):
         verifiers.append(Verifier(vid, "adversarial", config.signal_noise))
         vid += 1
+    switch = config.sleeper_switch_task
+    if switch is None:
+        switch = int(round(config.n_tasks * config.calibration_fraction))
+    for _ in range(config.n_sleeper):
+        verifiers.append(Verifier(vid, "sleeper", config.signal_noise, switch_task=switch))
+        vid += 1
     return verifiers
 
 
@@ -112,7 +121,7 @@ def run_simulation(config: SimulationConfig) -> SimulationResult:
     reports: Dict[int, Dict[int, int]] = {v.id: {} for v in verifiers}
     for t, truth in enumerate(ground_truth):
         for v in verifiers:
-            reports[v.id][t] = v.report(truth, rng)
+            reports[v.id][t] = v.report(truth, rng, t)
 
     all_reports_flat = [r for by_task in reports.values() for r in by_task.values()]
     global_prior = empirical_prior(all_reports_flat)
