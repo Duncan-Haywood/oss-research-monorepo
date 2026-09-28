@@ -8,6 +8,7 @@ from verification_markets.stealth import (
     minority_pts_scores,
     minority_trust_market,
     minority_trust_weights,
+    rolling_minority_trust_market,
 )
 
 
@@ -59,6 +60,41 @@ class TestMinorityTrust(unittest.TestCase):
         fixed = brier(minority_trust_market(r, scale_liquidity=False), r, r.scoring_tasks)
         scaled = brier(minority_trust_market(r, scale_liquidity=True), r, r.scoring_tasks)
         self.assertLess(scaled, fixed)
+
+
+def _late_cfg(seed=1, prob=1.0, nl=8, nh=14):
+    return SimulationConfig(
+        n_tasks=1500, n_honest=nh, n_lazy=0, n_colluding=0, n_adversarial=0,
+        n_late_whitewash=nl, whitewash_prob=prob, seed=seed,
+    )
+
+
+class TestLateWhitewash(unittest.TestCase):
+    def test_honest_before_switch_then_stealth(self):
+        v = Verifier(0, "late_whitewash", signal_noise=0.0, switch_task=10, whitewash_prob=1.0)
+        rng = random.Random(0)
+        self.assertEqual(v.report(0, rng, 5), 0)
+        self.assertEqual(v.report(0, rng, 10), 1)
+        self.assertEqual(v.report(1, rng, 10), 1)
+
+    def test_frozen_minority_trust_is_fooled(self):
+        r = run_simulation(_late_cfg())
+        ids = [v.id for v in r.verifiers if v.strategy == "late_whitewash"]
+        mw = minority_trust_weights(minority_pts_scores(r, r.calibration_tasks))
+        self.assertGreater(sum(mw[i] for i in ids) / len(ids), 0.8)
+
+    def test_rolling_minority_trust_beats_frozen(self):
+        for seed in (1, 2, 3):
+            r = run_simulation(_late_cfg(seed))
+            frozen = brier(minority_trust_market(r), r, r.scoring_tasks)
+            rolling = brier(rolling_minority_trust_market(r, 100, 0.5), r, r.scoring_tasks)
+            self.assertLess(rolling, 0.5 * frozen)
+
+    def test_rolling_no_harm_when_all_honest(self):
+        r = run_simulation(_late_cfg(1, nl=0, nh=22))
+        plain = brier(r.market_price_scoring, r, r.scoring_tasks)
+        rolling = brier(rolling_minority_trust_market(r, 100, 0.5), r, r.scoring_tasks)
+        self.assertLess(abs(rolling - plain), 5e-4)
 
 
 if __name__ == "__main__":

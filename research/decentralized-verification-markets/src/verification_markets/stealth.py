@@ -92,3 +92,49 @@ def minority_trust_market(
             m.trade(result.reports[i][t], reputation_weighted_trade_size(cfg.market_trade_size, w[i]))
         prices.append(m.price_yes())
     return prices
+
+
+def rolling_minority_trust_market(
+    result: SimulationResult,
+    block_size: int = 50,
+    decay: float = 0.5,
+    recovery_decay: float | None = None,
+    steepness: float = 12.0,
+    scale_liquidity: bool = True,
+    seed: int = 0,
+) -> List[float]:
+    """Rolling version of ``minority_trust_market``: block ``k`` is traded
+    with weights computed only from minority-label PTS scores of earlier
+    blocks (the calibration window seeds block 0), exponentially decayed.
+    Defeats ``late_whitewash`` adversaries that are honest through the
+    calibration window, which the frozen scheme cannot see.
+
+    ``recovery_decay`` gives the same fast-down / slow-up asymmetry as
+    ``adaptive.rolling_trust_market``. Per-block scores are noisy because a
+    block holds few faulty steps, so very small blocks are unreliable."""
+    import random
+
+    up = decay if recovery_decay is None else recovery_decay
+    cfg = result.config
+    rng = random.Random(cfg.seed + seed + 11)
+    ids = [v.id for v in result.verifiers]
+    running = minority_pts_scores(result, result.calibration_tasks)
+    scoring = result.scoring_tasks
+    prices: List[float] = []
+    for b in range(0, len(scoring), block_size):
+        block = scoring[b : b + block_size]
+        w = minority_trust_weights(running, steepness, cfg.trust_floor)
+        mass = sum(w.values()) / len(w) if scale_liquidity else 1.0
+        for t in block:
+            m = LMSRMarketMaker(liquidity=cfg.market_liquidity * mass)
+            order = list(ids)
+            rng.shuffle(order)
+            for i in order:
+                m.trade(result.reports[i][t], reputation_weighted_trade_size(cfg.market_trade_size, w[i]))
+            prices.append(m.price_yes())
+        fresh = minority_pts_scores(result, block)
+        running = {
+            i: (d := decay if fresh[i] < running[i] else up) * running[i] + (1 - d) * fresh[i]
+            for i in ids
+        }
+    return prices

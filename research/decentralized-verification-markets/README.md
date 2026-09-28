@@ -82,7 +82,7 @@ Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 57 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 61 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -296,6 +296,32 @@ the median baseline; and lie prob 0.25 is too rare to detect from ~450
 calibration tasks. Extending minority trust to the rolling scheme is the
 natural next step.
 
+## Follow-up 5: sleeper + whitewash, and rolling minority-label trust
+
+Follow-up 4 named two open items: a whitewasher that is honest until the
+calibration window ends, and extending minority trust to the rolling scheme.
+The `late_whitewash` strategy (`agents.py`) is exactly that combination
+(honest before `switch_task`, then `whitewash`). As predicted, calibration-
+only minority trust is completely blind to it (Brier identical to plain).
+`stealth.rolling_minority_trust_market` re-scores minority-label PTS on each
+block, exponentially decayed, with liquidity scaled to trust mass. Result
+(14 honest + 8 late_whitewash, 1500 tasks, block 100, decay 0.5, mean of 5
+seeds, scoring-window Brier):
+
+| lie prob | plain | frozen minority | rolling | rolling, asymmetric (recovery 0.9) |
+|---|---|---|---|---|
+| 0.5 | 0.0046 | 0.0046 | **0.0026** | 0.0028 |
+| 1.0 | 0.0200 | 0.0200 | **0.0043** | 0.0043 |
+
+That is a 43% and 79% reduction. Caveats: (a) each block holds few faulty
+steps, so per-block minority scores are noisy and small blocks are
+unreliable (the asymmetric variant gave no gain here since a whitewasher has
+no honest phase to exploit); (b) detection still lags by roughly a block;
+(c) the median baseline still assumes an honest majority; (d) a *intermittent*
+whitewasher and a whitewasher that adapts its lie rate to the trust weight
+remain untested; (e) all-honest populations are unaffected in the test
+suite (|delta Brier| < 5e-4).
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -332,7 +358,7 @@ explicit about:
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
    here. **Partially addressed** by Follow-up 2 (sleeper and intermittent
-   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash combos remain open).
+   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash and lie-rate-adaptive whitewash remain open).
 
 ## Citations
 

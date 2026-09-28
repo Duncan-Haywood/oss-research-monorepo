@@ -195,6 +195,24 @@ def main() -> None:
             acc[3] += brier(minority_trust_market(r, scale_liquidity=False), r, r.scoring_tasks)
         print(f"{prob:>8.2f} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 13, 14, 16))))
 
+    print_header("Sleeper+whitewash ('late_whitewash'): frozen vs. rolling minority trust (5 seeds)")
+    from verification_markets.stealth import rolling_minority_trust_market  # noqa: E402
+
+    print("14 honest + 8 late_whitewash; Brier on scoring window")
+    print(f"{'lie prob':>8} | {'plain':>7} | {'frozen minority':>15} | {'rolling sym':>11} | {'rolling asym':>12}")
+    for prob in (0.5, 1.0):
+        acc = [0.0] * 4
+        for seed in range(1, 6):
+            r = run_simulation(SimulationConfig(
+                n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0, n_adversarial=0,
+                n_late_whitewash=8, whitewash_prob=prob, seed=seed))
+            S = r.scoring_tasks
+            acc[0] += brier(r.market_price_scoring, r, S)
+            acc[1] += brier(minority_trust_market(r), r, S)
+            acc[2] += brier(rolling_minority_trust_market(r, 100, 0.5), r, S)
+            acc[3] += brier(rolling_minority_trust_market(r, 100, 0.5, recovery_decay=0.9), r, S)
+        print(f"{prob:>8.2f} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 15, 11, 12))))
+
 
 if __name__ == "__main__":
     main()
