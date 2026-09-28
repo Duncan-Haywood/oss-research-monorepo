@@ -213,6 +213,25 @@ def main() -> None:
             acc[3] += brier(rolling_minority_trust_market(r, 100, 0.5, recovery_decay=0.9), r, S)
         print(f"{prob:>8.2f} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 15, 11, 12))))
 
+    print_header("Intermittent whitewash: frozen vs. rolling minority trust (5 seeds)")
+    print("14 honest + 8 intermittent_whitewash (lie prob 1.0); Brier on scoring window")
+    print(f"{'defect':>6} {'period':>6} | {'plain':>7} | {'frozen':>7} | {'roll b100':>9} | {'roll b50':>8} | {'asym b100':>9}")
+    for frac in (0.25, 0.5, 0.75):
+        for period in (100, 300):
+            acc = [0.0] * 5
+            for seed in range(1, 6):
+                r = run_simulation(SimulationConfig(
+                    n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0, n_adversarial=0,
+                    n_intermittent_whitewash=8, whitewash_prob=1.0,
+                    intermittent_period=period, intermittent_defect_fraction=frac, seed=seed))
+                S = r.scoring_tasks
+                acc[0] += brier(r.market_price_scoring, r, S)
+                acc[1] += brier(minority_trust_market(r), r, S)
+                acc[2] += brier(rolling_minority_trust_market(r, 100, 0.5), r, S)
+                acc[3] += brier(rolling_minority_trust_market(r, 50, 0.5), r, S)
+                acc[4] += brier(rolling_minority_trust_market(r, 100, 0.2, recovery_decay=0.9), r, S)
+            print(f"{frac:>6.2f} {period:>6} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 7, 9, 8, 9))))
+
 
 if __name__ == "__main__":
     main()

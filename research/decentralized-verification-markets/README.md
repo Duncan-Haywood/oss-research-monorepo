@@ -82,7 +82,7 @@ Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 61 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 64 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -322,6 +322,46 @@ whitewasher and a whitewasher that adapts its lie rate to the trust weight
 remain untested; (e) all-honest populations are unaffected in the test
 suite (|delta Brier| < 5e-4).
 
+## Follow-up 6: intermittent whitewash, and a lie-rate sweep
+
+Follow-up 5 left an *intermittent* whitewasher and a lie-rate-adaptive one
+untested. `intermittent_whitewash` (`agents.py`) is honest before
+`switch_task`, then in each `period`-task cycle is honest for the first
+`1 - defect_fraction` and whitewashes (lie prob 1.0) for the rest. Frozen
+minority trust is blind to it, as expected. Rolling minority trust
+(`stealth.rolling_minority_trust_market`) handles it (14 honest + 8
+intermittent whitewashers, 1500 tasks, mean of 5 seeds, scoring-window Brier;
+reproduce with `experiments/run_experiment.py`):
+
+| defect frac | period | plain = frozen | rolling b100 | rolling b50 | asym b100 |
+|---|---|---|---|---|---|
+| 0.25 | 100 | 0.0064 | 0.0058 | 0.0059 | 0.0053 |
+| 0.25 | 300 | 0.0056 | 0.0057 | 0.0052 | 0.0042 |
+| 0.50 | 100 | 0.0112 | 0.0057 | 0.0041 | 0.0046 |
+| 0.50 | 300 | 0.0099 | 0.0047 | 0.0044 | 0.0039 |
+| 0.75 | 100 | 0.0162 | 0.0043 | 0.0038 | 0.0043 |
+| 0.75 | 300 | 0.0150 | 0.0048 | 0.0039 | 0.0048 |
+
+Unlike the trust-farming adversary of Follow-up 3, honest phases do not buy
+this attacker much, because minority-label PTS is so sharply penalised during
+a burst that one bad block outweighs a good one; asymmetric decay helps only
+at short bursts (0.25), where the signal is weakest. Residual damage is at
+the noise floor of per-block detection: at 0.25 defection rolling trust
+gives little or nothing.
+
+**Lie-rate sweep (a static stand-in for a rate-adaptive adversary).** A
+truly adaptive attacker needs to observe its own trust weight, which the
+simulator does not expose. As a proxy, sweep `whitewash_prob` for
+`late_whitewash` (block 50 / 100, decay 0.5): plain Brier 0.0018 / 0.0023 /
+0.0046 / 0.0099 / 0.0200 at lie prob 0.1 / 0.25 / 0.5 / 0.75 / 1.0, versus
+rolling (block 100) 0.0018 / 0.0022 / 0.0026 / 0.0032 / 0.0043. Damage is
+monotone in lie rate under rolling trust, so there is no interior sweet
+spot to exploit *at this scale*: throttling below ~0.25 just evades
+detection at the cost of nearly all the damage. This does not rule out a
+dynamic adversary that modulates its rate against the live trust weight;
+that (and a whitewasher that recruits enough peers to break the honest-median
+baseline) remain open.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -358,7 +398,7 @@ explicit about:
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
    here. **Partially addressed** by Follow-up 2 (sleeper and intermittent
-   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash and lie-rate-adaptive whitewash remain open).
+   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash addressed in Follow-up 6, with a static lie-rate sweep; a truly trust-observing adaptive adversary remains open).
 
 ## Citations
 
