@@ -82,7 +82,7 @@ Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 47 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 51 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -230,6 +230,35 @@ strategy is tested. Adversaries that best-respond to PTS's prior estimate,
 or that defect intermittently to stay above the trust threshold, remain
 untested.
 
+## Follow-up 3: an intermittent adversary, and asymmetric rolling trust
+
+Follow-up 2 left "defect intermittently to stay above the trust threshold"
+untested. `agents.py` now has an **intermittent** strategy: honest through
+the calibration window, then in every `period`-task cycle honest for the
+first `1 - defect_fraction` and always-"correct" for the rest. Against
+symmetric rolling trust (Follow-up 2), honest phases buy trust back, so the
+defense barely helps (12 honest + 10 intermittent, period 100, block 50,
+mean of 5 seeds, scoring-window Brier):
+
+| defect frac | plain | frozen | symmetric rolling (decay 0.5) | asymmetric rolling |
+|---|---|---|---|---|
+| 0.25 | 0.0119 | 0.0120 | 0.0119 | 0.0119 |
+| 0.50 | 0.0214 | 0.0214 | 0.0210 | **0.0176** |
+| 0.75 | 0.0309 | 0.0309 | 0.0265 | **0.0217** |
+
+`rolling_trust_market(..., decay=0.2, recovery_decay=0.9)` is a
+"fast down, slow up" update: a block scoring below the running average is
+absorbed with `decay`, one scoring above it with the slower
+`recovery_decay`. This is the usual asymmetry in adversarial online
+learning (punish quickly, forgive slowly). It cuts the Brier excess by
+~18% at 0.5 and ~30% at 0.75 defection. Costs and caveats: on an
+all-honest population it raises Brier from 0.0017 to 0.0019 (honest noise
+now gets punished faster than it is forgiven); at 0.25 defection it does
+nothing measurable (little damage to prevent, and per-block PTS is too noisy
+to catch it); and defectors are still only pushed toward the PTS ~ 0
+logistic midpoint, never the floor. Adversaries that best-respond to PTS's
+empirical prior remain untested.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -265,8 +294,8 @@ explicit about:
    window PTS score just above the trust floor to blunt the Follow-up
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
-   here. **Partially addressed** by Follow-up 2 (sleeper / trust-farming
-   only; intermittent and PTS-best-responding adversaries remain open).
+   here. **Partially addressed** by Follow-up 2 (sleeper and intermittent
+   trust-farming; PTS-best-responding adversaries remain open, see Follow-up 3).
 
 ## Citations
 

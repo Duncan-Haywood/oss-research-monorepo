@@ -150,6 +150,33 @@ def main() -> None:
         lag = f"{sum(detected) / len(detected):.0f} ({len(detected)}/5 detected)" if detected else "never"
         print(f"{block_size:>6} {decay:>6.1f} | {sum(frozen)/5:>12.4f} | {sum(rolling)/5:>13.4f} | {lag}")
 
+    print_header("Intermittent adversary: symmetric vs. asymmetric rolling trust (5 seeds)")
+    print("12 honest + 10 intermittent (period 100, block 50). asym = decay 0.2 down / 0.9 up")
+    print(f"{'defect frac':>11} | {'plain':>7} | {'frozen':>7} | {'sym roll':>8} | {'asym roll':>9} | honest-only sym / asym")
+    for frac in (0.25, 0.5, 0.75):
+        acc = {k: 0.0 for k in ("plain", "frozen", "sym", "asym", "h_sym", "h_asym")}
+        for seed in range(1, 6):
+            cfg = SimulationConfig(
+                n_tasks=1500, n_honest=12, n_lazy=0, n_colluding=0, n_adversarial=0,
+                n_intermittent=10, intermittent_period=100,
+                intermittent_defect_fraction=frac, seed=seed,
+            )
+            r = run_simulation(cfg)
+            sc = scoring_window_market_brier_scores(r)
+            acc["plain"] += sc["plain"]
+            acc["frozen"] += sc["trust_weighted"]
+            acc["sym"] += brier(rolling_trust_market(r, 50, 0.5, seed).market_price, r, r.scoring_tasks)
+            acc["asym"] += brier(
+                rolling_trust_market(r, 50, 0.2, seed, recovery_decay=0.9).market_price, r, r.scoring_tasks)
+            h = run_simulation(SimulationConfig(n_tasks=1500, n_honest=22, n_lazy=0, n_colluding=0,
+                                                n_adversarial=0, seed=seed))
+            acc["h_sym"] += brier(rolling_trust_market(h, 50, 0.5, seed).market_price, h, h.scoring_tasks)
+            acc["h_asym"] += brier(
+                rolling_trust_market(h, 50, 0.2, seed, recovery_decay=0.9).market_price, h, h.scoring_tasks)
+        a = {k: v / 5 for k, v in acc.items()}
+        print(f"{frac:>11.2f} | {a['plain']:>7.4f} | {a['frozen']:>7.4f} | {a['sym']:>8.4f} | "
+              f"{a['asym']:>9.4f} | {a['h_sym']:.4f} / {a['h_asym']:.4f}")
+
 
 if __name__ == "__main__":
     main()

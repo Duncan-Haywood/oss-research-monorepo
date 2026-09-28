@@ -52,12 +52,23 @@ def rolling_trust_market(
     block_size: int = 50,
     decay: float = 0.5,
     seed: int = 0,
+    recovery_decay: float | None = None,
 ) -> RollingTrustResult:
     """Re-run the trust-weighted LMSR over ``result.scoring_tasks`` with
     per-block trust from exponentially-decayed PTS scores of prior blocks
-    (the calibration window seeds block 0)."""
+    (the calibration window seeds block 0).
+
+    ``recovery_decay`` makes the update asymmetric ("fast down, slow up"):
+    ``decay`` is used when a verifier's fresh block score is *below* its
+    running score (bad news is absorbed quickly), ``recovery_decay`` when
+    it is above (good news is absorbed slowly). ``None`` -> symmetric.
+    Aimed at intermittent adversaries, which exploit symmetric averaging by
+    letting honest phases buy back trust."""
     if not 0.0 <= decay <= 1.0:
         raise ValueError("decay must be in [0, 1]")
+    if recovery_decay is not None and not 0.0 <= recovery_decay <= 1.0:
+        raise ValueError("recovery_decay must be in [0, 1]")
+    up = decay if recovery_decay is None else recovery_decay
     cfg = result.config
     rng = random.Random(seed)
     ids = [v.id for v in result.verifiers]
@@ -85,7 +96,10 @@ def rolling_trust_market(
             prices.append(market.price_yes())
         # Fold this block's (now-observed) behavior into the running score.
         fresh = _block_pts_scores(result, block, rng)
-        running = {i: decay * running[i] + (1 - decay) * fresh[i] for i in ids}
+        running = {
+            i: (d := decay if fresh[i] < running[i] else up) * running[i] + (1 - d) * fresh[i]
+            for i in ids
+        }
     return RollingTrustResult(starts, history, prices)
 
 

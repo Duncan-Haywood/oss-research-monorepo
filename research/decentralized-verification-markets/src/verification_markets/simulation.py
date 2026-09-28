@@ -54,6 +54,9 @@ class SimulationConfig:
     n_colluding: int = 3
     n_adversarial: int = 2
     n_sleeper: int = 0
+    n_intermittent: int = 0
+    intermittent_period: int = 100
+    intermittent_defect_fraction: float = 0.5
     # Task index at which sleepers defect; None -> end of calibration window.
     sleeper_switch_task: int | None = None
     market_liquidity: float = 5.0
@@ -108,6 +111,15 @@ def _build_verifiers(config: SimulationConfig) -> List[Verifier]:
         switch = int(round(config.n_tasks * config.calibration_fraction))
     for _ in range(config.n_sleeper):
         verifiers.append(Verifier(vid, "sleeper", config.signal_noise, switch_task=switch))
+        vid += 1
+    for _ in range(config.n_intermittent):
+        verifiers.append(
+            Verifier(
+                vid, "intermittent", config.signal_noise, switch_task=switch,
+                period=config.intermittent_period,
+                defect_fraction=config.intermittent_defect_fraction,
+            )
+        )
         vid += 1
     return verifiers
 
