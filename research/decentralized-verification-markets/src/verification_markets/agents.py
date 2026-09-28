@@ -26,7 +26,7 @@ def generate_tasks(n_tasks: int, corruption_rate: float, rng: random.Random) -> 
     return [0 if rng.random() < corruption_rate else 1 for _ in range(n_tasks)]
 
 
-STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper")
+STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent")
 
 
 @dataclass
@@ -49,25 +49,47 @@ class Verifier:
             bootstrapped from that early window looks honest), then always
             reports "correct" like a colluder. Targets the one-shot
             calibration window used by ``reputation.py``.
+        intermittent: an on/off trust-farming adversary. Honest before
+            ``switch_task``; afterwards, in every ``period``-task cycle it
+            reports honestly for the first ``(1 - defect_fraction)`` of the
+            cycle and always reports "correct" for the rest. Targets
+            rolling trust: defection is spread thin and interleaved with
+            honest play, so a decayed PTS average may stay above the trust
+            threshold.
     """
 
     id: int
     strategy: str
     signal_noise: float = 0.1
     switch_task: int = 0
+    period: int = 100
+    defect_fraction: float = 0.5
 
     def __post_init__(self) -> None:
         if self.strategy not in STRATEGIES:
             raise ValueError(f"unknown strategy: {self.strategy!r}")
         if not 0.0 <= self.signal_noise < 0.5:
             raise ValueError("signal_noise must be in [0, 0.5)")
+        if self.period < 1:
+            raise ValueError("period must be >= 1")
+        if not 0.0 <= self.defect_fraction <= 1.0:
+            raise ValueError("defect_fraction must be in [0, 1]")
+
+    def is_defecting(self, task_index: int) -> bool:
+        """Whether a sleeper / intermittent verifier defects on this task."""
+        if self.strategy == "sleeper":
+            return task_index >= self.switch_task
+        if self.strategy == "intermittent" and task_index >= self.switch_task:
+            phase = (task_index - self.switch_task) % self.period
+            return phase >= self.period * (1.0 - self.defect_fraction)
+        return False
 
     def _observe(self, ground_truth: int, rng: random.Random) -> int:
         """Private noisy signal: correct w.p. 1 - signal_noise."""
         return ground_truth if rng.random() > self.signal_noise else 1 - ground_truth
 
     def report(self, ground_truth: int, rng: random.Random, task_index: int = 0) -> int:
-        if self.strategy == "sleeper" and task_index >= self.switch_task:
+        if self.is_defecting(task_index):
             # Still draw the signal so the rng stream matches honest play.
             self._observe(ground_truth, rng)
             return 1
