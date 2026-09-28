@@ -26,7 +26,7 @@ def generate_tasks(n_tasks: int, corruption_rate: float, rng: random.Random) -> 
     return [0 if rng.random() < corruption_rate else 1 for _ in range(n_tasks)]
 
 
-STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent", "whitewash")
+STRATEGIES = ("honest", "lazy", "colluding", "adversarial", "sleeper", "intermittent", "whitewash", "late_whitewash")
 
 
 @dataclass
@@ -63,6 +63,10 @@ class Verifier:
             averaged Peer Truth Serum score (and hence trust), yet it is
             exactly the deviation that lets fraudulent training steps
             through.
+        late_whitewash: sleeper + whitewash. Fully honest before
+            ``switch_task`` (so calibration-window trust of either kind
+            looks honest), then behaves as ``whitewash`` for the rest of the
+            stream. Targets calibration-only minority-label trust.
     """
 
     id: int
@@ -110,6 +114,9 @@ class Verifier:
         signal = self._observe(ground_truth, rng)
         if self.strategy == "adversarial":
             return 1 - signal
-        if self.strategy == "whitewash" and signal == 0:
+        stealth = self.strategy == "whitewash" or (
+            self.strategy == "late_whitewash" and task_index >= self.switch_task
+        )
+        if stealth and signal == 0:
             return 1 if rng.random() < self.whitewash_prob else 0
         return signal  # honest

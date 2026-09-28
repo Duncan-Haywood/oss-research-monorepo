@@ -56,6 +56,7 @@ class SimulationConfig:
     n_sleeper: int = 0
     n_intermittent: int = 0
     n_whitewash: int = 0
+    n_late_whitewash: int = 0
     whitewash_prob: float = 0.5
     intermittent_period: int = 100
     intermittent_defect_fraction: float = 0.5
@@ -126,6 +127,14 @@ def _build_verifiers(config: SimulationConfig) -> List[Verifier]:
     for _ in range(config.n_whitewash):
         verifiers.append(
             Verifier(vid, "whitewash", config.signal_noise, whitewash_prob=config.whitewash_prob)
+        )
+        vid += 1
+    for _ in range(config.n_late_whitewash):
+        verifiers.append(
+            Verifier(
+                vid, "late_whitewash", config.signal_noise, switch_task=switch,
+                whitewash_prob=config.whitewash_prob,
+            )
         )
         vid += 1
     return verifiers
