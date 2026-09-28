@@ -232,6 +232,30 @@ def main() -> None:
                 acc[4] += brier(rolling_minority_trust_market(r, 100, 0.2, recovery_decay=0.9), r, S)
             print(f"{frac:>6.2f} {period:>6} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 7, 9, 8, 9))))
 
+    print_header("Closed-loop (trust-observing) whitewash adversary vs. rolling minority trust (5 seeds)")
+    from verification_markets import closed_loop as cl  # noqa: E402
+
+    print("14 honest + 8 adaptive whitewashers, block 100, decay 0.5; scoring-window Brier")
+    print(f"{'controller':>14} | {'lie rate':>8} | {'plain':>7} | {'rolling':>7} | {'missed fraud':>12} | {'adv weight':>10}")
+    ctls = [
+        ("fixed 0.25", lambda: cl.fixed(0.25)), ("fixed 0.50", lambda: cl.fixed(0.5)),
+        ("fixed 1.00", lambda: cl.fixed(1.0)), ("threshold", lambda: cl.threshold()),
+        ("proportional1", lambda: cl.proportional(1.0, 0.1)), ("proportional2", lambda: cl.proportional(2.0, 0.2)),
+    ]
+    for name, ctl in ctls:
+        acc = [0.0] * 5
+        for seed in range(1, 6):
+            r = run_simulation(SimulationConfig(
+                n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0, n_adversarial=0,
+                n_late_whitewash=8, whitewash_prob=0.0, seed=seed))
+            adv = [v.id for v in r.verifiers if v.strategy == "late_whitewash"]
+            o = cl.run_closed_loop(r, adv, ctl, block_size=100, decay=0.5)
+            S = r.scoring_tasks
+            for k, x in enumerate((o.lie_rate, brier(o.plain_prices, r, S), brier(o.prices, r, S),
+                                   o.missed_fraud, sum(o.adv_weight_history) / len(o.adv_weight_history))):
+                acc[k] += x
+        print(f"{name:>14} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (8, 7, 7, 12, 10))))
+
 
 if __name__ == "__main__":
     main()
