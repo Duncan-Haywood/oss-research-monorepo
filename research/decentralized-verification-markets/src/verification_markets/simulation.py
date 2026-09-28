@@ -55,6 +55,8 @@ class SimulationConfig:
     n_adversarial: int = 2
     n_sleeper: int = 0
     n_intermittent: int = 0
+    n_whitewash: int = 0
+    whitewash_prob: float = 0.5
     intermittent_period: int = 100
     intermittent_defect_fraction: float = 0.5
     # Task index at which sleepers defect; None -> end of calibration window.
@@ -119,6 +121,11 @@ def _build_verifiers(config: SimulationConfig) -> List[Verifier]:
                 period=config.intermittent_period,
                 defect_fraction=config.intermittent_defect_fraction,
             )
+        )
+        vid += 1
+    for _ in range(config.n_whitewash):
+        verifiers.append(
+            Verifier(vid, "whitewash", config.signal_noise, whitewash_prob=config.whitewash_prob)
         )
         vid += 1
     return verifiers

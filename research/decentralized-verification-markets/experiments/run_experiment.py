@@ -177,6 +177,24 @@ def main() -> None:
         print(f"{frac:>11.2f} | {a['plain']:>7.4f} | {a['frozen']:>7.4f} | {a['sym']:>8.4f} | "
               f"{a['asym']:>9.4f} | {a['h_sym']:.4f} / {a['h_asym']:.4f}")
 
+    print_header("Stealth 'whitewash' adversary: averaged vs. minority-label trust (5 seeds)")
+    from verification_markets.stealth import minority_trust_market  # noqa: E402
+
+    print("14 honest + 8 whitewash; Brier on scoring window")
+    print(f"{'lie prob':>8} | {'plain':>7} | {'avg-PTS trust':>13} | {'minority trust':>14} | {'fixed-b minority':>16}")
+    for prob in (0.25, 0.5, 1.0):
+        acc = [0.0] * 4
+        for seed in range(1, 6):
+            r = run_simulation(SimulationConfig(
+                n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0, n_adversarial=0,
+                n_whitewash=8, whitewash_prob=prob, seed=seed))
+            sc = scoring_window_market_brier_scores(r)
+            acc[0] += sc["plain"]
+            acc[1] += sc["trust_weighted"]
+            acc[2] += brier(minority_trust_market(r), r, r.scoring_tasks)
+            acc[3] += brier(minority_trust_market(r, scale_liquidity=False), r, r.scoring_tasks)
+        print(f"{prob:>8.2f} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 13, 14, 16))))
+
 
 if __name__ == "__main__":
     main()
