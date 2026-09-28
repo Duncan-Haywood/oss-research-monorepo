@@ -362,6 +362,50 @@ dynamic adversary that modulates its rate against the live trust weight;
 that (and a whitewasher that recruits enough peers to break the honest-median
 baseline) remain open.
 
+## Follow-up 7: a trust-observing (closed-loop) adversary
+
+Follow-up 6 could only sweep a *static* lie rate, because reports were
+generated before any mechanism ran. `closed_loop.py` closes the loop: block
+`k`'s reports are generated after the mechanism has computed block `k`'s
+weights (from blocks `< k`, as in `rolling_minority_trust_market`), and each
+of 8 whitewashers picks its lie probability from its *own* weight -- a
+white-box adversary, the worst case when weights are public on-chain.
+Controllers: `fixed(p)`; `threshold` (lie always until weight < 0.3, stop
+until it recovers to 0.8); `proportional(gain, w_min)` (`p = gain*(w - w_min)`
+clipped). 14 honest + 8 adversaries, 1500 tasks, block 100, decay 0.5, mean
+of 5 seeds, scoring-window Brier ("missed fraud" = faulty steps priced > 0.5):
+
+| controller | realised lie rate | plain | rolling | missed fraud | adv weight |
+|---|---|---|---|---|---|
+| fixed 0.25 | 0.25 | 0.0023 | 0.0021 | 0.0% | 0.81 |
+| fixed 0.50 | 0.50 | 0.0045 | 0.0026 | 0.0% | 0.31 |
+| fixed 1.00 | 1.00 | 0.0200 | 0.0043 | 1.1% | 0.11 |
+| threshold | 0.38 | 0.0062 | 0.0063 | 1.4% | 0.49 |
+| proportional (1, 0.1) | 0.39 | 0.0044 | 0.0042 | 0.7% | 0.48 |
+| proportional (2, 0.2) | 0.45 | 0.0055 | 0.0052 | 1.2% | 0.41 |
+
+Findings: (1) **Follow-up 6's "no interior sweet spot" claim does not survive
+an adaptive attacker.** Rolling trust cut plain Brier by 43-79% against every
+static rate, but against feedback controllers it gives ~0-5% improvement:
+the defense is neutralised, not just dented. (2) Damage per lie roughly
+doubles: the threshold controller lies 38% of the time yet does 2.4x the
+damage of a static 50% liar, because it lies in concentrated bursts while its
+weight is high and lies low while trust is being rebuilt, exploiting the
+lag of one block plus decay. (3) The adaptive adversaries hold ~0.4-0.5 average
+trust weight against 0.11-0.31 for static liars. The absolute harm is still
+small at this scale (<= 1.4% of faulty steps accepted), and honest-only
+populations are unaffected, but it shows block-lagged, decayed trust is a
+feedback loop an attacker can drive.
+
+Caveats / open: the controllers are hand-designed, not optimised (a learned
+policy, e.g. no-regret over lie rates, likely does better); adversaries act
+independently (no coordination to break the median baseline); and the
+defender is not adaptive. The obvious defenses, untested here, are
+randomised or private trust weights (hide the observable the controller
+needs), randomised block boundaries, and a floor on how fast trust can
+recover -- the last is exactly Follow-up 3's asymmetric decay, which helped
+against burst attackers but was not tested against this closed loop.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -398,7 +442,7 @@ explicit about:
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
    here. **Partially addressed** by Follow-up 2 (sleeper and intermittent
-   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash addressed in Follow-up 6, with a static lie-rate sweep; a truly trust-observing adaptive adversary remains open).
+   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash addressed in Follow-up 6, with a static lie-rate sweep; a trust-observing adaptive adversary shown to neutralise rolling minority trust in Follow-up 7; defenses to it remain open).
 
 ## Citations
 
