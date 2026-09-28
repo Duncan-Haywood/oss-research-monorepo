@@ -35,6 +35,13 @@ from .peer_prediction import (
     empirical_prior,
     peer_truth_serum,
 )
+from .reputation import (
+    pts_calibration_scores,
+    reputation_weighted_payment,
+    reputation_weighted_trade_size,
+    trust_weighted_correlated_agreement_matrix,
+)
+from .reputation import trust_weights as compute_trust_weights
 
 
 @dataclass
@@ -49,6 +56,9 @@ class SimulationConfig:
     market_liquidity: float = 5.0
     market_trade_size: float = 1.0
     audit_fraction: float = 0.05
+    calibration_fraction: float = 0.3
+    trust_steepness: float = 12.0
+    trust_floor: float = 0.02
     seed: int = 0
 
 
@@ -62,6 +72,17 @@ class SimulationResult:
     ca_payoff: Dict[int, float]
     market_price: List[float]  # per task, price_yes after all reports traded
     audited_tasks: List[int] = field(default_factory=list)
+    # Held-out calibration / trust-weighting extension (see reputation.py):
+    # everything below is estimated from `calibration_tasks` and scored only
+    # on the disjoint `scoring_tasks`, so trust estimation and mechanism
+    # scoring never share reports.
+    calibration_tasks: List[int] = field(default_factory=list)
+    scoring_tasks: List[int] = field(default_factory=list)
+    trust_weight: Dict[int, float] = field(default_factory=dict)
+    ca_scoring_payoff: Dict[int, float] = field(default_factory=dict)
+    ca_trust_payoff: Dict[int, float] = field(default_factory=dict)
+    market_price_scoring: List[float] = field(default_factory=list)
+    market_price_trust: List[float] = field(default_factory=list)
 
 
 def _build_verifiers(config: SimulationConfig) -> List[Verifier]:
@@ -137,6 +158,66 @@ def run_simulation(config: SimulationConfig) -> SimulationResult:
     n_audited = max(1, int(round(config.n_tasks * config.audit_fraction)))
     audited_tasks = rng.sample(range(config.n_tasks), k=min(n_audited, config.n_tasks))
 
+    # --- Held-out calibration / trust-weighting extension ---
+    # Split the stream into an early calibration window and a later scoring
+    # window. Trust weights are bootstrapped from PTS payoffs measured only
+    # on the calibration window, then used to (a) down-weight low-trust
+    # pairs out of the CA delta-matrix estimate and (b) scale LMSR trade
+    # sizes -- both estimated/measured only on the scoring window, so no
+    # step here reuses reports it has already used to estimate something it
+    # is about to score.
+    n_calibration = max(1, min(config.n_tasks - 1, int(round(config.n_tasks * config.calibration_fraction))))
+    calibration_tasks = list(range(n_calibration))
+    scoring_tasks = list(range(n_calibration, config.n_tasks))
+
+    calibration_reports = {
+        v.id: {t: reports[v.id][t] for t in calibration_tasks} for v in verifiers
+    }
+    calibration_prior = empirical_prior(
+        r for by_task in calibration_reports.values() for r in by_task.values()
+    )
+    calibration_scores = pts_calibration_scores(
+        calibration_reports, calibration_tasks, calibration_prior, rng
+    )
+    trust_weight = compute_trust_weights(
+        calibration_scores, steepness=config.trust_steepness, floor=config.trust_floor
+    )
+
+    trust_delta = trust_weighted_correlated_agreement_matrix(calibration_reports, trust_weight, rng)
+    plain_calibration_delta = correlated_agreement_matrix(calibration_reports, rng)
+
+    ca_scoring_payoff: Dict[int, float] = {v.id: 0.0 for v in verifiers}
+    ca_trust_payoff: Dict[int, float] = {v.id: 0.0 for v in verifiers}
+    for t in scoring_tasks:
+        for v in verifiers:
+            peers = [p for p in verifiers if p.id != v.id]
+            if not peers:
+                continue
+            peer = rng.choice(peers)
+            ca_scoring_payoff[v.id] += ca_payment(
+                reports[v.id][t], reports[peer.id][t], plain_calibration_delta
+            )
+            ca_trust_payoff[v.id] += reputation_weighted_payment(
+                ca_payment(reports[v.id][t], reports[peer.id][t], trust_delta),
+                trust_weight.get(v.id, 1.0),
+            )
+
+    market_price_scoring: List[float] = []
+    market_price_trust: List[float] = []
+    for t in scoring_tasks:
+        plain_market = LMSRMarketMaker(liquidity=config.market_liquidity)
+        trust_market = LMSRMarketMaker(liquidity=config.market_liquidity)
+        order = list(verifiers)
+        rng.shuffle(order)
+        for v in order:
+            plain_market.trade(reports[v.id][t], config.market_trade_size)
+            trust_market.trade(
+                reports[v.id][t],
+                reputation_weighted_trade_size(config.market_trade_size, trust_weight.get(v.id, 1.0)),
+            )
+        market_price_scoring.append(plain_market.price_yes())
+        market_price_trust.append(trust_market.price_yes())
+
     return SimulationResult(
         config=config,
         verifiers=verifiers,
@@ -146,4 +227,11 @@ def run_simulation(config: SimulationConfig) -> SimulationResult:
         ca_payoff=ca_payoff,
         market_price=market_price,
         audited_tasks=audited_tasks,
+        calibration_tasks=calibration_tasks,
+        scoring_tasks=scoring_tasks,
+        trust_weight=trust_weight,
+        ca_scoring_payoff=ca_scoring_payoff,
+        ca_trust_payoff=ca_trust_payoff,
+        market_price_scoring=market_price_scoring,
+        market_price_trust=market_price_trust,
     )

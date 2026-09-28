@@ -3,10 +3,12 @@ import unittest
 from verification_markets.metrics import (
     audit_cost_savings,
     average_payoff_by_strategy,
+    average_trust_weight_by_strategy,
     incentive_compatibility_gap,
     majority_vote_error_rate,
     market_brier_score,
     non_honest_fraction,
+    scoring_window_market_brier_scores,
     theoretical_manipulation_bound,
 )
 from verification_markets.simulation import SimulationConfig, run_simulation
@@ -89,6 +91,57 @@ class TestIncentiveCompatibility(unittest.TestCase):
         payoff_by_strategy = average_payoff_by_strategy(result, result.ca_payoff)
         gap = incentive_compatibility_gap(payoff_by_strategy)
         self.assertLess(gap, 0.0)
+
+
+class TestTrustWeightedRepair(unittest.TestCase):
+    # Follow-up to TestIncentiveCompatibility.test_ca_is_vulnerable_to_simultaneous_correlated_deviation:
+    # bootstrapping trust weights from held-out PTS calibration data (see
+    # reputation.py) and using them to both re-estimate the CA delta matrix
+    # and discount each agent's own CA payment should repair exactly the
+    # simultaneous-collusion vulnerability documented there, in the same
+    # verifier-population shape.
+    def _scenario_config(self, n_tasks):
+        return SimulationConfig(
+            n_tasks=n_tasks,
+            n_honest=14,
+            n_lazy=3,
+            n_colluding=3,
+            n_adversarial=2,
+            corruption_rate=0.15,
+            signal_noise=0.1,
+            seed=7,
+            calibration_fraction=0.3,
+            trust_steepness=12.0,
+            trust_floor=0.02,
+        )
+
+    def test_trust_weighted_ca_restores_incentive_compatibility(self):
+        result = run_simulation(self._scenario_config(n_tasks=800))
+
+        # The plain estimator, scored on the same held-out window for a fair
+        # comparison, reproduces the documented vulnerability.
+        plain_gap = incentive_compatibility_gap(
+            average_payoff_by_strategy(result, result.ca_scoring_payoff)
+        )
+        self.assertLess(plain_gap, 0.0)
+
+        # The trust-weighted estimator + payment discount restores it.
+        trust_gap = incentive_compatibility_gap(
+            average_payoff_by_strategy(result, result.ca_trust_payoff)
+        )
+        self.assertGreater(trust_gap, 0.0)
+
+    def test_honest_agents_earn_higher_trust_than_deviators(self):
+        result = run_simulation(self._scenario_config(n_tasks=800))
+        by_strategy = average_trust_weight_by_strategy(result)
+        self.assertGreater(by_strategy["honest"], by_strategy["lazy"])
+        self.assertGreater(by_strategy["honest"], by_strategy["colluding"])
+        self.assertGreater(by_strategy["honest"], by_strategy["adversarial"])
+
+    def test_reputation_weighted_market_improves_calibration(self):
+        result = run_simulation(self._scenario_config(n_tasks=1600))
+        brier = scoring_window_market_brier_scores(result)
+        self.assertLess(brier["trust_weighted"], brier["plain"])
 
 
 class TestAggregateAccuracy(unittest.TestCase):
