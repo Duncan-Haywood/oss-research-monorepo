@@ -82,6 +82,40 @@ def theoretical_manipulation_bound(eps: float) -> float:
     return eps * (1 - eps)
 
 
+def average_trust_weight_by_strategy(result: SimulationResult) -> Dict[str, float]:
+    """Average calibration-window trust weight (see reputation.py) per
+    strategy -- shows whether the trust bootstrap actually separates honest
+    reporters from lazy/colluding/adversarial ones without being told which
+    is which ahead of time."""
+    totals: Dict[str, float] = defaultdict(float)
+    counts: Dict[str, int] = defaultdict(int)
+    for v in result.verifiers:
+        totals[v.strategy] += result.trust_weight.get(v.id, 0.0)
+        counts[v.strategy] += 1
+    return {
+        strategy: totals[strategy] / counts[strategy]
+        for strategy in STRATEGIES
+        if counts[strategy] > 0
+    }
+
+
+def scoring_window_market_brier_scores(result: SimulationResult) -> Dict[str, float]:
+    """Brier score of the unweighted vs. trust-weighted LMSR market, both
+    measured only on `result.scoring_tasks` (held out from trust
+    calibration) -- a fair apples-to-apples comparison of whether
+    reputation-weighting trade size (see reputation.py) improves
+    calibration."""
+    truths = [result.ground_truth[t] for t in result.scoring_tasks]
+
+    def _brier(prices: List[float]) -> float:
+        return sum((p - gt) ** 2 for p, gt in zip(prices, truths)) / len(truths)
+
+    return {
+        "plain": _brier(result.market_price_scoring),
+        "trust_weighted": _brier(result.market_price_trust),
+    }
+
+
 def audit_cost_savings(result: SimulationResult) -> float:
     """Fraction of tasks that avoid full ground-truth recomputation.
 

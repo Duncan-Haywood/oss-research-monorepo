@@ -73,12 +73,16 @@ separate batch tallying step?
   majority-vote error rate, audit-cost savings, and an empirical
   manipulation-vulnerability curve compared against Credibly Neutral AI
   Oracles' `eps * (1 - eps)` bound.
+- `reputation.py` — a follow-up mechanism (see "Follow-up" section below)
+  that bootstraps a per-verifier trust weight from PTS payoffs measured on a
+  held-out calibration window, then uses it to repair Correlated
+  Agreement's collusion vulnerability and to reputation-weight LMSR trades.
 
 Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 32 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 42 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -130,43 +134,106 @@ Credibly Neutral AI Oracles is proved for a different mechanism
 here is illustrative, not a claim that majority vote satisfies the same
 guarantee.
 
+## Follow-up: reputation-weighted mechanisms (closes Limitations 1-3, below)
+
+The initial version of this package documented three limitations of its own
+mechanisms as "natural next steps": Correlated Agreement's population-pooled
+delta matrix is not collusion-resistant against a simultaneously-deviating
+block; both mechanisms estimated their prior/delta matrix from the same
+batch of reports they then scored (circular); and the LMSR aggregator
+weighted every trade equally regardless of the trader's track record.
+`reputation.py` addresses all three with one mechanism: it splits the task
+stream into an early **calibration window** and a later **scoring window**,
+computes each verifier's average Peer Truth Serum payoff on the calibration
+window alone (PTS, not CA, because the base experiment above already found
+PTS -- not CA -- robust to simultaneous correlated deviation), and squashes
+that into a trust weight in `[floor, 1]` via a logistic. That weight is then
+used, on the scoring window only, to:
+
+1. **Re-estimate the CA delta matrix from trust-weighted pairs.** Each
+   pair's contribution to the same-task / different-task counts is scaled by
+   `min(weight_a, weight_b)`, so a low-trust pair barely influences the
+   estimate (`trust_weighted_correlated_agreement_matrix`).
+2. **Discount each CA payment by the payee's own trust weight**
+   (`reputation_weighted_payment`). This turned out to be necessary *in
+   addition to*, not instead of, step 1: downweighting low-trust pairs out
+   of the delta-matrix estimate concentrates it on genuine honest-honest
+   correlation and so *increases* its magnitude (verified empirically), which
+   on its own makes a colluding block's free ride on `delta[(1, 1)]` more,
+   not less, lucrative. Discounting the final payment by the payee's own
+   weight closes that gap.
+3. **Scale LMSR trade size by trust weight**
+   (`reputation_weighted_trade_size`), so a low-trust reporter's trade moves
+   the market price less.
+
+**Result** (same 22-verifier population as above -- 14 honest / 3 lazy / 3
+colluding / 2 adversarial -- `calibration_fraction=0.3`, `trust_steepness=12`,
+scored on the held-out remainder; reproduce with
+`experiments/run_experiment.py`):
+
+| mechanism | honest advantage over best deviation |
+|---|---|
+| Correlated Agreement, plain (held-out scoring window) | **-1.73** (still broken) |
+| Correlated Agreement, trust-weighted | **+14.12** (fixed) |
+
+| market | Brier score (scoring window) |
+|---|---|
+| LMSR, plain | 0.0207 |
+| LMSR, trust-weighted | **0.0107** (48% lower) |
+
+Average calibration-window trust weight by strategy also separates cleanly
+without being told which strategy is which ahead of time: honest ~0.95,
+lazy/colluding ~0.46-0.48, adversarial at the floor (0.02).
+
+**This fix has its own limitation, worth being explicit about in turn**: it
+needs *enough* calibration-window data per agent for the bootstrapped PTS
+score to separate strategies reliably -- at small `n_tasks` /
+`calibration_fraction` (see `tests/test_simulation.py::TestTrustWeightedRepair`
+for the scale that was empirically validated), honest agents' own per-task
+noise can make an unlucky honest agent's calibration score overlap with the
+lazy/colluding cluster's near-zero score, muting the fix. It also bootstraps
+CA's fix off of PTS, so it inherits a dependency this package's original
+result already flagged as one-directional: if PTS itself were compromised
+(e.g. by an adversary that has learned to game PTS specifically, which
+Limitation 4 below notes is unverified), the trust weights it produces would
+be unreliable too.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
 deliberately simplifies the underlying theorems in ways worth being
 explicit about:
 
-1. **Correlated Agreement here is not collusion-resistant.** The Dasgupta &
-   Ghosh (2013) incentive-compatibility theorem is proved for a *single*
-   agent unilaterally deviating while the rest of the population reports
-   honestly. This implementation estimates a single delta matrix pooled
-   across the *entire* population, including any simultaneously-deviating
-   sub-population's own reports. When a large enough lazy/colluding block
-   all report the (skewed) majority label, the pooled matrix ends up
-   dominated by genuine honest-honest correlation, and the deviating block
-   free-rides on it — see the results table above and
-   `test_ca_is_vulnerable_to_simultaneous_correlated_deviation`. Peer Truth
-   Serum does not have this failure mode in the same experiment, because
-   dividing by the peer's marginal report probability directly cancels out
-   the "always guess the popular answer" exploit. A faithful fix would
-   likely require per-agent-pair delta estimation with enough shared-task
-   history per pair, or an explicit collusion-detection pass before scoring
-   — both are natural next steps.
-2. Both mechanisms use an *empirically estimated* prior/delta matrix
-   computed from the same batch of reports being scored, rather than a
-   held-out calibration window. In a live deployment you would want to
-   estimate these from historical (already-audited) data to avoid any
-   circularity.
-3. The LMSR aggregation treats every verifier's report as a fixed-size
-   trade; it does not yet weight trades by a verifier's track record (e.g.
-   their historical peer-prediction score), which is the natural next
-   extension — and would let the market itself down-weight known-bad
-   actors over time.
+1. ~~**Correlated Agreement here is not collusion-resistant** against a
+   *simultaneously* deviating block (the Dasgupta & Ghosh (2013)
+   incentive-compatibility theorem is proved only for a single unilateral
+   deviator).~~ **Closed** by the trust-weighted CA in the "Follow-up"
+   section above — with the caveat, documented there, that the fix itself
+   needs enough calibration-window data per agent to separate strategies
+   reliably. The plain, population-pooled estimator (`peer_prediction.py`)
+   is kept as-is and still exhibits the original vulnerability
+   (`test_ca_is_vulnerable_to_simultaneous_correlated_deviation`); it is the
+   thing being fixed, not something this package still claims is safe to
+   use un-weighted.
+2. ~~Both mechanisms used an *empirically estimated* prior/delta matrix
+   computed from the same batch of reports being scored (circular).~~
+   **Closed**: the trust-weighted path in `reputation.py` estimates trust
+   and the CA delta matrix from a held-out calibration window, and scores
+   both CA and LMSR only on the disjoint scoring window. The plain PTS/CA
+   payoffs computed over the full stream (`result.pts_payoff`,
+   `result.ca_payoff`) are still in-sample by design, since they are meant
+   to reproduce the original (pre-follow-up) experiment for comparison.
+3. ~~The LMSR aggregation treated every verifier's report as a fixed-size
+   trade, not weighted by track record.~~ **Closed** by
+   `reputation_weighted_trade_size` in the "Follow-up" section above.
 4. The "adversarial" and "colluding" strategies here are simple,
    non-adaptive models. They do not attempt to game the specific mechanism
    (e.g. an adversary that has learned the empirical prior and best-responds
-   against PTS specifically). Robustness against an adaptive, mechanism-aware
-   adversary is unverified.
+   against PTS specifically, or one that deliberately keeps its calibration-
+   window PTS score just above the trust floor to blunt the Follow-up
+   section's fix). Robustness against such an adaptive, mechanism-aware
+   adversary is still unverified, and is the most natural next step from
+   here.
 
 ## Citations
 
