@@ -59,10 +59,10 @@ cannot regain influence when their regime returns (final wealth shares
 learning failure of a mechanism that is otherwise a static-environment
 optimum.
 
-**Finding 2 — a fixed-share tax fixes it**, matching Hedge+FS at long
-periods and beating it at f=1 (period 400: 0.0082 vs 0.0105) though not at
-short periods (period 25: 0.0195–0.0200 vs 0.0217 is roughly a tie; FS-Hedge
-was not tuned separately from WSWM, only eta=2 fixed).
+**Finding 2 — a fixed-share tax fixes it.** WSWM+FS beats Hedge+FS at every
+period (e.g. period 400: 0.0082 vs 0.0105; period 25: 0.0195 vs 0.0217),
+though Hedge's eta=2 was fixed, not tuned, so this is not a claim about the
+best possible Hedge.
 
 **2. (f, alpha) grid, period 100, regret per round.**
 
@@ -116,6 +116,6 @@ money" property.
 Lambert, Langford, Wortman, Vaughan, Chen, Pennock, Waggoner, Frongillo
 (2008), *Self-financed wagering mechanisms for forecasting*, EC; Herbster &
 Warmuth (1998), *Tracking the best expert* (fixed share); Frongillo, Della
-Penna & Reid (2012), *Interpreting prediction market prices as
-probabilities*/Kelly-as-mirror-descent; Gensyn, *Verde* and *Prediction
+Penna & Reid (2012), *Interpreting prediction markets as stochastic mirror
+descent*; Gensyn, *Verde* and *Prediction
 Markets are Learning Algorithms*.
