@@ -48,4 +48,10 @@ a{color:#0b5cad}code{background:#eee;padding:0 .25em}@media(prefers-color-scheme
 <h2>What does it cost to pay a verifier to check?</h2>
 <p>Effort elicitation with proper scoring rules in an exact beta-binomial model: implementable efforts are the concave envelope of the value curve, Brier information rent is exactly (n&minus;1)/(a+b) times effort cost, and the log score needs half Brier's payout spread on rare-fault priors. Pure-Python, 6 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/effort-elicitation">Code and white paper</a></p>
+<h2>How much should a router extremize?</h2>
+<p>Pooling calibrated experts with shared training data: the Bayes-optimal logit exponent a* = n/(1+(n&minus;1)&rho;) (matched to a numerical argmin), extra experts saturating at 1/&rho; effective experts, naive independence pooling doing worse than chance at &rho;=0.9, and an online learner that finds a*. Pure-Python, 6 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/expert-pooling">Code and white paper</a></p>
+<h2>What does a proper score buy when effort is private?</h2>
+<p>Scoring-rule payments as moral-hazard contracts for costly inference: a closed-form shirking threshold (matched to 1%), first-best effort at scale equal to marginal value with a fee, and under limited liability only 48&ndash;65% of first-best surplus, with log score cheaper than Brier at high effort. Pure-Python, 6 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/effort-contracts">Code and white paper</a></p>
 </body></html>

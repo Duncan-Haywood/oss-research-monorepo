@@ -1,6 +1,6 @@
 # Paying for checking: effort elicitation with proper scoring rules
 
-*Stylised model, exact computation, MIT. Companion to the verification-game / holdout-market notes in this repo.*
+*Stylised model, exact computation, MIT. Companion to the verification-game / holdout-market notes; complements `research/effort-contracts` (continuous-effort moral hazard with limited liability) by using a discrete sampling model with exact rent and implementability results.*
 
 ## Question
 Refereed verification (Gensyn-style) needs verifiers to *spend effort*, e.g. re-run n sampled steps, before reporting a probability that a claimed result is faithful. Proper scoring rules (Savage; Frongillo–Waggoner–style elicitation) make *honest reporting* optimal, but do they also make *costly effort* optimal, and at what price? Which rule is cheapest?
