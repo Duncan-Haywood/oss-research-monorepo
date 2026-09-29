@@ -57,6 +57,9 @@ a{color:#0b5cad}code{background:#eee;padding:0 .25em}@media(prefers-color-scheme
 <h2>How do you pay for effort when nobody knows the truth?</h2>
 <p>Peer prediction for unverifiable labelling and judging work: output agreement pays 1.0 for always answering the majority label versus 0.68 for honesty, the Dasgupta&ndash;Ghosh payoff is exactly 2p(1&minus;p)g<sub>i</sub>g<sub>j</sub>, effort becomes a coordination game with a closed-form threshold (12.8&times; higher for rare-positive tasks), and a cost-optimal gold-check rate &radic;(c&middot;g<sub>H</sub>/G) removes the shirking equilibrium. Pure-Python, 8 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/peer-prediction-effort">Code and white paper</a></p>
+<h2>Which surrogate should train a verifier that can escalate?</h2>
+<p>Reject-option surrogates for accept/reject/escalate decisions: the generalised-hinge conditional risk embeds the Bayes action at its kinks, regret transfers linearly with constant exactly 2d (grid-verified), logistic transfer degrades as 2d(1&minus;d)/&delta;, and a negative result shows logistic-plus-thresholds still learns faster in scalar SGD. Pure-Python, 6 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/reject-surrogates">Code and white paper</a></p>
 <h2>Are reward pools identity-proof?</h2>
 <p>Sybil splitting and whale merging under stake-weighted pools: only linear-in-stake weights are split-invariant, per-head pools are captured at k* = &radic;(Rn/c) &minus; n identities (exact match), a sharp per-identity deterrence fee, exponents above 1 reward merging, and weighted-score wagering is split-neutral. Pure-Python, 7 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/sybil-stake">Code and white paper</a></p>
