@@ -74,8 +74,17 @@ def run_closed_loop(
     decay: float = 0.5,
     steepness: float = 12.0,
     seed: int = 0,
+    observation_noise: float | None = 0.0,
+    recovery_decay: float | None = None,
 ) -> ClosedLoopOutcome:
-    """``base`` must hold *honest* reports for the adversaries (build it with
+    """Defences (README Follow-up 8): ``observation_noise`` is the s.d. of
+    Gaussian noise added to the weight each adversary *observes* (private /
+    randomised weights; ``None`` hides the weight entirely, the controller
+    then sees a constant 1.0). ``recovery_decay`` is the slower decay applied
+    when a block's score beats the running score (fast-down / slow-up, as in
+    ``stealth.rolling_minority_trust_market``); ``None`` = symmetric.
+
+    ``base`` must hold *honest* reports for the adversaries (build it with
     ``whitewash_prob=0.0``); ``controller`` is a factory so each adversary
     keeps its own state. Adversaries only lie inside the scoring window."""
     cfg = base.config
@@ -96,7 +105,14 @@ def run_closed_loop(
         block = scoring[b : b + block_size]
         w = minority_trust_weights(running, steepness, cfg.trust_floor)
         # Adversaries observe their weight, then choose this block's lie rate.
-        probs = {a: ctls[a](w[a], states[a]) for a in adversary_ids}
+        def seen_w(a: int) -> float:
+            if observation_noise is None:
+                return 1.0
+            if observation_noise == 0.0:
+                return w[a]
+            return max(0.0, min(1.0, w[a] + rng.gauss(0.0, observation_noise)))
+
+        probs = {a: ctls[a](seen_w(a), states[a]) for a in adversary_ids}
         for a in adversary_ids:
             for t in block:
                 if reports[a][t] == 0:
@@ -115,7 +131,11 @@ def run_closed_loop(
                 m.trade(reports[i][t], reputation_weighted_trade_size(cfg.market_trade_size, w[i]))
             prices.append(m.price_yes())
         fresh = minority_pts_scores(work, block)
-        running = {i: decay * running[i] + (1 - decay) * fresh[i] for i in ids}
+        up = decay if recovery_decay is None else recovery_decay
+        running = {
+            i: (d := decay if fresh[i] < running[i] else up) * running[i] + (1 - d) * fresh[i]
+            for i in ids
+        }
     faulty = [(p, t) for p, t in zip(prices, scoring) if base.ground_truth[t] == 0]
     missed = sum(p > 0.5 for p, _ in faulty) / len(faulty) if faulty else 0.0
     plain: List[float] = []
