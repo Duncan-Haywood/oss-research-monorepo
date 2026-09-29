@@ -1,0 +1,24 @@
+E1 shift mass eps from bin 0 to bin d (K=10): regret/eps^2 and per unit payment range (Brier 2, RPS K-1=9)
+ d=1  rps  1.00 (0.111/range)  brier  2.00 (1.000/range)  rps/brier per range 0.111 = d/(K-1)
+ d=2  rps  2.00 (0.222/range)  brier  2.00 (1.000/range)  rps/brier per range 0.222 = d/(K-1)
+ d=5  rps  5.00 (0.556/range)  brier  2.00 (1.000/range)  rps/brier per range 0.556 = d/(K-1)
+ d=9  rps  9.00 (1.000/range)  brier  2.00 (1.000/range)  rps/brier per range 1.000 = d/(K-1)
+
+E2 worst-case regret (exact vertex), K=10
+ uniform      rps max 2.850 (range 9)  brier max 0.900 (range 2)
+ bell         rps max 3.720 (range 9)  brier max 1.196 (range 2)
+ mass at top  rps max 8.910 (range 9)  brier max 1.980 (range 2)
+
+E3 misreport = truth translated by s bins (narrow truth on bins 4,5): regret
+ s=1  rps  0.500  brier  0.500
+ s=2  rps  1.500  brier  1.000
+ s=3  rps  2.500  brier  1.000
+ s=4  rps  3.500  brier  1.000
+
+E4 neighbour-blur misreport of a bell truth (K=10)
+ a=0.05  rps 0.00012  brier 0.00008  kl 0.00059
+ a=0.1   rps 0.00047  brier 0.00031  kl 0.00220
+ a=0.25  rps 0.00293  brier 0.00191  kl 0.01187
+
+E5 tolerance pricing: weight only threshold t, decision regret <= 2*sqrt(excess weighted RPS); 20000 random pairs
+ wrong-decision cases 6341, max regret/bound 1.000 (<=1)
