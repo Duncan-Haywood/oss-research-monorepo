@@ -75,4 +75,7 @@ a{color:#0b5cad}code{background:#eee;padding:0 .25em}@media(prefers-color-scheme
 <h2>What can one stubborn node do to gossip training?</h2>
 <p>Pairwise gossip averaging as a stand-in for all-reduce: disagreement contracts by exactly (n&minus;2)/(2(n&minus;1)) &asymp; &frac12; per matching round (about 20 rounds at any n), the noise floor is (n&minus;1)(n&minus;2)s&sup2;/n (matched to 0.3%), a single stubborn node captures the honest mean at exact rate 1&minus;1/(n(n&minus;1)), and a trust-region clip turns capture into linear creep of at most &tau;/(n(n&minus;1)) per step. Pure-Python, 7 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/gossip-consensus">Code and white paper</a></p>
+<h2>When do verifiers complement rather than substitute?</h2>
+<p>Exact value of verifier committees for an accept/slash decision: value is zero below a closed-form minimum committee size (4 at &pi;=0.05, q=0.7) even though mutual information is submodular, 24&ndash;34% of triples violate diminishing returns, myopic marginal-value hiring buys nothing (ratio 0 to the optimum) and leave-one-out pay is a parity sawtooth that falls 7&times; below average value at 40 verifiers. Pure-Python, 8 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/verifier-complements">Code and white paper</a></p>
 </body></html>
