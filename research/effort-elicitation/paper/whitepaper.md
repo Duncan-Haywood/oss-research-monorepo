@@ -12,7 +12,7 @@ computed exactly from the beta-binomial law. The verifier maximises αV(n) − c
 
 ## Results
 1. **Implementable efforts = concave envelope.** Effort n is induced by some scale α iff (n, V(n)) is on the upper concave envelope of V; the exact interval of valid α is [max_{m<n} c(n−m)/(V(n)−V(m)), min_{m>n} c(m−n)/(V(m)−V(n))]. In all nine (rule × prior) cases tested, V was concave on n ≤ 60, so every effort level was implementable.
-2. **Brier rent, exact.** For Brier, V(n) = Var(p)·n/(a+b+n). The binding constraint is the one-step deviation to n−1, giving α* = c(s+n)(s+n−1)/(s·Var p) with s=a+b and **information rent / effort cost = (n−1)/(a+b)**. Verified to 1e-9 for several priors. Rent is driven by the prior's pseudo-count: diffuse or U-shaped priors (small a+b) leave the verifier a large surplus (Beta(0.3,0.3), n=20: rent is 31.7× cost), informative priors little (Beta(2,8): 1.9×).
+2. **Brier rent, exact.** For Brier, V(n) = Var(p)·n/(a+b+n). The binding constraint is the one-step deviation to n−1, giving α* = c(s+n)(s+n−1)/(s·Var p) with s=a+b and **information rent / effort cost = (n−1)/(a+b)**. Verified numerically to 1e-6 for several priors. Rent is driven by the prior's pseudo-count: diffuse or U-shaped priors (small a+b) leave the verifier a large surplus (Beta(0.3,0.3), n=20: rent is 31.7× cost), informative priors little (Beta(2,8): 1.9×).
 3. **Which rule is cheapest depends on the prior.** For n\*=20, c=10⁻³, measuring the worst-case payout spread needed (a limited-liability / bankroll proxy):
    - uniform prior: spherical 2.31 < Brier 2.52 < log 3.08;
    - rare-fault Beta(0.2,5): **log 10.3 vs Brier 19.3 vs spherical 24.8** — log's curvature weights rare-event resolution, so it needs half the payout range of Brier;

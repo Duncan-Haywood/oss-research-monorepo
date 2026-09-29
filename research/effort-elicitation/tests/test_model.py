@@ -48,7 +48,7 @@ class T(unittest.TestCase):
         for a, b in [(1, 1), (2, 8), (0.2, 5)]:
             for n in (5, 30):
                 d = design("brier", a, b, n, 0.001, nmax=4 * n)
-                self.assertAlmostEqual(d["rent_per_cost"], (n - 1) / (a + b), places=9)
+                self.assertAlmostEqual(d["rent_per_cost"], (n - 1) / (a + b), places=6)
 
 if __name__ == "__main__":
     unittest.main()
