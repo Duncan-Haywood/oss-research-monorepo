@@ -28,7 +28,7 @@ extra loss, and in practice a strategic reporter must optimise against the scori
 **R4 (floating-point grids).** Minifloats are dense near 0 but coarse near 1, so a raw e4m3 grid is 13× worse than its
 symmetrisation (report min(p,1−p) plus a side bit) under log score, 4× under Brier (E3). Even symmetrised, formats
 waste range on tiny values: e5m6 symmetrised (961 points) is 16× worse than an optimal compander of the same size.
-For e4m3/e5m2/e3m4 the symmetrised format is within 1.5–3× (e4m3, e3m4) or ≈16× (e5m2) of optimal.
+For e4m3/e5m2/e3m4 the symmetrised format is within 2.4–3× (e3m4, e4m3) or ≈16× (e5m2) of optimal.
 
 ## Implications
 1. Serialise confidence as a **companded** code (roughly ∝ (q(1−q))^{−1/3} density under log score), or symmetrised
