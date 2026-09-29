@@ -43,7 +43,8 @@ never exceeds it (also unit-tested). The certificate is exactly attained by a po
 1. A validation score converts to an auditable cap on excess decision cost: compute ψ from (A, R, c), read off ψ⁻¹(measured excess score). Use it to set score-quality SLAs for verifiers.
 2. Under log score, the more lopsided the costs (rare, expensive faults) the smaller the regret a given nat-gap can hide, so log score is preferable when fault cost ≫ slashing cost.
 3. Optimising a smooth proper score gives ε² transfer; if only the decision is needed, polyhedral surrogates give linear transfer but cannot be paid as probability reports.
-4. Combine with `effort-contracts`: the scale on the scoring rule sets both incentive strength and, through this note, the decision loss per unit of effort shortfall.
+4. `reject-surrogates` studies the polyhedral side of the same accept/reject/escalate decision (linear transfer, a training-side view); this note is the proper-score side (a certificate for a verifier that is already paid by a proper rule).
+5. Combine with `effort-contracts`: the scale on the scoring rule sets both incentive strength and, through this note, the decision loss per unit of effort shortfall.
 
 ## Limits
 Binary fault variable, known costs, a verifier report that is directly acted on (no aggregation across verifiers; see `expert-pooling`, `market-routing`), average-case certificate through
