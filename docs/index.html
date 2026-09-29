@@ -69,4 +69,7 @@ a{color:#0b5cad}code{background:#eee;padding:0 .25em}@media(prefers-color-scheme
 <h2>How much can Byzantine verifiers move an aggregate?</h2>
 <p>Mean, median and trimmed-mean aggregation of verifier reports under a Byzantine fraction &beta;: mean bias &beta;B is unbounded, median bias &sigma;&Phi;<sup>&minus;1</sup>(1/(2(1&minus;&beta;))) is independent of B and diverges at &beta;=&frac12;, trimmed-mean closed form for &tau;&ge;&beta; matches simulation, and trimming below &beta; fails. Pure-Python, 7 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/robust-aggregation">Code and white paper</a></p>
+<h2>How many audits before you slash, and can you keep looking?</h2>
+<p>Anytime-valid sequential audits of noisy verification checks: re-running a fixed-sample test after every audit falsely slashes 28% of honest provers at a nominal 5%, while a mixture e-process stays below its Ville bound; expected audits match ln(1/&delta;)/KL with a &frac12;ln n price for not knowing the corruption rate, and it catches subtle corruption that a mis-tuned SPRT or fixed test misses. Pure-Python, 8 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/anytime-audit">Code and white paper</a></p>
 </body></html>

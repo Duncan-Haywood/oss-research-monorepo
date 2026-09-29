@@ -1,0 +1,16 @@
+Setup: honest step flags w.p. a=0.05 (float drift), corrupted step w.p. p; level delta=0.05; horizon N=1000
+E1. type-I error of an honest prover (p=a), 3000 runs: peeking slashes honest provers
+  fixed-n test at n=N    false-slash rate 0.037
+  peeking every audit    false-slash rate 0.284
+  peeking every 50       false-slash rate 0.189
+  mixture e-process      false-slash rate 0.016
+E2. expected audits to slash a corrupted prover (delta=0.05, 2000 runs); ideal = ln(1/delta)/KL(p||a)
+  p=0.10: ideal  145.0 | SPRT(knows p)  156.5 | mixture  261.9 (detect 1.000) | fixed-n for 80% power n=170
+  p=0.20: ideal   21.4 | SPRT(knows p)   25.2 | mixture   32.4 (detect 1.000) | fixed-n for 80% power n=27
+  p=0.40: ideal    5.4 | SPRT(knows p)    6.8 | mixture    7.8 (detect 1.000) | fixed-n for 80% power n=7
+E3. mis-planned fixed test: planned for p=0.4 (n from E2), true p=0.15; SPRT tuned to 0.4; mixture adapts
+  fixed n=7: power 0.283 | SPRT(0.4) detect-by-5000 0.550 mean 45 | mixture detect 1.000 mean 68 (ideal 43)
+E4. cost of not knowing p: mixture / ideal expected audits, by delta (p=0.2)
+  delta=0.05: ideal 21.4 mixture 33.6 ratio 1.57
+  delta=0.01: ideal 32.9 mixture 45.0 ratio 1.37
+  delta=0.001: ideal 49.4 mixture 61.6 ratio 1.25
