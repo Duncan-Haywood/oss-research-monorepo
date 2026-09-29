@@ -90,4 +90,7 @@ a{color:#0b5cad}code{background:#eee;padding:0 .25em}@media(prefers-color-scheme
 <h2>What does secret task assignment buy?</h2>
 <p>Random k-fold replication with slashing against a colluding fraction &beta; of workers: with secret assignment cheating is a coordination game and honesty is the unique equilibrium iff S &ge; G&beta;<sup>k&minus;1</sup>/(1&minus;&beta;<sup>k&minus;1</sup>), geometric in k; with public assignment colluders cheat only on all-friend jobs, so corruption is &beta;<sup>k</sup> at any stake; a leak probability &lambda; leaves a &lambda;&beta;<sup>k</sup> floor, so each order of magnitude of leakage costs about two replicas. Formulas match Monte Carlo. Pure-Python, 11 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/replicated-execution">Code and white paper</a></p>
+<h2>How often should preemptible workers checkpoint?</h2>
+<p>Exact checkpoint interval under Poisson churn: w* = (1+W<sub>0</sub>(&minus;e<sup>&minus;1&minus;&lambda;C</sup>))/&lambda;, independent of restart cost, with Young/Daly overshooting by 5&ndash;25%; intervals within 2&times; cost under 3.5%; a synchronous job on n workers restarts at rate n&lambda; so efficiency falls to 50% near n&asymp;700, and admitting flaky workers cut throughput five-fold. Pure-Python, 8 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/churn-checkpointing">Code and white paper</a></p>
 </body></html>
