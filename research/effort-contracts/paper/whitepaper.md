@@ -24,12 +24,11 @@ equal to three decimals); the principal recovers the surplus with a participatio
 pay ≥ 0 in expectation) that contract hands all surplus to the worker.
 
 **R3 (limited liability underprovides effort).** Choosing α to maximise value minus pay gives α* < w (0.34–0.91 for
-c=0.02–0.3), effort 65–70% of first best, and surplus only **48–65% (Brier)** of first-best (E2). The distortion is
-worst where effort is cheap relative to value, in the sense that rent grows with e faster than value.
+c=0.02–0.3), effort 63–70% of first best, and surplus only **48–65% (Brier)** of first-best (E2). The efficiency loss is largest (ratio falls toward 48%) as effort gets costlier, where the first-best effort is small.
 
 **R4 (score shape matters at high effort).** To induce a target effort e the worker's rent is lower under log score than Brier
 once accuracy is high (e=1.5, c=0.1: rent 0.120 vs 0.149, E4), because the log information curve is more convex there,
-so the principal's optimum is 3–6% better with log (E2). At low effort the two coincide. This is one instance, under a Brier-valued
+so the principal's optimum is 0–6% better with log (E2). At low effort the two coincide. This is one instance, under a Brier-valued
 principal; it does not show log is generally superior.
 
 ## Implications
