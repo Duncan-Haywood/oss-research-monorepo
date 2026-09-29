@@ -45,6 +45,28 @@ class TestClosedLoop(unittest.TestCase):
             wins += brier(a.prices, r, r.scoring_tasks) > brier(f.prices, r, r.scoring_tasks)
         self.assertGreaterEqual(wins, 3)
 
+    def test_hidden_weights_reduce_controller_to_constant(self):
+        # With the weight hidden the controller sees a constant, so a
+        # proportional controller with gain*(1-w_min)>=1 always lies.
+        r = _base()
+        o = run_closed_loop(r, _adv(r), lambda: proportional(2.0, 0.2), block_size=100, observation_noise=None)
+        self.assertAlmostEqual(o.lie_rate, 1.0, delta=0.01)
+
+    def test_hiding_weights_beats_public_against_adaptive(self):
+        wins = 0
+        for seed in (1, 2, 3, 4):
+            r = _base(seed)
+            pub = run_closed_loop(r, _adv(r), lambda: threshold(), block_size=100)
+            hid = run_closed_loop(r, _adv(r), lambda: threshold(), block_size=100, observation_noise=None)
+            wins += brier(hid.prices, r, r.scoring_tasks) < brier(pub.prices, r, r.scoring_tasks)
+        self.assertGreaterEqual(wins, 3)
+
+    def test_default_args_unchanged(self):
+        r = _base()
+        a = run_closed_loop(r, _adv(r), lambda: fixed(0.5), block_size=100)
+        b = run_closed_loop(r, _adv(r), lambda: fixed(0.5), block_size=100, observation_noise=0.0, recovery_decay=None)
+        self.assertEqual(a.prices, b.prices)
+
     def test_does_not_mutate_base(self):
         r = _base()
         before = {i: dict(d) for i, d in r.reports.items()}

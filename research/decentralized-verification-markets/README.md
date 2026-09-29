@@ -82,7 +82,7 @@ Run it:
 
 ```bash
 cd research/decentralized-verification-markets
-PYTHONPATH=src python3 -m unittest discover -s tests -v   # 64 tests
+PYTHONPATH=src python3 -m unittest discover -s tests -v   # 72 tests
 python3 experiments/run_experiment.py                       # full report
 ```
 
@@ -406,6 +406,38 @@ needs), randomised block boundaries, and a floor on how fast trust can
 recover -- the last is exactly Follow-up 3's asymmetric decay, which helped
 against burst attackers but was not tested against this closed loop.
 
+## Follow-up 8: defences against the closed-loop adversary
+
+Follow-up 7 named three untested defences. `run_closed_loop` now takes
+`observation_noise` (Gaussian noise on the weight each adversary observes;
+`None` hides it) and `recovery_decay` (fast-down / slow-up trust update).
+Same setting (14 honest + 8 adaptive whitewashers, block 100, 5 seeds,
+scoring-window Brier of the rolling market; reproduce with
+`experiments/defenses_closed_loop.py`):
+
+| controller | public (F7) | asym, decay .2 / rec .9 | noisy sd .4 | hidden |
+|---|---|---|---|---|
+| threshold | 0.0063 | **0.0042** | 0.0045 | 0.0043 |
+| proportional (1, 0.1) | 0.0042 | **0.0035** | **0.0035** | 0.0038 |
+| proportional (2, 0.2) | 0.0052 | **0.0042** | 0.0045 | 0.0043 |
+
+Findings: (1) every defence recovers the damage, taking Brier back to the
+~0.004 that a *static* 100% liar suffers under rolling trust (Follow-up 5),
+i.e. the extra harm from feedback control (up to 2.4x) disappears.
+(2) **Hiding weights does not make the attacker weaker, it makes it
+static**: a blind adversary lies at rate ~0.9-1.0, so hiding merely
+downgrades a white-box attacker to the static one already handled; it does
+not reduce below that floor. Noise (sd .4) mostly buys the same result while
+still letting a smart attacker average out noise over blocks (not tested).
+(3) Asymmetric recovery works by making banked trust expensive to rebuild
+(the adaptive attacker's realised lie rate falls 0.38 -> 0.12), and it
+also hits missed fraud only modestly (1.4% -> 1.05%). Caveats: the asym
+column also changes `decay` (0.5 -> 0.2), so the two effects are
+confounded; the controllers are still hand-designed rather than learned;
+noise-averaging and randomised block boundaries remain untested; absolute
+missed-fraud stays ~1% for every defence, which is the noise floor of
+per-block detection at this scale.
+
 ## Limitations (read before reusing this)
 
 This is a research prototype, not a production-ready mechanism, and it
@@ -442,7 +474,7 @@ explicit about:
    section's fix). Robustness against such an adaptive, mechanism-aware
    adversary is still unverified, and is the most natural next step from
    here. **Partially addressed** by Follow-up 2 (sleeper and intermittent
-   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash addressed in Follow-up 6, with a static lie-rate sweep; a trust-observing adaptive adversary shown to neutralise rolling minority trust in Follow-up 7; defenses to it remain open).
+   trust-farming; stealth minority-label whitewashing addressed in Follow-up 4; sleeper+whitewash closed by Follow-up 5; intermittent whitewash addressed in Follow-up 6, with a static lie-rate sweep; a trust-observing adaptive adversary shown to neutralise rolling minority trust in Follow-up 7; defences evaluated in Follow-up 8).
 
 ## Citations
 
