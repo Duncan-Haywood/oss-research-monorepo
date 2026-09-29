@@ -42,4 +42,4 @@ principal; it does not show log is generally superior.
 ## Limits
 One-dimensional effort, a specific accuracy curve, risk-neutral workers, no competition between workers (which would
 add relative-performance schemes), and no dynamic effort. Extending to multi-worker tournaments and to ambiguous
-outcomes (peer prediction, where the outcome is not observed) is the natural next step.
+outcomes (peer prediction, where the outcome is not observed) is the natural next step, taken in `peer-prediction-effort`.
