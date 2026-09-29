@@ -72,4 +72,7 @@ a{color:#0b5cad}code{background:#eee;padding:0 .25em}@media(prefers-color-scheme
 <h2>Can you slash while watching the data stream?</h2>
 <p>Anytime-valid slashing of miscalibrated verifiers with e-processes: repeatedly re-running a z-test falsely slashes 37% of honest verifiers at nominal 5%, the likelihood-ratio e-process stays under &alpha; by Ville&rsquo;s inequality, detection delay tracks ln(1/&alpha;)/KL within 12% (logarithmic in 1/&alpha;), and not knowing the cheating rate costs a factor 1.36. Pure-Python, 6 tests, stylised.</p>
 <p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/sequential-slashing">Code and white paper</a></p>
+<h2>What can one stubborn node do to gossip training?</h2>
+<p>Pairwise gossip averaging as a stand-in for all-reduce: disagreement contracts by exactly (n&minus;2)/(2(n&minus;1)) &asymp; &frac12; per matching round (about 20 rounds at any n), the noise floor is (n&minus;1)(n&minus;2)s&sup2;/n (matched to 0.3%), a single stubborn node captures the honest mean at exact rate 1&minus;1/(n(n&minus;1)), and a trust-region clip turns capture into linear creep of at most &tau;/(n(n&minus;1)) per step. Pure-Python, 7 tests, stylised.</p>
+<p><a href="https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research/gossip-consensus">Code and white paper</a></p>
 </body></html>
