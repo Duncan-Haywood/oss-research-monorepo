@@ -129,6 +129,11 @@
      "slug": "skill-score-normalisation",
      "title": "Is a skill score normalised by the realised base rate safe to pay on?",
      "summary": "Ranking verifiers by the Brier skill score 1&minus;Brier/(<em>y</em>&#772;(1&minus;<em>y</em>&#772;)) divides a proper score by an outcome-dependent baseline, and that breaks properness. The optimal report is exactly the hit rate reweighted by the inverse baseline variance: it is &frac12; for any belief with two tasks, and for larger <em>n</em> is biased by about &minus;(1&minus;2<em>p</em>)/<em>n</em> (0.232 against a true 0.1 at <em>n</em>=5), with misreporting gaining 0.042 skill for a 0.017 true-Brier cost. Because the baseline pools all of a verifier&rsquo;s tasks, the report on one task type also shifts with beliefs on the others (0.090 vs 0.133 for the rare type). A leave-one-out or ex-ante baseline restores properness. Independent tasks, constant reports, Brier only; exact enumeration agrees with 200,000-trial simulation. Pure-Python, 9 tests."
+    },
+    {
+     "slug": "multi-observation-elicitation",
+     "title": "What does it cost to price the variance of drift from pairs of independent draws?",
+     "summary": "A single draw cannot elicit a variance, but two independent draws can: the pair score (<em>r</em> &minus; (<em>y</em><sub>1</sub>&minus;<em>y</em><sub>2</sub>)<sup>2</sup>/2)<sup>2</sup> has excess loss exactly (<em>r</em>&minus;&sigma;<sup>2</sup>)<sup>2</sup>, and kernels for mean<sup>2</sup>, the third moment and &sigma;<sup>4</sup> need 2, 3 and 4 draws (verified by exact enumeration). Detecting a variance under-report of relative size &rho; takes ((<em>z</em><sub>&alpha;</sub>+<em>z</em><sub>&beta;</sub>)/&rho;)<sup>2</sup>(&kappa;+1)/2 pairs, so heavy-tailed drift makes verification expensive; a robust scale score wins for Laplace and <em>t</em><sub>5</sub> drift, all-pairs pooling cuts payment noise by (&kappa;+1)/(&kappa;&minus;1), and correlated draws let a verifier under-report by exactly &rho;. Stylised distributions, no measured drift."
     }
    ]
   },
