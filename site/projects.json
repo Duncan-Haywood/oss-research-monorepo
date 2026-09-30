@@ -134,11 +134,6 @@
      "slug": "skill-score-normalisation",
      "title": "Is a skill score normalised by the realised base rate safe to pay on?",
      "summary": "Ranking verifiers by the Brier skill score 1&minus;Brier/(<em>y</em>&#772;(1&minus;<em>y</em>&#772;)) divides a proper score by an outcome-dependent baseline, and that breaks properness. The optimal report is exactly the hit rate reweighted by the inverse baseline variance: it is &frac12; for any belief with two tasks, and for larger <em>n</em> is biased by about &minus;(1&minus;2<em>p</em>)/<em>n</em> (0.232 against a true 0.1 at <em>n</em>=5), with misreporting gaining 0.042 skill for a 0.017 true-Brier cost. Because the baseline pools all of a verifier&rsquo;s tasks, the report on one task type also shifts with beliefs on the others (0.090 vs 0.133 for the rare type). A leave-one-out or ex-ante baseline restores properness. Independent tasks, constant reports, Brier only; exact enumeration agrees with 200,000-trial simulation. Pure-Python, 9 tests."
-    },
-    {
-     "slug": "multi-observation-elicitation",
-     "title": "What does it cost to elicit the scale of benign drift?",
-     "summary": "A pair score (r&minus;(y<sub>1</sub>&minus;y<sub>2</sub>)<sup>2</sup>/2)<sup>2</sup> elicits drift variance with excess loss exactly (r&minus;&sigma;<sup>2</sup>)<sup>2</sup>; kernels for mean<sup>2</sup>, the third central moment and &sigma;<sup>4</sup> need 2, 3 and 4 draws. Payment noise (&mu;<sub>4</sub>+&sigma;<sup>4</sup>)/2 sets the audit cost of detecting an under-report (Monte Carlo power 0.70&ndash;0.79 against a nominal 0.8); scoring |y<sub>1</sub>&minus;y<sub>2</sub>| beats the variance score for Laplace (0.882 vs 0.935 relative sd); all-pairs pooling cuts payment variance by (&kappa;+1)/(&kappa;&minus;1) (1.87 measured); correlated draws make the score elicit &sigma;<sup>2</sup>(1&minus;&rho;). Stylised distributions, no measured drift."
     }
    ]
   },
