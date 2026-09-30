@@ -1055,6 +1055,11 @@
      "slug": "compressed-outer",
      "title": "How far can DiLoCo reports be compressed?",
      "summary": "Unbiased compression of each worker&rsquo;s pseudo-gradient (noise proportional to the signal, &omega;) has exact stationary variance &alpha;<em>V</em><sub>w</sub>(1+&omega;)/(<em>Ms</em>(2&minus;&alpha;<em>sc</em>)), <em>c</em>&nbsp;=&nbsp;1+&omega;/<em>M</em>: it caps the outer step at 2/(<em>sc</em>) and the contraction at 1&minus;1/<em>c</em> (keeping 10% of coordinates with 8 workers: 0.53, 22 rounds to 10<sup>&minus;6</sup> against 1), and random participation is the special case &omega;&nbsp;=&nbsp;1/<em>p</em>&minus;1. Dithered quantisation only adds &Delta;<sup>2</sup>/12 to the variance and leaves stability alone. At fixed bandwidth, sparsifying favours few full reports, while quantising has an interior optimum near 1.3 bits per coordinate with many workers, about 4&times; below 8-bit reports (the textbook high-resolution law understates the noise 2.9&times; at 1 bit). Matched to simulation within 3%. Stylised."
+    },
+    {
+     "slug": "sparse-outer-sync",
+     "title": "What does it cost to send only a fraction of the outer update, and does error feedback help?",
+     "summary": "Each worker transmits a random fraction <em>p</em> of its pseudo-gradient. Rescaling the subset (unbiased) inflates the stationary noise floor by exactly 1/<em>p</em>. Adding a per-worker error-feedback memory gives an exact closed form from a four-dimensional second-moment recursion and costs only 1 + <em>&alpha;s</em>(1/<em>p</em> &minus; 1) at small steps, for any number of workers, because the virtual iterate follows uncompressed SGD. The price is speed: the mean dynamics have determinant 1 &minus; <em>p</em>, so the contraction cannot beat &radic;(1 &minus; <em>p</em>) per round; over a 400-round horizon error feedback reaches 0.39, 0.24 and 0.17 of the unbiased loss at <em>p</em> = 0.25, 0.1, 0.03, and the advantage disappears when the horizon is shorter than about 1/<em>p</em>. Stylised: diagonal quadratics, Bernoulli masks, no top-<em>k</em>."
     }
    ]
   }
