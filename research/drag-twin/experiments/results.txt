@@ -1,0 +1,43 @@
+Drag twin: real v' = F - k v^2 (k = 0.50, unit mass), twin v' = F - c v.  Closed-form truth; twin c fitted from coast-down.
+
+== 1. Coast-down from v0 = 10, twin calibrated by the secant at v0 (c = k v0 = 5.0): time / distance to reach v_f ==
+v_f/v0   real time  twin time   real dist  twin dist
+0.50        0.200      0.139      1.386      1.000
+0.20        0.800      0.322      3.219      1.600
+0.10        1.800      0.461      4.605      1.800
+0.05        3.800      0.599      5.991      1.900
+0.01       19.800      0.921      9.210      1.980
+twin stopping distance (v_f -> 0): 2.000; real distance to fall to 1e-6 v0: 27.6 (unbounded, ln)
+
+== 2. Steady states and mission energy: twin secant-calibrated at v_cal, real system at other speeds ==
+for the force F = k v^2 that holds speed v in reality: twin terminal speed / v, and twin energy per distance / real (= v_cal/v)
+v_cal=3    v=2    term 0.667 energy 1.500 | v=5    term 1.667 energy 0.600 | v=10   term 3.333 energy 0.300 | v=15   term 5.000 energy 0.200
+v_cal=6    v=2    term 0.333 energy 3.000 | v=5    term 0.833 energy 1.200 | v=10   term 1.667 energy 0.600 | v=15   term 2.500 energy 0.400
+v_cal=10   v=2    term 0.200 energy 5.000 | v=5    term 0.500 energy 2.000 | v=10   term 1.000 energy 1.000 | v=15   term 1.500 energy 0.667
+
+== 3. Step response of speed to a force step about v* = 6: time to cover 63.2% of the step (real vs twin) ==
+calibration   c        small step (+0.1%): real tau  twin tau   ratio    | large step F x4: real  twin  ratio    final speed twin/real
+secant       3.00           0.1666     0.3333   2.001    |       0.0993  0.3333  3.358    2.000
+tangent      6.00           0.1666     0.1667   1.000    |       0.0993  0.1667  1.679    1.000
+closed-loop speed hold with proportional gain Kp (u = F0 + Kp (vref - v)), 10% step in vref, time to 63.2%: twin vs real (secant twin at v*)
+Kp=0.5   real 0.1540  twin 0.2860  ratio 1.857  (pole: real 6.50, twin 3.50)
+Kp=2     real 0.1250  twin 0.2000  ratio 1.600  (pole: real 8.00, twin 5.00)
+Kp=10    real 0.0630  twin 0.0770  ratio 1.222  (pole: real 16.00, twin 13.00)
+
+== 4. What a fit to coast-down data returns (v0 = 10, dt = 0.02, noise sd 0.05, mean of 20 seeds) ==
+window T   speed at T   fit on ln v (time domain)   fit on decel vs v   secant c at v0  at mid speed  tangent at v0
+0.2             5.000          3.432 (sd 0.039)           3.745 (sd 0.059)       5.00      3.75     10.00
+0.5             2.857          2.389 (sd 0.015)           3.203 (sd 0.038)       5.00      3.21     10.00
+1.0             1.667          1.632 (sd 0.009)           2.913 (sd 0.037)       5.00      2.92     10.00
+3.0             0.625          0.743 (sd 0.005)           2.651 (sd 0.032)       5.00      2.66     10.00
+noise-free force regression on v uniform on [0, V]: c = 3kV/4 (V=10: 3.750)
+
+== 5. A twin calibrated on a coast-down window [5, 10] (mean-square fit of k v^2 by c v) used over a mission speed band: error of steady-state energy per distance ==
+fitted c = 4.018 (secant at the window midpoint 7.5 would be 3.750)
+mission speed 1     twin/real energy 8.036
+mission speed 2.5   twin/real energy 3.214
+mission speed 5     twin/real energy 1.607
+mission speed 7.5   twin/real energy 1.071
+mission speed 10    twin/real energy 0.804
+mission speed 15    twin/real energy 0.536
+the fit is unbiased in the energy only at v = c/k = 8.036, and the twin over-charges slower and under-charges faster missions by the ratio v_fit/v

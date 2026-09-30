@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drag-twin"
+version = "0.1.0"
+description = "Linear-drag twin calibrated by coast-down vs real quadratic drag: a secant-matched twin has the right steady state at the calibration speed but a 2x wrong small-signal time constant; coast-down distance is finite in the twin and logarithmically unbounded in truth; energy and terminal speed errors follow the speed ratio"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
