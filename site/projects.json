@@ -610,6 +610,11 @@
      "slug": "twin-elicitation",
      "title": "What should you pay a digital-twin provider for?",
      "summary": "A provider paid Brier score on the twin&rsquo;s parameter reports its posterior mean; one paid the deployed control cost reports the Bayes gain, which is more conservative (0.778 vs 0.823 at posterior sd 0.3, mean 1) and equals domain randomization under the provider&rsquo;s own uncertainty. Certainty equivalence costs a quartic in spread (16&times; per doubling); reports with equal squared error have regret ratios of 1.3&ndash;24&times;; a payment cap makes the elicited gain jump at a closed-form threshold <em>M</em>* (19.3 in the example) that decides whether rare catastrophic plants are priced in; and Brier under- or over-pays probing by a 15&times; spread in decision value per unit variance. Stylised."
+    },
+    {
+     "slug": "twin-multifidelity",
+     "title": "How do you estimate a controller's real-world cost with a biased digital twin?",
+     "summary": "A twin-only cost estimate is biased by the twin&rsquo;s error, a real-only one is noisy; as a control variate the twin keeps the estimate unbiased and is worth its <em>correlation</em> with real rollouts, not its accuracy. Under common disturbances the cost correlation has a closed form and decays as (1+<em>c</em><sup>4</sup>)/(1&minus;<em>c</em><sup>4</sup>)<sup>2</sup>(<em>k&delta;</em>)<sup>2</sup> in the twin&rsquo;s gain error (0.985, 0.941, 0.782, 0.472 for gains 1.15, 1.3, 1.6, 2.0 while the twin-only bias grows 0.004 to 1.34); replaying only a fraction &lambda; of the real disturbance multiplies it by exactly &lambda;<sup>2</sup>. The optimal twin-to-real rollout ratio is &radic;(<em>c<sub>r</sub></em>&rho;<sup>2</sup>/(<em>c<sub>t</sub></em>(1&minus;&rho;<sup>2</sup>))), the twin pays only below price (1&minus;&radic;(1&minus;&rho;<sup>2</sup>))<sup>2</sup>/&rho;<sup>2</sup>, and a simulated estimator cut variance to 0.228 of real-only against 0.225 predicted. Twin-only wins at tiny budgets or tiny bias; the control variate is best elsewhere. Stylised."
     }
    ]
   }
