@@ -880,6 +880,11 @@
      "slug": "deadband-twin",
      "title": "What does a twin with no actuator deadband promise a proportional loop, and what does the real one do?",
      "summary": "With a deadband <em>d</em> the real servo loop rests at exactly |<em>x</em>|&nbsp;=&nbsp;<em>d</em>/<em>k</em> (0.500 at <em>d</em>=0.2, <em>k</em>=0.4) while the twin converges to zero, so the twin certifies tolerances the real loop never meets and needs <em>k</em>&nbsp;&ge;&nbsp;<em>d</em>/<em>&epsilon;</em>, which fails beyond <em>k</em>&nbsp;=&nbsp;1. A linear twin fitted from Gaussian excitation of std <em>s</em> recovers 2<em>Q</em>(<em>d</em>/<em>s</em>) (Stein&rsquo;s lemma; 0.0457 vs 0.0455 at <em>s</em>=0.5), an excitation-dependent gain, while the small-signal gain is 0. Bisection needs about 8 real probes to cut the stall 0.784&nbsp;&rarr;&nbsp;0.0005, with exact residuals (<em>d</em>&minus;<em>d&#770;</em>)/<em>k</em> under-compensated and a period-2 chatter (<em>d&#770;</em>&minus;<em>d</em>)/(2&minus;<em>k</em>) over-compensated. Stylised: scalar integrator, noiseless, <em>k</em>&nbsp;&le;&nbsp;1."
+    },
+    {
+     "slug": "deadband-noise-twin",
+     "title": "Does measurement noise, or dither, hide an actuator deadband the twin lacks?",
+     "summary": "At <em>K</em>=0.5, <em>d</em>=0.1 the linear twin&rsquo;s exact stationary rms is <em>s</em>&radic;(<em>K</em>/(2&minus;<em>K</em>)); the real deadband loop is 27&times; worse at <em>s</em>=0.01 (0.1591 vs 0.0058) but 0.37&times; at <em>s</em>=0.05 (0.0107 vs 0.0289), because noise dithers the actuator, so a validation in the high-noise regime would call the deadband harmless. Deliberate dither removes the noise-free stall (rms 0.2000 to 0.0001 at <em>a</em>=<em>d</em>) but only hurts at <em>s</em>=0.05 (0.0103 to 0.0226), and under noise mild under-compensation of the width beats the exact width (0.0053 vs 0.0116 at <em>s</em>=0.02). Follow-up to the deadband twin. Stylised: scalar integrator, single-seed simulations without confidence intervals."
     }
    ]
   }
