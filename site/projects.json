@@ -655,6 +655,11 @@
      "slug": "latency-twin",
      "title": "What does a digital twin without sensor latency do to a tuned controller?",
      "summary": "A scalar unstable plant is controlled by the LQR gain designed in a twin with no measurement delay. The exact stable-gain interval shrinks with the real delay (upper edge 1 at one step, 0.59 at two), so the twin-tuned gain (0.70) tolerates one step at 1.6&times; the delay-aware cost and is unstable from two; a retuned static gain costs 1.1&ndash;2.6&times; for delays 1&ndash;5, and a predictor built for the wrong delay is unstable in nearly every off-diagonal case tested. Identifying the delay from an i.i.d. probe takes about 2<em>z</em><sup>2</sup>(1+1/snr) samples. Stylised: scalar plant, integer delay, known dynamics."
+    },
+    {
+     "slug": "targeted-observation-twin",
+     "title": "When does a forecast-ensemble twin send the UAV to the wrong place, or make the update worse?",
+     "summary": "A UAV samples from a corridor to cut forecast error over a region it cannot enter, with sites and Kalman gain taken from a twin&rsquo;s covariance; the real error after the update is exact (Joseph form, checked against simulation). A matched twin cuts the real error 22%; a twin whose correlation length is 2&times; too long claims &minus;65% and delivers +28%, because updates are harmful beyond a closed-form radius (ln&nbsp;2/(&ell;<sub>r</sub><sup>&minus;2</sup>&minus;&ell;<sub>t</sub><sup>&minus;2</sup>))<sup>1/2</sup>. Amplitude errors are harmless for one observation but an under-confident twin double-counts over several. A finite ensemble drawn from the <em>correct</em> model already hurts: 10 members give +27% mean real error (71% of ensembles worse than no observation), 50 are safe, and localisation helps at small sizes but costs accuracy at large ones; fitting the length scale from real samples needs about 50. Stylised: 1-D Gaussian field, one static update."
     }
    ]
   }
