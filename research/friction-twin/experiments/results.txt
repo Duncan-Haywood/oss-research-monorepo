@@ -1,0 +1,47 @@
+Friction twin: massless load, dry friction (stiction fs, Coulomb fc <= fs); twin has none. Loop z+=z+x, u=-(kp*x+ki*z), x+=u-s*fc.
+
+== 1. Twin converges; Coulomb-only twin rests; real stiction loop hunts (fs=1, fc=0.5, x0=10, 60000 steps, tail 3000) ==
+kp    ki     twin radius  twin |x| end  Coulomb-only twin amp  real amp  max|x|   stuck intervals  mean stuck  spread  slide steps
+0.5   0.1    0.707        4.9e-324      0                      0.4810    0.4904   525              34.3        0.06    3.79
+0.3   0.05   0.837        6.9e-232      0                      0.7315    0.7491   407              43.1        0.05    6.00
+0.2   0.2    0.894        7.7e-124      0                      0.9182    0.9284   1449             9.7         0.09    4.10
+0.3   0.1    0.837        3.6e-226      0                      0.7073    0.7148   717              22.9        0.06    5.00
+0.5   0.2    0.707        4.9e-324      0                      0.4744    0.4875   960              17.8        0.09    3.00
+
+== 2. Homogeneity (kp=0.5, ki=0.1, fc=fs/2, x0=10 fs, 5000 steps): max |trajectory/fs - reference| ==
+fs=0.0078125  max dev = 0
+fs=64         max dev = 0
+fs=0.01       max dev = 0.917
+fs=100        max dev = 0.909
+amplitude/fs over 60000 steps: fs=0.01: 0.4793  fs=1: 0.4810  fs=100: 0.4765
+
+== 3. Stiction drop sweep (kp=0.5, ki=0.1, fs=1, fc=1-d): amplitude and max|x| relative to d, three starts (200000 steps, tail 20000) ==
+d       amp/d (x0=10)  amp/d (x0=2)  amp/d (x0=0.5)  max|x|/d (x0=10)
+1       0.9467         0.9467        0.9467          0.9468
+0.5     0.9817         0.9702        0.9723          0.9822
+0.2     0.9602         0.9671        0.9660          0.9684
+0.1     0.9680         0.9731        0.9683          0.9837
+0.05    0.9407         0.9315        0.9435          0.9533
+0.02    0.9446         0.9073        0.9225          0.9658
+0.01    0.9107         0.9027        0.8934          0.9405
+0       amp = 0, 0, 0 (stiction = Coulomb: deadband, comes to rest)
+
+== 4. Integral gain (kp=0.5, fs=1, fc=0.5): amplitude by start ==
+ki     twin radius  x0=10    x0=2     x0=0.5
+0.01   0.980        0.0000   0.0000   0.4861
+0.02   0.958        0.0000   0.0000   0.4849
+0.05   0.885        0.4828   0.0000   0.4831
+0.1    0.707        0.4739   0.4721   0.4802
+0.2    0.707        0.4808   0.4797   0.4734
+0.4    0.707        0.4977   0.4931   0.4893
+
+== 5. Mis-calibrated twin with stiction: predicted amplitude vs real (kp=0.5, ki=0.1, true fs=1, fc=0.5 i.e. d=0.5, x0=2) ==
+real amp = 0.4801
+assumed d   twin amp   error vs real
+0           0.0000     -100.0%
+0.1         0.0921     -80.8%
+0.25        0.2315     -51.8%
+0.4         0.3686     -23.2%
+0.5         0.4801     +0.0%
+0.6         0.5725     +19.3%
+0.75        0.7246     +50.9%

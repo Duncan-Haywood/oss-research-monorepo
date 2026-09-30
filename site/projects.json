@@ -895,6 +895,11 @@
      "slug": "backlash-twin",
      "title": "Does a twin with a rigid drivetrain miss the hunting cycle caused by gear backlash?",
      "summary": "On a discrete PI loop the rigid twin has spectral radius 0.71&ndash;0.89 and converges, yet the real loop with a gap of half-width <em>h</em> settles on a limit cycle of motor amplitude 1.30&ndash;2.94<em>h</em> that scales exactly with <em>h</em> (1.302317 for <em>h</em>=0.01, 1, 100). The backlash describing function is an excitation-dependent gain (0.21 at <em>A</em>/<em>h</em>=1.2, 0.99 at 30) with a phase lag, and harmonic balance predicts the cycle but overestimates its amplitude by 6.7&ndash;10.1%. Negative result: the loop is bistable in some settings (hunting 1.165<em>h</em> from small starts, converging from large steps), so a large-step validation can pass a configuration that hunts. Follow-up to the deadband twin. Stylised: scalar loop, symmetric known gap, noiseless."
+   },
+   {
+     "slug": "friction-twin",
+     "title": "Does a twin with no dry friction miss the stick-slip hunting caused by stiction?",
+     "summary": "On a discrete PI loop the frictionless twin has spectral radius 0.71&ndash;0.89 and converges, and so does a Coulomb-only twin (a pure deadband), yet a real load whose breakaway level <em>f</em><sub>s</sub> exceeds its sliding level <em>f</em><sub>c</sub> stick-slips indefinitely (amplitude 0.47&ndash;0.92<em>f</em><sub>s</sub> at <em>f</em><sub>c</sub>=<em>f</em><sub>s</sub>/2, slides of 3&ndash;6 steps between 10&ndash;43-step dwells). The amplitude is set by the drop <em>d</em>=<em>f</em><sub>s</sub>&minus;<em>f</em><sub>c</sub>, at 0.89&ndash;0.98<em>d</em> for <em>d</em> from 0.01 to 1 at one gain setting but 1.5&ndash;1.8<em>d</em> at lower proportional gain, and trajectories rescale bit for bit with the friction levels. A twin that assumes the wrong drop mispredicts the amplitude almost proportionally (&minus;23% at 0.8<em>d</em>, +51% at 1.5<em>d</em>). Negative result: for small integral gain small starts hunt where large starts converge, so a single large-step validation can miss it. Stylised: scalar massless load, constant friction levels, noiseless."
    }
    ]
   }

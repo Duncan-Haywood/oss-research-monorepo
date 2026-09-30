@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "friction-twin"
+version = "0.1.0"
+description = "Stiction a twin does not model: stick-slip hunting under PI control that a viscous or Coulomb-only twin cannot predict, exact scaling with the friction level, linear growth with the stiction drop, and calibration sensitivity"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
