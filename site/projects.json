@@ -513,6 +513,11 @@
      "slug": "forgetting-law",
      "title": "How fast does a shared model forget a task, and does splitting it into modules help?",
      "summary": "Training to convergence on random rank-<em>r</em> tasks in <em>R<sup>d</sup></em> is a projection, and the expected loss on a task learned <em>k</em> tasks ago is exactly (<em>r</em>/<em>d</em>)(1&minus;<em>r</em>/<em>d</em>)(&rho;<sup><em>k</em></sup>&minus;&lambda;<sup><em>k</em></sup>): zero when learned, a peak (0.044 at <em>d</em>=12, <em>r</em>=3, lag 2.5) at a lag near 0.7<em>d</em>/<em>r</em>, then decay because the tasks agree; matched by simulation to the third decimal. Routing tasks to <em>m</em> modules dilutes both rates by <em>m</em> and cuts short-horizon forgetting (5.9&times; at <em>T</em>=4, <em>m</em>=8) but a single shared model minimises seen-plus-fresh loss at every horizon tried, and two modules forget more than one at <em>T</em>=12. With conflicting tasks forgetting has a floor 2<em>r</em>&tau;&sup2;/<em>d</em> that only task-specific modules remove. Stylised: linear regression, exact convergence, isotropic tasks."
+    },
+    {
+     "slug": "merge-law",
+     "title": "How should independently trained modules be merged, and how much does parallel training buy?",
+     "summary": "Averaging <em>m</em> modules trained to convergence on random rank-<em>r</em> tasks has an exact residual error 1&minus;2<em>amp</em>+<em>a</em><sup>2</sup>(<em>mp</em>+<em>m</em>(<em>m</em>&minus;1)<em>p</em><sup>2</sup>) with <em>p</em>=<em>r</em>/<em>d</em>, needing only isotropy. The optimal scale is 1/(1+(<em>m</em>&minus;1)<em>p</em>) and leaves (1&minus;<em>p</em>)/(1+(<em>m</em>&minus;1)<em>p</em>): plain averaging stalls at (1&minus;<em>p</em>)<sup>2</sup> (0.78 vs 0.47 at <em>m</em>=8, <em>d</em>/<em>r</em>=8) and unscaled task arithmetic diverges (56 at <em>m</em>=64). The decay is harmonic, not geometric, so <em>m</em> parallel workers give a wall-clock speedup that grows only logarithmically (8.9&times; at <em>m</em>=16, 17&times; at <em>m</em>=64) and halves in efficiency near <em>m</em>&asymp;<em>d</em>/<em>r</em>&times;2.5. Seen and fresh losses are closed forms matched by simulation. Stylised: linear regression, exact convergence, consistent isotropic tasks."
     }
    ]
   }
