@@ -1100,6 +1100,11 @@
      "slug": "aliasing-twin",
      "title": "What does a radar twin with unlimited unambiguous velocity over-certify?",
      "summary": "A pulsed Doppler radar reports radial velocity modulo 2<em>V</em>; a twin that renders velocity as a real number never aliases. The real bias of a wrapped return is an exact Gaussian tail series (&minus;<em>V</em> at speed <em>V</em>, &minus;2<em>V</em> beyond) and the real MSE has a bias<sup>2</sup> floor, so averaging widens the gap to the twin's claim <em>s</em><sup>2</sup>/<em>n</em>: at <em>V</em>=10, <em>s</em>=1 and speed 8 the real/claimed MSE is 7.9&times; for one return and 2.1&times;10<sup>3</sup> for 10<sup>4</sup>. Speeds with |bias| &le; 0.1 reach only 87%, 74% and 48% of <em>V</em> for noise 0.5, 1, 2. Unwrapping against a prior has exact failure probability 2&Phi;(&minus;<em>V</em>/&radic;(<em>s</em><sup>2</sup>+<em>s<sub>p</sub></em><sup>2</sup>)) and stays within 10% of the twin's claim only for prior error &le; 0.26<em>V</em>. Stylised: one radial channel, Gaussian noise, simulated radar."
+    },
+    {
+     "slug": "twin-ladder",
+     "title": "Which rungs of a ladder of digital twins are worth running?",
+     "summary": "For twins of decreasing cost and fidelity used as nested control variates the variance is exact, &sigma;<sup>2</sup>&Sigma;(&rho;<sub>i</sub><sup>2</sup>&minus;&rho;<sub>i+1</sub><sup>2</sup>)/m<sub>i</sub>, and a cheaper rung pays below a twin already in use iff &rho;<sub>2</sub>/&rho;<sub>1</sub> &gt; 2&radic;r/(1+r) (0.943 for halved cost, 0.575 for a 10&times; drop), the single-twin threshold applied to the step correlation. Using every rung is not best (q=0.99, r=0.5, six rungs: 0.284 of real-only variance vs 0.196 for the best two; q=0.9 makes all rungs 1.41&times; worse than real-only while the best subset gets 0.83), and 10 of 336 paying grid points are infeasible. On a saturated PD mass-spring timestep ladder the best ladder reaches 0.156 of real-only variance (0.204 for the best single twin), collapsing to the cheapest twin at 90%/70% disturbance replay (0.52/0.89 simulated); a coarser rung diverged in 2 of 20,000 contexts. Stylised: one plant, known correlations, step-count costs."
     }
    ]
   }
