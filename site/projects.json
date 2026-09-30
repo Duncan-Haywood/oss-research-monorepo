@@ -705,6 +705,11 @@
      "slug": "twin-certification",
      "title": "Can a digital twin shorten a real-world safety certification?",
      "summary": "Certifying a failure rate <em>p</em>&nbsp;&lt;&nbsp;&epsilon; from <em>n</em> real trials with a twin-derived prior. The worst-case false-certification probability of any &lsquo;certify iff <em>k</em>&nbsp;&le;&nbsp;<em>c</em>&rsquo; rule is exactly P(Bin(<em>n</em>,&epsilon;)&nbsp;&le;&nbsp;<em>c</em>), so by Karlin&ndash;Rubin the twin cannot cut real trials at a fixed level: at &epsilon;=0.01, &delta;=0.05 the exact test needs 299 zero-failure trials, a twin prior reaches 133 only at worst-case size 0.26, and the exact test held to the same size needs the same <em>n</em> (1057 vs 1057 for 90% power at <em>p</em>=&epsilon;/3). A weakly informative Jeffreys bound is already anti-conservative (size 0.147 at 191 trials). Optimistic twins inflate size, pessimistic ones (claim 2&epsilon;) block certification entirely, and the largest safe twin weight is about 90 twin-trial equivalents at <em>n</em>=299. Stylised: one Bernoulli failure rate, no continuous margins."
+    },
+    {
+     "slug": "twin-evaluation",
+     "title": "How many real rollouts does a biased digital twin save when evaluating a robot policy?",
+     "summary": "Using the twin as a control variate keeps the estimate unbiased whatever the twin's bias (twin-only error +0.700 vs +0.001) with exact variance &sigma;<sub>R</sub>&sup2;((1&minus;&rho;&sup2;)/n + &rho;&sup2;/N). Real and twin cannot share execution noise, so &rho; is set by the observed scenario context: a faithful twin gets &rho;=&eta; but a noise-free twin gets &rho;=&radic;&eta; (1.33&times; vs 2.0&times; real-sample equivalent at &eta;=0.5). A twin is worth its compute only if c<sub>T</sub>/c<sub>R</sub> &lt; (1&minus;&radic;(1&minus;&rho;&sup2;))&sup2;/&rho;&sup2; (0.072 at &rho;=0.5), and where twin bias favours the wrong policy, twin-only ranking is wrong while 86&ndash;125 real episodes per policy give a 90% correct order against 164 real-only. Stylised: Gaussian returns, exact context replay, no robot data."
     }
    ]
   }
