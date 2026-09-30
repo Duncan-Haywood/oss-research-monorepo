@@ -825,6 +825,11 @@
      "slug": "terrain-twin",
      "title": "What stopping distance can a twin with independent terrain cells certify?",
      "summary": "Braking on Gamma-distributed patch friction has an exact incomplete-gamma law. A twin drawing 100 independent cells across the stopping distance certifies 1.17&times; the mean-friction distance at level 10<sup>&minus;3</sup>; on real terrain with 1, 3 or 10 patches across it the exceedance is 0.44, 0.33 and 0.18, and finer twin cells make it worse. The mean stopping distance is nearly right (1.00&ndash;1.32&times;) while the tail is not. Matching the measured patch count restores the level; overstating it 2&times; gives 16&times; the claimed risk. Stylised."
+    },
+    {
+     "slug": "replicate-twin",
+     "title": "One long twin run or many replications when every run starts in the wrong state?",
+     "summary": "Splitting a fixed budget of <em>N</em> twin draws into <em>r</em> replications, each started at an offset and with <em>d</em> draws deleted, gives iid replication means, but the warm-up bias does not shrink with <em>r</em>. For an AR(1) the MSE and the exact coverage of the Student-<em>t</em> interval are closed-form (0.921 vs 0.921 simulated at <em>r</em>=50): a single run minimises MSE, replication costs at most 1.07&times; at <em>&phi;</em>=0.9 but 2.2&times; at <em>&phi;</em>=0.99, and the nominal-95% interval covers 92% at the MSE-optimal deletion once replications are short (no deletion reaches 94% at 40 draws each). Single-run batch means were not worse in this model. Preliminary M/M/1 simulation: 30 short replications cover 5.8% of the time, and no setting tried reaches 95%. Stylised: Gaussian AR(1), one start offset, simulated &ldquo;real&rdquo; system."
     }
    ]
   }
