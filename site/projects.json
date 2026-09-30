@@ -745,6 +745,11 @@
      "slug": "timestep-twin",
      "title": "What overshoot does a controller tuned in a fixed-step digital twin really have?",
      "summary": "A twin's integrator adds or removes damping the plant does not have. Per-step pole moduli are exact (real e<sup>&minus;hc</sup>; explicit 1&minus;hc+h&sup2;k; semi-implicit 1&minus;hc; implicit 1/(1+hc+h&sup2;k)), and the first-order damping bias of explicit and implicit Euler changes sign at &zeta;=1/&radic;2 (measured 0.742&rarr;0.711 and 0.675&rarr;0.703 as h falls 0.2&rarr;0.025). Tuned to 10% overshoot in the twin, the real plant overshoots 0.105&ndash;0.192 (semi-implicit and implicit, h=0.05&ndash;0.4) while forward Euler is conservative (0.091&ndash;0.036); at a 1% target the semi-implicit twin under-claims by up to 4.9&times;. The excess halves with h (first order); Richardson extrapolation of the twin&rsquo;s overshoot at fixed gain recovers the real value to 0.0003&ndash;0.0012, and re-tuning with substeps costs &times;4 to &times;32. Stylised: one linear oscillator, textbook integrators (not any engine&rsquo;s scheme), overshoot read from samples, no robot data."
+    },
+    {
+     "slug": "twin-ladder",
+     "title": "Which rungs of a ladder of digital twins are worth running?",
+     "summary": "For twins of decreasing cost and fidelity used as nested control variates the variance is exact, &sigma;<sup>2</sup>&Sigma;(&rho;<sub>i</sub><sup>2</sup>&minus;&rho;<sub>i+1</sub><sup>2</sup>)/m<sub>i</sub>, and a cheaper rung pays below a twin already in use iff &rho;<sub>2</sub>/&rho;<sub>1</sub> &gt; 2&radic;r/(1+r) (0.943 for halved cost, 0.575 for a 10&times; drop), the single-twin threshold applied to the step correlation. Using every rung is not best (q=0.99, r=0.5, six rungs: 0.284 of real-only variance vs 0.196 for the best two; q=0.9 makes all rungs 1.41&times; worse than real-only while the best subset gets 0.83), and 10 of 336 paying grid points are infeasible. On a saturated PD mass-spring timestep ladder the best ladder reaches 0.156 of real-only variance (0.204 for the best single twin), collapsing to the cheapest twin at 90%/70% disturbance replay (0.52/0.89 simulated); a coarser rung diverged in 2 of 20,000 contexts. Stylised: one plant, known correlations, step-count costs."
     }
    ]
   }
