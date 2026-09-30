@@ -810,6 +810,11 @@
      "slug": "autocorr-twin",
      "title": "How much is one long digital-twin run worth when its output is serially correlated?",
      "summary": "Twin output such as queue waits is autocorrelated, but a run is usually summarised as mean &plusmn; 1.96&thinsp;<em>s</em>/&radic;<em>n</em>. For AR(1) output the run-mean variance is exact (matched to simulation), so 1000 draws at <em>&phi;</em>=0.9 are worth 53. For an M/M/1 lab instrument the variance of the run mean is 9.7&times;, 33&times; and 363&times; the iid value at <em>&rho;</em>=0.5, 0.7, 0.9: from 10<sup>4</sup> jobs the naive 95% interval covers the true mean wait 53%, 26% and 9% of the time, and a twin &ldquo;certifies&rdquo; an SLA of 8 against a true mean of 9 in 26% of runs. Higher load needs a longer run (470 jobs by the iid formula, 170,268 exactly at <em>&rho;</em>=0.9). Batch means restore coverage (94&ndash;95%) only when batches outlast the correlation time; it is 53.5% at <em>&phi;</em>=0.99 and 82.5% at <em>&rho;</em>=0.9, <em>n</em>=10<sup>4</sup>. Stylised (Gaussian AR(1) and M/M/1, simulated &ldquo;real&rdquo; system)."
+    },
+    {
+     "slug": "warmup-twin",
+     "title": "How much of a digital-twin run should be thrown away because it started in the wrong state?",
+     "summary": "A twin started from an empty queue or a nominal sensor value is biased at first. For AR(1) output the bias and variance of the run mean are exact (0.300 vs 0.300 simulated at <em>&phi;</em>=0.9, <em>n</em>=100), and the MSE-optimal warm-up is about one relaxation time 1/(1&minus;<em>&phi;</em>) with a gain of at most 1.5&times; and 1.03&times; once <em>n</em> is about a hundred relaxation times. An M/M/1 instrument started empty underestimates the mean wait by 21%, 6% and 1.2% at <em>&rho;</em>=0.9 with 500, 2000 and 10<sup>4</sup> jobs, but at 5000 jobs the bias (&minus;0.14) is far below the run-to-run RMSE (2.4). Negative result: fixed deletion does not lower RMSE, and MSER-5 truncation leaves a larger bias (&minus;0.77), covers 61% against 72% for no truncation, and passes a violating system 28% of the time against 18%. Stylised (Gaussian AR(1), M/M/1, simulated &ldquo;real&rdquo; system)."
     }
    ]
   }
