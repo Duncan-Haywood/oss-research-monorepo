@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sweep-twin"
+version = "0.1.0"
+description = "Instantaneous-scan twin of a spinning lidar: a wall seen while moving is skewed by v_n T/(2 pi d), so heading bias, speed limits and the accuracy a deskew velocity needs follow in closed form"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

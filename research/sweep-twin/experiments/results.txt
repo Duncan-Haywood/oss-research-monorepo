@@ -1,0 +1,53 @@
+Sweep twin: real = spinning 2-D lidar, scan period T=0.1 s (10 Hz), 1800 beams, moving robot; twin = whole scan at one instant.
+Wall fitted by total least squares over +-30 deg of azimuth; skew = error of the fitted wall normal angle.
+
+== 1. Wall 5 m ahead, robot driving at it: apparent rotation of the wall (twin: 0) ==
+v (m/s)   fitted skew (deg)   fitted distance (m)   formula vn T/(2 pi d0) (deg)   formula with d at hit (deg)
+   1.0               0.173                 4.962                          0.182                         0.184
+   2.0               0.349                 4.925                          0.365                         0.370
+   5.0               0.894                 4.812                          0.912                         0.948
+  10.0               1.860                 4.622                          1.824                         1.973
+  20.0               4.041                 4.237                          3.648                         4.304
+
+== 2. Only the normal velocity component skews a wall (v = 10 m/s, wall 5 m ahead) ==
+normal   (10, 0)       skew 1.860 deg, fitted distance 4.622 m
+tangent  (0, 10)       skew 0.000 deg, fitted distance 5.000 m
+oblique (7.07, 7.07)   skew 1.285 deg, fitted distance 4.733 m
+
+== 3. Scan period and range: skew at v = 10 m/s ==
+T (s)    d=2 m    d=5 m    d=10 m   (deg, fitted; wall ahead)
+ 0.05    2.372    0.894     0.438
+ 0.10    5.276    1.860     0.894
+ 0.20   13.451    4.041     1.860
+
+== 4. Room heading estimate from all four walls (walls weighted by point count, +-5 deg sectors), robot at origin, v = (5, 0) m/s ==
+centred  x in [-5, 5]      mean heading error 0.027 deg (twin 0.0e+00); per wall (front, left, back, right) = [0.946, 0.0, -0.837, 0.0] deg
+off-centre x in [-2, 18]   mean heading error -0.403 deg (twin 0.0e+00); per wall (front, left, back, right) = [0.256, 0.0, -1.867, 0.0] deg
+long hall x in [-2, 40]    mean heading error -0.438 deg (twin 0.0e+00); per wall (front, left, back, right) = [0.114, 0.0, -1.867, 0.0] deg
+
+== 5. Speed limit for a skew tolerance: v* = 2 pi d psi_tol / T (m/s) ==
+tolerance   T (s)   d=2 m   d=5 m   d=10 m
+   0.5 deg   0.05    2.19    5.48    10.97
+   0.5 deg   0.10    1.10    2.74     5.48
+   1.0 deg   0.05    4.39   10.97    21.93
+   1.0 deg   0.10    2.19    5.48    10.97
+   2.0 deg   0.05    8.77   21.93    43.86
+   2.0 deg   0.10    4.39   10.97    21.93
+check: at v*(1 deg, T=0.1, d=5) = 5.48 m/s the fitted skew is 0.984 deg (fitted distance 4.794 m)
+
+== 6. Deskewing with a wrong velocity (true v = 10 m/s, wall 5 m ahead, T = 0.1 s) ==
+velocity error   residual skew (deg)   formula (vn - v_est) T/(2 pi d_hit) (deg)
+           0%                0.000                                    0.000
+           5%                0.092                                    0.099
+          10%                0.185                                    0.197
+          20%                0.370                                    0.395
+          50%                0.926                                    0.986
+velocity accuracy needed for residual <= 0.5 deg at v=10, d=5, T=0.1: eps <= 27.4%
+velocity accuracy needed for residual <= 1.0 deg at v=10, d=5, T=0.1: eps <= 54.8%
+
+== 7. Yaw rate bends the wall instead of rotating it (wall 5 m ahead, +-20 deg sector, no translation) ==
+yaw rate (rad/s)   max departure from best line (mm)   fitted tilt (deg)   heading at hit Om*t_hit (deg)   tilt minus heading (deg)
+            0.5                               3.327              -1.084                          -1.074                     -0.009
+            1.0                               6.688              -2.186                          -2.149                     -0.037
+            2.0                              13.513              -4.446                          -4.297                     -0.149
+            4.0                              27.569              -9.184                          -8.594                     -0.590
