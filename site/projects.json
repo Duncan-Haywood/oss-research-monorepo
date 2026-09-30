@@ -558,6 +558,11 @@
      "slug": "partial-participation",
      "title": "What happens to local SGD when workers drop in and out?",
      "summary": "Each of <em>N</em> workers joins a round with probability <em>p</em>. Averaging the participants has exact stationary variance &alpha;<em>V</em><sub>w</sub><em>m</em>/(<em>s</em>(2&minus;&alpha;<em>s</em>)) with <em>m</em>&nbsp;=&nbsp;<em>E</em>[1/<em>K</em>&nbsp;|&nbsp;<em>K</em>&ge;1]; dividing by the expected count instead is stable only for &alpha;<em>s</em>&nbsp;&lt;&nbsp;2/<em>c</em>, <em>c</em>&nbsp;=&nbsp;1+(1&minus;<em>p</em>)/(<em>Np</em>), and cannot contract faster than 1&minus;1/<em>c</em> per round (0.22 at <em>N</em>=32, <em>p</em>=0.1). At matched speed the fixed normaliser is quieter at small steps by <em>E</em>[<em>K</em>|<em>K</em>&ge;1]&middot;<em>E</em>[1/<em>K</em>|<em>K</em>&ge;1] (1.34&times;), and averaging wins only at fast rates. Reliable workers bias the fixed point (0.467 instead of 1.000 in our example) unless displacements are inverse-propensity weighted. Matched to simulation within 0.5%. Stylised."
+    },
+    {
+     "slug": "compressed-sync",
+     "title": "What does compressing the pseudo-gradient cost local SGD, and is it better than syncing less often?",
+     "summary": "Unbiased compression of each worker's displacement (rand-k, relative variance &omega;) gives an exact stationary variance &alpha;<em>V</em><sub>w</sub>(1+&omega;)/(<em>N s</em>((2&minus;&alpha;<em>s</em>)&minus;&alpha;<em>s</em>&omega;/<em>N</em>)) and shrinks the stable outer step to 2/(<em>s</em>(1+&omega;/<em>N</em>)): more workers restore the step (0.47 &rarr; 2.44 for &omega;=99, <em>N</em>=16 &rarr; 256) but never the floor, which stays (1+&omega;)&times;. Norm-scaled (QSGD-style) quantisation has a closed form through one scalar <em>T</em>&nbsp;=&nbsp;<em>E</em>|<em>d</em>|<sup>2</sup>; at equal error energy its loss equals coordinate-wise at <em>H</em>=1 and is about 10% worse at <em>H</em>=16, with the stiff mode's variance doubling. For equal bytes, syncing 1/&rho; times less often leaves the floor unchanged at &alpha;=1 while keeping a fraction &rho; multiplies it by 1/&rho;. Matched to simulation within 2%. Stylised: quadratic, shared curvature (no client drift), unbiased compressors only."
     }
    ]
   }
