@@ -268,6 +268,11 @@
      "slug": "stake-screening",
      "title": "Can a bond tell reliable hardware from unreliable?",
      "summary": "Workers have hidden fault rates and accept a wage-and-stake contract. Single crossing runs the wrong way: the <em>reliable</em> worker is the one who would copy a high-stake contract, so its rent is exactly (&theta;<sub>H</sub>&minus;&theta;<sub>L</sub>)(c+(1+&rho;)s<sub>H</sub>)/(1&minus;&theta;<sub>H</sub>), minimised at zero stake, and with continuous types a flat wage with no stake is optimal (no random 2&ndash;4-contract menu beats it). A stake needed for deterrence is a tax: it scales reliable workers&rsquo; rent by (c+(1+&rho;)s)/c and lowers the pool&rsquo;s fault rate (0.169&rarr;0.089) at 9&ndash;55% of profit. Stylised."
+    },
+    {
+     "slug": "milestone-schedules",
+     "title": "How many milestones does an unenforced job need?",
+     "summary": "A requester and an anonymous worker split a job into milestones, each a stage of pre-payment, work and late payment, with a grim trigger that forfeits the remaining surplus and a relationship value <em>W</em>. A milestone is self-enforcing under some pre-payment split iff its cost is at most the <em>pooled</em> continuation value, so pay-after-delivery needs <em>P</em>/<em>W<sub>r</sub></em> equal milestones, pay-before <em>C</em>/<em>W<sub>w</sub></em>, and the best split <em>C</em>/(<em>W<sub>r</sub></em>+<em>W<sub>w</sub></em>) (110, 25 and 20 in the example), whoever holds the value. Because early defection also forfeits the remaining work, the largest milestone shrinks geometrically and the minimum count is &lceil;ln(1+(<em>V</em>&minus;<em>C</em>)/<em>W</em>)/ln(<em>V</em>/<em>C</em>)&rceil;: 17 instead of 100 at <em>C</em>=100, <em>V</em>=120, <em>W</em>=1, with the first milestone 1&minus;(<em>C</em>&minus;<em>W</em>)/<em>V</em> of the job. Cheap re-entry caps <em>W</em> and costs ln(1/<em>e</em>) milestones. Matched on 2000 random instances. Stylised: complete information, pro-rata value."
     }
    ]
   },
