@@ -770,6 +770,11 @@
      "slug": "ladder-twin",
      "title": "How should a simulation budget be split across twin fidelities?",
      "summary": "A twin runs at several fixed-step fidelities (n=2<sup>l+1</sup> Euler steps). Multilevel Monte Carlo telescopes the finest-level answer over coupled pairs sharing scenario draws, with allocation N<sub>l</sub> &prop; &radic;(V<sub>l</sub>/C<sub>l</sub>). For a smooth terminal state (bias rate &alpha;=1.000, variance rate &beta;=2.001, cost rate 1) it needs 3.6&times; fewer steps than one fine twin at RMSE 10<sup>&minus;2</sup> and 897&times; fewer at 3&times;10<sup>&minus;5</sup>. For a failure probability the variance only halves per level (&beta;=1.000), so multilevel <em>loses</em> at loose targets (0.4&times; at 3&times;10<sup>&minus;2</sup>), breaks even near 10<sup>&minus;3</sup> and reaches 7.7&times; at 10<sup>&minus;4</sup>. Equal samples per level cost 156&times; (smooth) and 3.9&times; (failure) the optimum; a coarse twin alone is off by 10&ndash;48% however many runs. Stylised: one scalar linear system, exact level moments."
+    },
+    {
+     "slug": "finetune-twin",
+     "title": "How many real steps does a twin-pretrained policy save, and which twin errors does fine-tuning inherit?",
+     "summary": "On a quadratic real loss with SGD noise, the expected loss after <em>k</em> real steps from a twin start is exact (matched to Monte Carlo within 0.3%). A twin start with 0.6&times; the cold-start error saves 64&ndash;67% of the steps to every target from 8&times; to 1.2&times; the SGD floor; at equal error it saves nothing and at 1.5&times; it costs 138 extra steps (negative transfer). For any curvature spectrum the loss left by a twin error of norm <em>b</em> is at most <em>b</em><sup>2</sup>/(4<em>e&eta;k</em>), attained by the direction &lambda;<sub>*</sub>=1/(2&eta;<em>k</em>), so twin error decays as 1/<em>k</em>, not geometrically. At the same initial loss, an error in the stiffest direction needs 13 steps to reach 2&times; the floor and one in the flattest 1,541. Stylised: fixed offset, isotropic noise, no robot data."
     }
    ]
   }
