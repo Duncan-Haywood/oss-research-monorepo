@@ -600,6 +600,11 @@
      "slug": "randomized-twin",
      "title": "How wide should domain randomization be, and what does it buy?",
      "summary": "Randomizing the twin's input gain over &plusmn;&epsilon; trains a more conservative gain (monotone in &epsilon;; small-width law <em>k</em><sub>&epsilon;</sub>&minus;<em>k</em>* = &minus;(&epsilon;<em>b</em>)<sup>2</sup><em>J</em><sub>kbb</sub>/(6<em>J</em><sub>kk</sub>)) at a quartic price when the twin was right, and moves the deployment stability cliff out by about 15%. At 2.3&times; the twin's gain the nominal controller has regret 84 versus 1.4 at &epsilon;=0.9. But uniform-average training is not minimax: its worst-case regret exceeds the nominal gain's for &epsilon;&nbsp;&le;&nbsp;0.7, and the best width equals the prior's half-width, paying off only when the prior reaches the cliff. Stylised."
+    },
+    {
+     "slug": "twin-upkeep",
+     "title": "What does it cost to keep a digital twin in sync with a drifting plant, and is probing worth it?",
+     "summary": "A Kalman twin tracks a drifting actuator gain from the closed-loop data the controller already produces. Its steady-state predictive variance is a closed-form quadratic root (<em>m</em> = <em>q</em>/2 + &radic;(<em>q</em><sup>2</sup>/4 + <em>q</em>&sigma;<sup>2</sup>/<em>v</em>) for a random walk), matching closed-loop simulation to 1&ndash;3%, and control regret is &frac12;<em>J</em><sub>kk</sub>(d<em>k</em>*/d<em>b</em>)<sup>2</sup><em>m</em> (0.00447 predicted vs 0.00466 simulated). A calibrate-and-freeze twin loses half its edge over the population mean after ln&nbsp;2/(2(1&minus;&rho;)) = 34.5 steps. For one drifting parameter a dedicated probing budget never pays (information price 0.70 vs marginal value &le;&nbsp;0.04); for two, the closed-loop blind direction makes a fixed-gain twin unobservable and the mean-field optimal dither scales exactly as <em>q</em><sup>1/6</sup>, yet simulation shows the controller&rsquo;s own gain jitter supplies most of that excitation, so the mean-field law is an upper bound. Stylised."
     }
    ]
   }
