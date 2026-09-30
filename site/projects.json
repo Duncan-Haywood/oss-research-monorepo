@@ -558,6 +558,11 @@
      "slug": "partial-participation",
      "title": "What happens to local SGD when workers drop in and out?",
      "summary": "Each of <em>N</em> workers joins a round with probability <em>p</em>. Averaging the participants has exact stationary variance &alpha;<em>V</em><sub>w</sub><em>m</em>/(<em>s</em>(2&minus;&alpha;<em>s</em>)) with <em>m</em>&nbsp;=&nbsp;<em>E</em>[1/<em>K</em>&nbsp;|&nbsp;<em>K</em>&ge;1]; dividing by the expected count instead is stable only for &alpha;<em>s</em>&nbsp;&lt;&nbsp;2/<em>c</em>, <em>c</em>&nbsp;=&nbsp;1+(1&minus;<em>p</em>)/(<em>Np</em>), and cannot contract faster than 1&minus;1/<em>c</em> per round (0.22 at <em>N</em>=32, <em>p</em>=0.1). At matched speed the fixed normaliser is quieter at small steps by <em>E</em>[<em>K</em>|<em>K</em>&ge;1]&middot;<em>E</em>[1/<em>K</em>|<em>K</em>&ge;1] (1.34&times;), and averaging wins only at fast rates. Reliable workers bias the fixed point (0.467 instead of 1.000 in our example) unless displacements are inverse-propensity weighted. Matched to simulation within 0.5%. Stylised."
+    },
+    {
+     "slug": "sparse-outer-sync",
+     "title": "What does it cost to send only a fraction of the outer update, and does error feedback help?",
+     "summary": "Each worker transmits a random fraction <em>p</em> of its pseudo-gradient. Rescaling the subset (unbiased) inflates the stationary noise floor by exactly 1/<em>p</em>. Adding a per-worker error-feedback memory gives an exact closed form from a four-dimensional second-moment recursion and costs only 1 + <em>&alpha;s</em>(1/<em>p</em> &minus; 1) at small steps, for any number of workers, because the virtual iterate follows uncompressed SGD. The price is speed: the mean dynamics have determinant 1 &minus; <em>p</em>, so the contraction cannot beat &radic;(1 &minus; <em>p</em>) per round; over a 400-round horizon error feedback reaches 0.39, 0.24 and 0.17 of the unbiased loss at <em>p</em> = 0.25, 0.1, 0.03, and the advantage disappears when the horizon is shorter than about 1/<em>p</em>. Stylised: diagonal quadratics, Bernoulli masks, no top-<em>k</em>."
     }
    ]
   }
