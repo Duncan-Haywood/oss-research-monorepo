@@ -635,6 +635,11 @@
      "slug": "occupancy-twin",
      "title": "What does a too-clean sensor twin do to a mapper's commit error?",
      "summary": "A grid cell committed when log-odds built with a twin's sensor model reach &plusmn;<em>A</em> has, under the real sensor, an exact error set by the Lundberg exponent &theta;* (equal to 1 for a correct twin) with a rigorous optional-stopping sandwich. A twin whose free-space false-hit rate is 0.05 against a real 0.15 turns a 10<sup>&minus;3</sup> design into 1.45&times;10<sup>&minus;2</sup> (14.5&times;, matched by simulation; 260&times; at 0.30), and an optimistic occupied hit rate (0.8 vs 0.6) gives 26&times;. Committing at ln(1/&epsilon;)/&theta;* restores the target at 1.4&ndash;16&times; the latency, and the real-data estimate of &theta;* needs several hundred known-free observations before the tempered mapper stops exceeding target in over a quarter of maps. Stylised: one independent-beam cell."
+    },
+    {
+     "slug": "latency-twin",
+     "title": "What does a digital twin without sensor latency do to a tuned controller?",
+     "summary": "A scalar unstable plant is controlled by the LQR gain designed in a twin with no measurement delay. The exact stable-gain interval shrinks with the real delay (upper edge 1 at one step, 0.59 at two), so the twin-tuned gain (0.70) tolerates one step at 1.6&times; the delay-aware cost and is unstable from two; a retuned static gain costs 1.1&ndash;2.6&times; for delays 1&ndash;5, and a predictor built for the wrong delay is unstable in nearly every off-diagonal case tested. Identifying the delay from an i.i.d. probe takes about 2<em>z</em><sup>2</sup>(1+1/snr) samples. Stylised: scalar plant, integer delay, known dynamics."
     }
    ]
   }
