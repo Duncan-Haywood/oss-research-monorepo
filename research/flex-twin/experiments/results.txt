@@ -1,0 +1,71 @@
+Flex twin: real plant = motor + spring/damper + load, twin = rigid body J=1.  PD on the load (non-collocated) or motor (collocated).
+Units: resonance wr = 1; design kp = wn^2, kd = 2*zeta*wn; zs = structural damping ratio; r = Jl/Jm.
+
+== 1. First-crossing bandwidth: closed form (cubic) vs roots of the characteristic polynomial (zeta=0.7) ==
+r      zs     wn* cubic    wn* roots    rel diff   wn*/zs
+0.25   0.01   0.014286     0.014286     2.2e-16    1.4286
+0.25   0.05   0.071416     0.071416     2.2e-16    1.4283
+0.25   0.2    0.286485     0.286485     0.0e+00    1.4324
+1      0.01   0.014286     0.014286     2.2e-16    1.4286
+1      0.05   0.071416     0.071416     2.2e-16    1.4283
+1      0.2    0.286485     0.286485     0.0e+00    1.4324
+4      0.01   0.014286     0.014286     2.2e-16    1.4286
+4      0.05   0.071416     0.071416     2.2e-16    1.4283
+4      0.2    0.286485     0.286485     0.0e+00    1.4324
+16     0.01   0.014286     0.014286     1.1e-16    1.4286
+16     0.05   0.071416     0.071416     2.2e-16    1.4283
+16     0.2    0.286485     0.286485     2.2e-16    1.4324
+max relative difference = 2.2e-16  (wn* is identical for all r: mu cancels)
+
+== 2. Does the twin's certificate hold?  Stable for ALL wn by construction.  Real abscissa max Re(pole), r=1, zs=0.05 ==
+wn/wn*    wn       real max Re(s)   twin max Re(s)   real growth/decay
+0.25      0.0179   -0.01250         -0.01250         decays
+0.9       0.0643   -0.00500         -0.04499         decays
+1.1       0.0786   0.00500          -0.05499         GROWS e-fold in 199.9 time units
+2         0.1428   0.05000          -0.09998         GROWS e-fold in 20.0 time units
+5         0.3571   0.19630          -0.24996         GROWS e-fold in 5.1 time units
+20        1.4283   0.68270          -0.99982         GROWS e-fold in 1.5 time units
+wn* = 0.07142 (zs=0.05): bandwidth must stay below 7.1% of the resonance
+
+== 3. Time-domain check (RK4, dt=0.005, T=2000): |load| envelope, r=1, zs=0.2 ==
+wn/wn*   max|q| in t in [600,800]   max|q| in t in [1800,2000]
+0.8      2.505e-12                  5.945e-33
+0.98     6.885e-03                  6.215e-05
+1.02     1.757e+00                  1.938e+02
+1.25     5.438e+15                  7.195e+40
+
+== 4. Validation horizon: max|real - twin| of the load step response (x0=1, r=1, zs=0.05, dt=0.01) ==
+wn/wn*   real max Re(s)   T=50        T=400       T=3000
+0.5      -0.02500         2.103e-03   2.103e-03   2.103e-03
+0.99     -0.00050         7.419e-03   7.419e-03   7.419e-03
+1.1      0.00500          8.955e-03   4.477e-02   1.986e+04
+2        0.05000          2.328e-01   8.727e+06   2.598e+63
+
+== 5. Structural damping needed for a target bandwidth (zeta=0.7) ==
+wn/wr   required zs   check: roots stable at 1.01*zs / unstable at 0.99*zs
+0.05    0.03500       True / False
+0.1     0.07002       True / False
+0.2     0.14001       True / False
+0.3     0.20927       True / False
+0.5     0.33970       True / False
+0.8     0.49990       True / False
+
+== 6. Undamped joint (zs=0): max Re(pole) for the twin-certified design (r=1) ==
+wn=0.001  max Re(s) = 7.000e-04
+wn=0.01   max Re(s) = 7.000e-03
+wn=0.1    max Re(s) = 7.001e-02
+wn=1      max Re(s) = 5.783e-01
+
+== 7. Collocated (motor-side) feedback: stable at every gain (r=1, zs=0.05, zeta=0.7) ==
+wn      max Re(s)     twin max Re(s)
+0.1     -6.9966e-02   -7.0000e-02
+1       -6.7853e-02   -7.0000e-01
+10      -2.4962e-02   -7.0000e+00
+50      -2.4996e-02   -3.5000e+01
+
+== 8. wn* scales as zs/zeta: lower design damping ratio allows more bandwidth (zs=0.05) ==
+zeta=0.3  wn* = 0.15969  (zs/zeta = 0.16667)
+zeta=0.5  wn* = 0.09903  (zs/zeta = 0.10000)
+zeta=0.7  wn* = 0.07142  (zs/zeta = 0.07143)
+zeta=1    wn* = 0.05025  (zs/zeta = 0.05000)
+zeta=2    wn* = 0.02522  (zs/zeta = 0.02500)

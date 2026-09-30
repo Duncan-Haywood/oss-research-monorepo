@@ -895,6 +895,11 @@
      "slug": "backlash-twin",
      "title": "Does a twin with a rigid drivetrain miss the hunting cycle caused by gear backlash?",
      "summary": "On a discrete PI loop the rigid twin has spectral radius 0.71&ndash;0.89 and converges, yet the real loop with a gap of half-width <em>h</em> settles on a limit cycle of motor amplitude 1.30&ndash;2.94<em>h</em> that scales exactly with <em>h</em> (1.302317 for <em>h</em>=0.01, 1, 100). The backlash describing function is an excitation-dependent gain (0.21 at <em>A</em>/<em>h</em>=1.2, 0.99 at 30) with a phase lag, and harmonic balance predicts the cycle but overestimates its amplitude by 6.7&ndash;10.1%. Negative result: the loop is bistable in some settings (hunting 1.165<em>h</em> from small starts, converging from large steps), so a large-step validation can pass a configuration that hunts. Follow-up to the deadband twin. Stylised: scalar loop, symmetric known gap, noiseless."
+   },
+   {
+     "slug": "flex-twin",
+     "title": "How much PD bandwidth does a flexible joint tolerate that a rigid-body twin certifies?",
+     "summary": "The rigid twin is stable at every bandwidth <em>&omega;</em><sub>n</sub>, but with load-side feedback the real motor&ndash;spring&ndash;load loop is stable iff <em>&omega;</em><sub>n</sub> &lt; <em>&omega;</em><sub>n</sub>*, the root of an exact cubic (matching the characteristic roots to 2&times;10<sup>&minus;16</sup>) that is independent of the inertia ratio and &asymp; <em>&zeta;</em><sub>s</sub>/<em>&zeta;</em> of the resonance: 7.1% at structural damping <em>&zeta;</em><sub>s</sub>=0.05. A bandwidth of 0.3 resonance needs <em>&zeta;</em><sub>s</sub> &ge; 0.209. Negative result: over a 50-time-unit step response the real&ndash;twin gap is 9.0&times;10<sup>&minus;3</sup> at 1.1<em>&omega;</em><sub>n</sub>* (already unstable) versus 2.1&times;10<sup>&minus;3</sup> at 0.5<em>&omega;</em><sub>n</sub>*, so a short validation passes a divergent design. Motor-side feedback stayed stable at every gain tried. Stylised: linear single joint, exact-derivative PD, no sampling or delay."
    }
    ]
   }

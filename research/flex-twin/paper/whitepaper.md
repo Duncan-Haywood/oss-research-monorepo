@@ -1,0 +1,30 @@
+# A rigid-body twin certifies every PD bandwidth; the real flexible joint tolerates only `ζ_s/ζ` of its resonance
+
+*Stylised: a linear two-inertia joint, continuous-time PD, pure Python; every number is from `experiments/results.txt` (deterministic, a few seconds). The "real" system is itself simulated; no lab or field data. Negative and out-of-model results are marked.*
+
+## Question
+Manipulator joints and gimbals are compliant: a motor inertia drives a load through a gearbox modelled as a spring and damper. A twin that treats motor and load as one rigid body (`J s² q = u`) certifies any PD design with positive gains. If the controller feeds back the load position (non-collocated, e.g. an external encoder or a vision-measured end-effector), how large a bandwidth does the real joint tolerate, does it depend on the inertia ratio, and can a short validation run against the real plant reveal the problem?
+
+## Model
+Motor inertia `J_m`, load inertia `J_l`, `J = J_m+J_l`, spring `k`, damper `b`; `μ = J_mJ_l/J`, resonance `ω_r = √(k/μ)`, structural damping ratio `ζ_s = b/(2√(kμ))`, inertia ratio `r = J_l/J_m`. Units: `J = 1`, `ω_r = 1`. Control `u = −(k_p q + k_d q̇)` with the twin design `k_p = ω_n²`, `k_d = 2ζω_n` (twin poles at `−ζω_n ± jω_n√(1−ζ²)`, stable for every `ω_n`). With `q = θ_l`, the real characteristic polynomial is `J_mJ_l s⁴ + J b s³ + (Jk + b k_d)s² + (b k_p + k k_d)s + k k_p`. With `q = θ_m` (collocated) it is `(J_m s²)(J_l s²+c) + J_l s² c + (k_d s+k_p)(J_l s²+c)`, `c = k+bs`.
+
+## Results
+1. **A closed form, free of the mass ratio.** In the Hurwitz conditions for the quartic, `μ` cancels, so stability does not depend on `r`. The binding condition `a₁(a₃a₂−a₄a₁) > a₃²a₀` becomes `g(ω_n) = ζ_s²ω_n³ + ζ_s(q+ζ)ω_n² + ζ q ω_n − ζ ζ_s < 0` with `q = ζ(1−4ζ_s²)`. For `ζ_s < 1/2` only the constant term is negative, so `g` is increasing and the stable set is exactly `ω_n < ω_n*`, the unique positive root; `ω_n* ≈ ζ_s/ζ` for small `ζ_s`. It matches the roots of the characteristic polynomial to 2·10⁻¹⁶ (relative) for `r` = 0.25, 1, 4, 16 and `ζ_s` = 0.01, 0.05, 0.2 (e.g. `ω_n*` = 0.014286, 0.071416, 0.286485 at `ζ = 0.7`). This is a derived, not a fitted, law, but it covers only this loop structure.
+2. **The twin's certificate fails at a few percent of the resonance.** At `ζ_s = 0.05` the twin is stable at every `ω_n` (max Re(pole) −0.045 at 0.9`ω_n*`, −1.0 at 20`ω_n*`) while the real poles are at −0.0050 (0.9`ω_n*`), +0.0050 (1.1`ω_n*`, e-folding growth in 200 time units), +0.050 (2`ω_n*`) and +0.68 (20`ω_n*`, e-fold in 1.5). The bandwidth must stay below 7.1% of the resonance. RK4 simulation agrees: at `ζ_s = 0.2` the load envelope falls from 2.5·10⁻¹² to 6·10⁻³³ at 0.8`ω_n*` and grows 1.8 → 194 at 1.02`ω_n*`.
+3. **Required damping.** Inverting `g`: a bandwidth of 0.1 / 0.2 / 0.3 / 0.5 `ω_r` at `ζ = 0.7` needs `ζ_s` ≥ 0.070 / 0.140 / 0.209 / 0.340 (verified by roots at ±1%), far above the 0.01–0.05 typical of lightly damped joints; a bandwidth near the resonance is unreachable for any `ζ_s < 1/2`. Lower design damping buys bandwidth only as `1/ζ` (`ω_n*` = 0.160 / 0.099 / 0.071 / 0.050 / 0.025 for `ζ` = 0.3 / 0.5 / 0.7 / 1 / 2 at `ζ_s = 0.05`), at the price of a less damped twin response.
+4. **Undamped joint.** With `ζ_s = 0` (`a₃ = 0`) the Hurwitz test fails for every gain. Max Re(pole) is +0.0007 / 0.0070 / 0.0700 / 0.578 at `ω_n` = 0.001 / 0.01 / 0.1 / 1; for small `ω_n` this equals `ζω_n`, the magnitude of the twin's decay rate with flipped sign (observed numerically, not proved here).
+5. **Negative result for short validation.** Over a 50-time-unit step response at `ζ_s = 0.05`, the maximum real-twin difference is 2.1·10⁻³ at 0.5`ω_n*`, 7.4·10⁻³ at 0.99`ω_n*` and 9.0·10⁻³ at 1.1`ω_n*` (already unstable) — of the same order. At T=400 the unstable 1.1`ω_n*` case is still at 4.5·10⁻², and only at T=3000 does it reach 2·10⁴. A twin validated on a step response of moderate length passes configurations that diverge later; at 2`ω_n*` the mismatch is visible by T=50 (0.23).
+6. **Collocated feedback is safe.** Feeding back motor position, the real loop stayed stable at `ω_n` = 0.1, 1, 10, 50 (max Re(pole) −0.070 / −0.068 / −0.025 / −0.025, `r = 1`, `ζ_s = 0.05`), although it is slower than the twin predicts at high gain (−0.025 vs −7 or −35) — the twin's rates are optimistic, its stability verdict holds. Only four gains were tried; stability of collocated PD is classical (passivity).
+
+## Limitations
+Linear, one joint, constant parameters, viscous structural damping, PD with exact derivative (no filtering, sampling or delay, which would lower the bandwidth further), no friction or backlash (see `backlash-twin`), one twin-design damping `ζ = 0.7` for most tables, simulated "real" plant identical in structure to the model analysed, so the closed form is exact by construction and says nothing about a particular robot. Result 5's horizon comparison uses one plant and four gains. The claim that the stable set is an interval in `ω_n` follows from the monotone `g` only for the non-collocated loop with `ζ_s < 1/2`.
+
+## Next steps
+Sampled and delayed implementations; identification of `ζ_s` and `ω_r` from closed-loop logs (link `closedloop-twin`); notch filters and what a twin must contain to certify them; vision-measured load position with latency (link `latency-twin`); a certificate that uses the measured resonance peak instead of a full model (link `twin-certification`).
+
+## References
+- Spong, M. W. (1987). Modeling and control of elastic joint robots. *J. Dyn. Syst. Meas. Control* 109(4), 310–319.
+- Cannon, R. H. & Schmitz, E. (1984). Initial experiments on the end-point control of a flexible one-link robot. *Int. J. Robotics Research* 3(3), 62–75.
+- Preumont, A. (2011). *Vibration Control of Active Structures*, 3rd ed. Springer.
+- Åström, K. J. & Murray, R. M. (2008). *Feedback Systems*. Princeton University Press.
+- Zhao, W., Queralta, J. P. & Westerlund, T. (2020). Sim-to-real transfer in deep reinforcement learning for robotics: a survey. *IEEE SSCI*.
