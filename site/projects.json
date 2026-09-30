@@ -755,6 +755,11 @@
      "slug": "filter-twin",
      "title": "What does a state estimator tuned in a twin with the wrong noise levels cost in the real world?",
      "summary": "For a scalar Kalman filter (plant <em>x</em>&prime;=<em>ax</em>+<em>w</em>, sensor <em>y</em>=<em>x</em>+<em>v</em>) the real error under the twin&rsquo;s gain <em>K</em> is exactly ((1&minus;<em>K</em>)<sup>2</sup><em>Q</em>+<em>K</em><sup>2</sup><em>R</em>)/(1&minus;(1&minus;<em>K</em>)<sup>2</sup><em>a</em><sup>2</sup>). With <em>a</em>=0.9 and <em>Q</em>=<em>R</em>=1, a twin 10&times; too quiet claims MSE 0.215 but the real MSE is 1.32 (+121%), while one 10&times; too noisy is slightly pessimistic (+42%); at 100&times; the quiet twin costs 5.0 against 0.64, and for a random walk quiet-twin regret grows as <em>m</em><sup>&minus;1/2</sup>. Regret is locally <em>c</em>(ln <em>m</em>)<sup>2</sup>. Negative result: for an unstable plant the twin&rsquo;s gain never destabilises the filter. The lag-1 innovation covariance is zero iff the gain is optimal, and a one-shot moment retune from real innovations cut regret from 2.15 to 0.026 at <em>n</em>=200 and 0.0002 at <em>n</em>=25,000 (simulation, &sim;1/<em>n</em>). Stylised: scalar linear-Gaussian system, stationary, known dynamics."
+    },
+    {
+     "slug": "ladder-twin",
+     "title": "How should a simulation budget be split across twin fidelities?",
+     "summary": "A twin runs at several fixed-step fidelities (n=2<sup>l+1</sup> Euler steps). Multilevel Monte Carlo telescopes the finest-level answer over coupled pairs sharing scenario draws, with allocation N<sub>l</sub> &prop; &radic;(V<sub>l</sub>/C<sub>l</sub>). For a smooth terminal state (bias rate &alpha;=1.000, variance rate &beta;=2.001, cost rate 1) it needs 3.6&times; fewer steps than one fine twin at RMSE 10<sup>&minus;2</sup> and 897&times; fewer at 3&times;10<sup>&minus;5</sup>. For a failure probability the variance only halves per level (&beta;=1.000), so multilevel <em>loses</em> at loose targets (0.4&times; at 3&times;10<sup>&minus;2</sup>), breaks even near 10<sup>&minus;3</sup> and reaches 7.7&times; at 10<sup>&minus;4</sup>. Equal samples per level cost 156&times; (smooth) and 3.9&times; (failure) the optimum; a coarse twin alone is off by 10&ndash;48% however many runs. Stylised: one scalar linear system, exact level moments."
     }
    ]
   }
