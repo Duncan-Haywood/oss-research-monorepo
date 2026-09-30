@@ -660,6 +660,11 @@
      "slug": "targeted-observation-twin",
      "title": "When does a forecast-ensemble twin send the UAV to the wrong place, or make the update worse?",
      "summary": "A UAV samples from a corridor to cut forecast error over a region it cannot enter, with sites and Kalman gain taken from a twin&rsquo;s covariance; the real error after the update is exact (Joseph form, checked against simulation). A matched twin cuts the real error 22%; a twin whose correlation length is 2&times; too long claims &minus;65% and delivers +28%, because updates are harmful beyond a closed-form radius (ln&nbsp;2/(&ell;<sub>r</sub><sup>&minus;2</sup>&minus;&ell;<sub>t</sub><sup>&minus;2</sup>))<sup>1/2</sup>. Amplitude errors are harmless for one observation but an under-confident twin double-counts over several. A finite ensemble drawn from the <em>correct</em> model already hurts: 10 members give +27% mean real error (71% of ensembles worse than no observation), 50 are safe, and localisation helps at small sizes but costs accuracy at large ones; fitting the length scale from real samples needs about 50. Stylised: 1-D Gaussian field, one static update."
+    },
+    {
+     "slug": "grasp-twin",
+     "title": "How hard should a robot grip when its digital twin has the wrong friction?",
+     "summary": "A two-finger grasp holds iff 2&mu;<em>N</em> &ge; <em>m</em>(<em>g</em>+<em>a</em>) and real friction is lognormal, so the cost-optimal force has a closed form (base case: 107% above the median slip threshold, 1.9% drops, matched to a grid and a Coulomb simulation). A twin with one deterministic friction value grips exactly at its own slip threshold, so the real drop probability is &Phi;(<em>b</em>/<em>s</em>): 0.50 median-matched, 0.57 mean-matched, 0.87 when friction is 1.5&times; too high. A randomised twin has real drop &Phi;((<em>b</em>+<em>s</em><sub>T</sub><em>z</em><sub>T</sub>)/<em>s</em>) exactly, but a width that cancels a bias on one mass gives 9&ndash;14% regret on others; a 1.5&times; safety factor drops 12&ndash;49% where 1% needs 2.3&ndash;9.6&times;. Setting the threshold from <em>n</em> real friction measurements inflates a 1% drop target exactly to 2.7% at <em>n</em>=10 (56 measurements to come within 25%). Stylised; no real friction data."
     }
    ]
   }

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grasp-twin"
+version = "0.1.0"
+description = "How hard to grip: a grasp twin with the wrong friction law makes the robot grip at its own slip threshold; closed-form optimal force, real drop probability and finite-data pessimism"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
