@@ -263,6 +263,11 @@
      "slug": "sybil-stake",
      "title": "Are reward pools identity-proof?",
      "summary": "Sybil splitting and whale merging under stake-weighted pools: only linear-in-stake weights are split-invariant, per-head pools are captured at k* = &radic;(Rn/c) &minus; n identities (exact match), a sharp per-identity deterrence fee, exponents above 1 reward merging, and weighted-score wagering is split-neutral. Stylised."
+    },
+    {
+     "slug": "stake-screening",
+     "title": "Can a bond tell reliable hardware from unreliable?",
+     "summary": "Workers have hidden fault rates and accept a wage-and-stake contract. Single crossing runs the wrong way: the <em>reliable</em> worker is the one who would copy a high-stake contract, so its rent is exactly (&theta;<sub>H</sub>&minus;&theta;<sub>L</sub>)(c+(1+&rho;)s<sub>H</sub>)/(1&minus;&theta;<sub>H</sub>), minimised at zero stake, and with continuous types a flat wage with no stake is optimal (no random 2&ndash;4-contract menu beats it). A stake needed for deterrence is a tax: it scales reliable workers&rsquo; rent by (c+(1+&rho;)s)/c and lowers the pool&rsquo;s fault rate (0.169&rarr;0.089) at 9&ndash;55% of profit. Stylised."
     }
    ]
   },
