@@ -1,0 +1,31 @@
+== 1. Closed form vs Monte Carlo (60k runs), q=1e-6, twin gain
+k=10  exact real var 1.4655e-03  mc 1.4544e-03 | twin claims 7.5610e-04
+k=20  exact real var 2.2651e-03  mc 2.2803e-03 | twin claims 1.0244e-03
+k=30  exact real var 1.4721e-03  mc 1.4874e-03 | twin claims 8.0488e-04
+k=40  exact real var 1.1073e-04  mc 1.1082e-04 | twin claims 9.7561e-05
+
+== 2. A constant shared drift is absorbed (n=40, twin gain): worst-pose sd, drift sd beta
+beta=0.000  real worst sd 0.03201 (twin claims 0.03201)
+beta=0.002  real worst sd 0.03202 (twin claims 0.03201)
+beta=0.004  real worst sd 0.03207 (twin claims 0.03201)
+beta=0.020  real worst sd 0.03370 (twin claims 0.03201)
+
+== 3. Drifting bias (random walk, per-step variance q): twin's claim vs reality, worst pose
+q        claimed sd  real sd    end-gain   per-pose   real/claim  gain g n: twin / end
+1e-07    0.03201     0.03389    0.03394    0.03356    1.06        0.9756 / 0.9842
+1e-06    0.03201     0.04759    0.04842    0.04188    1.49        0.9756 / 0.9962
+4e-06    0.03201     0.07738    0.07967    0.06093    2.42        0.9756 / 0.9989
+1e-05    0.03201     0.11590    0.11982    0.08735    3.62        0.9756 / 0.9996
+
+== 4. Certified chain length: largest n with worst-pose sd <= 4 cm (tau2 = 1.6e-3)
+q        twin certifies  real sd there     true max n (twin g) true max n (end gain) 
+1e-07    62              0.04526           51                  51                    
+1e-06    62              0.07944           33                  33                    
+4e-06    62              0.14325           23                  23                    
+
+== 5. Auditing the claim: one-sided test on the mean of m squared errors at pose k=20 over the twin's claim (5% level, 20000 draws)
+q        ratio    | power at m = 1, 3, 10, 30, 100
+1e-07    1.12     | 0.063  0.073  0.088  0.128  0.224
+1e-06    2.21     | 0.192  0.317  0.598  0.922  1.000
+4e-06    5.84     | 0.412  0.719  0.976  1.000  1.000
+null false-alarm check (ratio 1): m=10 -> 0.050, m=100 -> 0.050

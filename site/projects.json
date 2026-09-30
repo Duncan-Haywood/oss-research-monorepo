@@ -670,6 +670,11 @@
      "slug": "grasp-twin",
      "title": "How firmly should a robot grip when its friction twin is too clean?",
      "summary": "A pinch grasp slips if &mu;<em>F</em>&nbsp;&lt;&nbsp;<em>w</em><sub>0</sub> and crushes if <em>F</em> exceeds a fragility limit; with log-normal friction and crush force the expected loss is a sum of two normal CDFs in ln&nbsp;<em>F</em> and its optimum solves a quadratic. A twin whose friction spread is 0.1 instead of 0.3 grips softer, claims a risk of 1.1&times;10<sup>&minus;5</sup> and delivers 0.069 (4.0&times; the optimum; 11.6&times; at spread 0.05). A near-zero-spread twin has a flat zero-risk plateau, so its &lsquo;optimal&rsquo; force is a tie-break: real slip 0.50 at the lower edge, 0.015 at the upper. Biased friction costs &asymp;&nbsp;&frac12;<em>J</em>&Prime;&Delta;<em>x</em>&sup2; (85% of the optimum at &minus;0.3 in log-friction), and a widened randomisation width can cancel a known bias but costs 1.5&times; the optimum if the bias is of opposite sign. A plug-in from <em>n</em> real friction measurements has regret matched by the delta method within 5% for <em>n</em>&nbsp;&ge;&nbsp;50. Stylised: static friction threshold, chosen parameters, no contact dynamics or reactive re-grasp."
+    },
+    {
+     "slug": "loop-closure-twin",
+     "title": "How long can a robot run before closing a loop when its odometry twin has independent noise?",
+     "summary": "A loop-closure residual spread linearly over an odometry chain has an exact error variance for any real noise covariance. A twin with independent increments picks nearly the right gain but claims the wrong error: a constant shared drift is almost absorbed (worst-pose sd 0.0321 vs 0.0321 claimed), while a drifting bias makes the real worst-pose sd 1.5&times; (<em>q</em>=10<sup>&minus;6</sup>) to 3.6&times; the claim. Refitting the gain from residuals does not help, and even the best per-pose shares recover only 12&ndash;25% (for <em>q</em>&nbsp;&ge;&nbsp;10<sup>&minus;6</sup>). A twin-certified &lsquo;close a loop every 62 steps&rsquo; rule has a true limit of 51, 33 or 23 steps, and auditing an overconfidence ratio of 2.2 needs about 30 ground-truthed chains for 92% power. Stylised: 1-D chain, one closure, linear spreading, chosen parameters."
     }
    ]
   }
