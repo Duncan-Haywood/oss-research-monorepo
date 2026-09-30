@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deadband-twin"
+version = "0.1.0"
+description = "Actuator deadband in a digital twin: the fitted linear gain is b*P(|u|>delta) (Bussgang), depends on excitation amplitude, and the twin-designed loop stalls or diverges; inverse compensation is asymmetric"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
