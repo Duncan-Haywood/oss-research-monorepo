@@ -1015,6 +1015,11 @@
      "slug": "twin-shrinkage",
      "title": "How far should a real-plant estimate be pulled toward its digital twin?",
      "summary": "Shrinking a real estimate of d plant parameters toward the twin's prediction (James&ndash;Stein) has an exact risk d&minus;(d&minus;2)<sup>2</sup>E[1/(d&minus;2+2K)], K~Poisson(&lambda;/2): it never raises total error for d&ge;3, a perfect twin gives risk 2 at any d (saving 33% at d=3, 80% at d=10), and a twin as noisy as the data (&lambda;/d=1) still saves 14&ndash;49% while using it alone saves nothing. At large d the twin is worth n+&sigma;<sup>2</sup>/&tau;<sup>2</sup> real samples (exact values 0.72&ndash;0.998 of that at d=5&ndash;100). The guarantee is aggregate only: one badly mismatched parameter among d takes about d/4 noise variances of damage (measured 2.9 at d=10, 25.5 at d=100 against 1), and blocks of 5 cap that at 1.65 (d=30) while keeping 72% of the perfect-twin saving. Stylised: Gaussian noise, orthogonal design, no robot data."
+    },
+    {
+     "slug": "aliasing-twin",
+     "title": "What does a radar twin with unlimited unambiguous velocity over-certify?",
+     "summary": "A pulsed Doppler radar reports radial velocity modulo 2<em>V</em>; a twin that renders velocity as a real number never aliases. The real bias of a wrapped return is an exact Gaussian tail series (&minus;<em>V</em> at speed <em>V</em>, &minus;2<em>V</em> beyond) and the real MSE has a bias<sup>2</sup> floor, so averaging widens the gap to the twin's claim <em>s</em><sup>2</sup>/<em>n</em>: at <em>V</em>=10, <em>s</em>=1 and speed 8 the real/claimed MSE is 7.9&times; for one return and 2.1&times;10<sup>3</sup> for 10<sup>4</sup>. Speeds with |bias| &le; 0.1 reach only 87%, 74% and 48% of <em>V</em> for noise 0.5, 1, 2. Unwrapping against a prior has exact failure probability 2&Phi;(&minus;<em>V</em>/&radic;(<em>s</em><sup>2</sup>+<em>s<sub>p</sub></em><sup>2</sup>)) and stays within 10% of the twin's claim only for prior error &le; 0.26<em>V</em>. Stylised: one radial channel, Gaussian noise, simulated radar."
     }
    ]
   }
