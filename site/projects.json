@@ -578,6 +578,11 @@
      "slug": "heterogeneous-steps",
      "title": "How should a server weight workers that ran different numbers of inner steps?",
      "summary": "With worker <em>i</em> running <em>H<sub>i</sub></em> steps, weighted averaging has exact floor &alpha;<sup>2</sup>&Sigma;<em>w<sub>i</sub></em><sup>2</sup><em>V<sub>i</sub></em>/(<em>r</em>(2&minus;<em>r</em>)), <em>r</em>&nbsp;=&nbsp;&alpha;&Sigma;<em>w<sub>i</sub>s<sub>i</sub></em>. One worker's information is <em>I</em><sub>&infin;</sub>tanh(&lambda;<em>H</em>/2): <em>H</em>=8 carries 20% of the ceiling and <em>H</em>=64 93%, so a fast device is worth far less than its step count. Information-optimal weights span at most 2&times;, hence equal weights lose at most 9/8 (measured &le;1.09), whereas step-proportional (FedAvg-style) weights lose up to 1.76&times; per mode and 10.5&times; on three modes when one worker in eight is 256&times; faster. Matched to simulation within 1%. Stylised: quadratic, shared optimum (no client drift), fixed <em>H<sub>i</sub></em>."
+    },
+    {
+     "slug": "robust-outer",
+     "title": "What does a median or trimmed-mean outer step cost local SGD, and what does it buy against Byzantine workers?",
+     "summary": "Because the median and trimmed mean commute with shifts, the outer loop stays exactly linear: floor &alpha;<em>V</em><sub>w</sub><em>v</em>/(<em>s</em>(2&minus;&alpha;<em>s</em>)) plus a bias <em>V</em><sub>w</sub><em>m</em><sup>2</sup>/<em>s</em><sup>2</sup>, with the same stability limit as averaging. With no attackers the median costs <em>N</em>&middot;Var = 1.35 to 1.56 (&rarr; &pi;/2). With a fraction &epsilon; of attackers its bias is bounded (&Phi;(<em>z</em>) = 1/(2(1&minus;&epsilon;)): 0.18 noise-sigmas at &epsilon; = 1/8) and beats averaging once the attack offset exceeds about 1.4 sigmas; more workers shrink only the variance part (total loss 0.103 &rarr; 0.102 from <em>N</em>=8 to 128), while a longer inner loop shrinks the bias (39&times; from <em>H</em>=1 to 256). Trimming exactly the attacker count is worse than the median. Matched to simulation within 1.3%. Stylised: quadratic, Gaussian noise, shared curvature, constant-offset attackers."
     }
    ]
   }
