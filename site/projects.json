@@ -675,6 +675,11 @@
      "slug": "loop-closure-twin",
      "title": "What does an odometry twin that is too clean do to a loop-closure gate?",
      "summary": "A scalar position filter is tuned in a twin with drift variance <em>T</em> and gates loop closures by a chi-square test on its own covariance. With every closure accepted the real posterior variance is exact (1.47&times;, 2.14&times;, 4.03&times; the twin&rsquo;s claim for real/twin drift-sd ratios 1.5, 2, 3; simulation within 1%), and genuine closures fail the 99% design gate 5% of the time at ratio 2. With the gate on, rejection compounds into lock-out: real error is 9&ndash;16&times; the ungated value at ratio 2 and 56&ndash;182&times; at ratio 3, growing with horizon. The gate halves error against aliased closures when the twin is right (0.52 vs 1.27) but is 8&times; worse than no gate at ratio 2 (13.9 vs 1.72), and a gate retuned with the real drift beats no gate only up to ratio 2. Fitting drift from measured ground truth fixes the median by 10 cycles but the lock-out tail needs about 30 (28% of trials lock out at 3). Stylised: scalar error, Gaussian drift, simulated not measured."
+    },
+    {
+     "slug": "rendezvous-twin",
+     "title": "How often should a mapping team rendezvous when its twin's odometry drift has no bias?",
+     "summary": "Robots reset their dead-reckoning error at rendezvous; the real error variance is <em>s</em><sup>2</sup><em>t</em>&nbsp;+&nbsp;<em>b</em><sup>2</sup><em>t</em><sup>2</sup> (white noise plus a per-run bias rate), but a twin fitted on short-horizon increments sees only the first term, so it plans a rendezvous every 10 and claims a peak error std of 3.16. The real optimum solves a cubic; at a bias/noise ratio &rho;&nbsp;=&nbsp;0.1/0.3/1/3 the twin's interval has 0.19/1.35/8.65/34.6% regret, the real error is exactly &radic;(1+&rho;) times the claim, and under an error budget the twin breaches it for 8&ndash;55% of every cycle. In the pairwise frame used for map merging a shared bias cancels (twin regret 5.3% &rarr; 0.10% at bias correlation 0.9). Repair needs ground-truth error at a long lag as well as a short one and about 5&ndash;10 runs to beat the twin reliably. Variance law and pairwise law checked by Monte Carlo. Stylised: one-dimensional Gaussian error, constant per-run bias, perfect reset."
     }
    ]
   }
