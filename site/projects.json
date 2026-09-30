@@ -461,6 +461,11 @@
      "slug": "race-heterogeneity",
      "title": "Who drops out of a race when workers have unequal costs?",
      "summary": "If only the first <em>k</em> of <em>n</em> finishers are paid, a slow worker entering at a vanishing rate wins with probability rate &times; <em>E X</em><sub>(<em>k</em>)</sub> of the fast workers, which gives an exact exit rule: workers with cost ratio <em>c<sub>s</sub></em>/<em>c<sub>f</sub></em> &ge; <em>n<sub>f</sub></em>/(<em>n<sub>f</sub></em>&minus;<em>k</em>) stay out entirely, and paying <em>k</em> &ge; <em>n<sub>f</sub></em> never excludes anyone (checked by best-entry payoffs at thresholds 4/3, 2, 4). At cost ratio 4 with four fast workers, <em>k</em> &le; 3 shuts the slow ones out and <em>k</em>=4..7 readmits them (share of prizes 0.21&rarr;0.46 against a fair 0.5). The note also proves the telescoping identity behind the symmetric race and shows that with convex speed cost, headcount does buy speed. Two cost types, exponential races, grid-checked equilibria."
+    },
+    {
+     "slug": "private-data-market",
+     "title": "How much accuracy can a market buy from contributors who value their privacy?",
+     "summary": "A market pays each contributor the log-score gain of a public Gaussian belief for releasing a statistic plus Gaussian-mechanism noise, so the expected payment is exactly the information released, &frac12;&lambda;ln(1+&tau;/a). The best noise is a closed-form quadratic root, and participation is possible if and only if &kappa;a&nbsp;&lt;&nbsp;1 with &kappa;&nbsp;=&nbsp;c&Delta;<sup>2</sup>/&lambda;: precision is capped at &lambda;/(c&Delta;<sup>2</sup>) however many contributors arrive, approached geometrically at rate 2&sigma;<sup>2</sup>/(2&sigma;<sup>2</sup>+&kappa;), and total payout is at most &frac12;&lambda;ln(1/(&kappa;a<sub>0</sub>)). Early arrivals add too little noise (1.5&ndash;5&times;; 1&ndash;22% welfare loss against a planner), and admitting small data holders first lifts final precision from 28.0 to 34.2. Checked against grid search and 10<sup>6</sup>-run Monte Carlo. Stylised."
     }
    ]
   },
