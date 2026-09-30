@@ -1095,6 +1095,11 @@
      "slug": "runlength-twin",
      "title": "How long must a real test run be when its length was sized in a twin with the wrong plant pole?",
      "summary": "A gain designed in a twin whose pole is <em>m</em>&times; the real one is validated on hardware for a run length chosen in the twin. The variance of the time-averaged cost of a Gaussian AR(1) loop is exact and depends on the closed-loop pole through (1+<em>&rho;</em>)/(1&minus;<em>&rho;</em>), <em>&rho;</em>=<em>a<sub>c</sub></em><sup>2</sup>, so the twin-sized run is 3.8&times; too short at <em>m</em>=2, <em>r</em>=0.1 (3,177 vs 12,110 steps; real coverage of a &plusmn;5% claim 0.69 vs 0.95 nominal, simulated 0.68) and 2.1&times; too long at <em>m</em>=1.5, <em>r</em>=5; an oscillating (negative-pole) loop averages as slowly as a sluggish one. Sizing from a real pilot&rsquo;s lag-one autocorrelation is close to median-unbiased but under-sizes about half the time. Stylised: scalar linear-Gaussian, fixed known gain, normal-approximation interval."
+    },
+    {
+     "slug": "aliasing-twin",
+     "title": "What does a radar twin with unlimited unambiguous velocity over-certify?",
+     "summary": "A pulsed Doppler radar reports radial velocity modulo 2<em>V</em>; a twin that renders velocity as a real number never aliases. The real bias of a wrapped return is an exact Gaussian tail series (&minus;<em>V</em> at speed <em>V</em>, &minus;2<em>V</em> beyond) and the real MSE has a bias<sup>2</sup> floor, so averaging widens the gap to the twin's claim <em>s</em><sup>2</sup>/<em>n</em>: at <em>V</em>=10, <em>s</em>=1 and speed 8 the real/claimed MSE is 7.9&times; for one return and 2.1&times;10<sup>3</sup> for 10<sup>4</sup>. Speeds with |bias| &le; 0.1 reach only 87%, 74% and 48% of <em>V</em> for noise 0.5, 1, 2. Unwrapping against a prior has exact failure probability 2&Phi;(&minus;<em>V</em>/&radic;(<em>s</em><sup>2</sup>+<em>s<sub>p</sub></em><sup>2</sup>)) and stays within 10% of the twin's claim only for prior error &le; 0.26<em>V</em>. Stylised: one radial channel, Gaussian noise, simulated radar."
     }
    ]
   }
