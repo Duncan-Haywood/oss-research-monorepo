@@ -268,6 +268,11 @@
      "slug": "stake-screening",
      "title": "Can a bond tell reliable hardware from unreliable?",
      "summary": "Workers have hidden fault rates and accept a wage-and-stake contract. Single crossing runs the wrong way: the <em>reliable</em> worker is the one who would copy a high-stake contract, so its rent is exactly (&theta;<sub>H</sub>&minus;&theta;<sub>L</sub>)(c+(1+&rho;)s<sub>H</sub>)/(1&minus;&theta;<sub>H</sub>), minimised at zero stake, and with continuous types a flat wage with no stake is optimal (no random 2&ndash;4-contract menu beats it). A stake needed for deterrence is a tax: it scales reliable workers&rsquo; rent by (c+(1+&rho;)s)/c and lowers the pool&rsquo;s fault rate (0.169&rarr;0.089) at 9&ndash;55% of profit. Stylised."
+    },
+    {
+     "slug": "milestone-schedules",
+     "title": "How many milestones does an unenforced job need?",
+     "summary": "A requester and an anonymous worker split a job into milestones, each a stage of pre-payment, work and late payment, with a grim trigger that forfeits the remaining surplus and a relationship value <em>W</em>. A milestone is self-enforcing under some pre-payment split iff its cost is at most the <em>pooled</em> continuation value, so pay-after-delivery needs <em>P</em>/<em>W<sub>r</sub></em> equal milestones, pay-before <em>C</em>/<em>W<sub>w</sub></em>, and the best split <em>C</em>/(<em>W<sub>r</sub></em>+<em>W<sub>w</sub></em>) (110, 25 and 20 in the example), whoever holds the value. Because early defection also forfeits the remaining work, the largest milestone shrinks geometrically and the minimum count is &lceil;ln(1+(<em>V</em>&minus;<em>C</em>)/<em>W</em>)/ln(<em>V</em>/<em>C</em>)&rceil;: 17 instead of 100 at <em>C</em>=100, <em>V</em>=120, <em>W</em>=1, with the first milestone 1&minus;(<em>C</em>&minus;<em>W</em>)/<em>V</em> of the job. Cheap re-entry caps <em>W</em> and costs ln(1/<em>e</em>) milestones. Matched on 2000 random instances. Stylised: complete information, pro-rata value."
     }
    ]
   },
@@ -382,6 +387,11 @@
      "slug": "sleeping-incentives",
      "title": "Can a module game a ledger by choosing when to sleep?",
      "summary": "Yes, if it declares after seeing its loss. The wealth ledger pays each awake module exactly its leave-one-out saving, &eta;<em>W<sub>A</sub></em>(1&minus;<em>p<sub>i</sub></em>)<em>S<sub>i</sub></em>, but a module that sleeps whenever its own loss exceeds &theta; earns &eta;<em>p<sub>B</sub></em>&theta;(1&minus;&theta;)/2 per unit wealth against an equal-skill honest rival (best 1/8 at &theta;=1/2) and takes the market from a 0.1 share in about 130 rounds, while the router&rsquo;s realised loss stays at 0.5. Declared <em>before</em> the router serves, the same wealth is a real saving that falls from 0.125 to 0.011 as the module&rsquo;s signal about its own loss gets noisier. A sleeping tax that stops the exploit must be at least &eta;<em>p<sub>B</sub></em>/2, a fixed-share rate that halves an honest specialist asleep 90% of the time in 6 rounds, so commitment, not taxation, is the fix. Two modules, uniform losses, threshold strategies; mean-field predictions 3&ndash;8% slow."
+    },
+    {
+     "slug": "decision-markets",
+     "title": "What does it cost to route between models with conditional markets, and what does a stake do to the answer?",
+     "summary": "Markets that forecast each model&rsquo;s loss <em>if chosen</em> only ever see the chosen arm. An inverse-propensity Brier payment is exactly proper even when the router reads the report (without the weight a trader shades its forecast, or hides), and its price is exact: E[1/&pi;] = 1+(K&minus;1)e<sup>&omega;<sup>2</sup>/2&tau;<sup>2</sup></sup>, so payment variance blows up as the router cools (a probit router has infinite variance for &tau; &le; &omega;; Monte Carlo at &tau;=0.3 sees 29 against the exact 195). Exploration regret is at most 0.2785&tau;. Equal owner stakes cancel in the decision, a stake gap shifts the reported gap by a closed-form fixed point, and the loss it causes is second order, &prop;(&Delta;B/k)<sup>2</sup>. Gaussian, one-shot, stylised."
     }
    ]
   },
@@ -471,6 +481,11 @@
      "slug": "race-heterogeneity",
      "title": "Who drops out of a race when workers have unequal costs?",
      "summary": "If only the first <em>k</em> of <em>n</em> finishers are paid, a slow worker entering at a vanishing rate wins with probability rate &times; <em>E X</em><sub>(<em>k</em>)</sub> of the fast workers, which gives an exact exit rule: workers with cost ratio <em>c<sub>s</sub></em>/<em>c<sub>f</sub></em> &ge; <em>n<sub>f</sub></em>/(<em>n<sub>f</sub></em>&minus;<em>k</em>) stay out entirely, and paying <em>k</em> &ge; <em>n<sub>f</sub></em> never excludes anyone (checked by best-entry payoffs at thresholds 4/3, 2, 4). At cost ratio 4 with four fast workers, <em>k</em> &le; 3 shuts the slow ones out and <em>k</em>=4..7 readmits them (share of prizes 0.21&rarr;0.46 against a fair 0.5). The note also proves the telescoping identity behind the symmetric race and shows that with convex speed cost, headcount does buy speed. Two cost types, exponential races, grid-checked equilibria."
+    },
+    {
+     "slug": "private-data-market",
+     "title": "How much accuracy can a market buy from contributors who value their privacy?",
+     "summary": "A market pays each contributor the log-score gain of a public Gaussian belief for releasing a statistic plus Gaussian-mechanism noise, so the expected payment is exactly the information released, &frac12;&lambda;ln(1+&tau;/a). The best noise is a closed-form quadratic root, and participation is possible if and only if &kappa;a&nbsp;&lt;&nbsp;1 with &kappa;&nbsp;=&nbsp;c&Delta;<sup>2</sup>/&lambda;: precision is capped at &lambda;/(c&Delta;<sup>2</sup>) however many contributors arrive, approached geometrically at rate 2&sigma;<sup>2</sup>/(2&sigma;<sup>2</sup>+&kappa;), and total payout is at most &frac12;&lambda;ln(1/(&kappa;a<sub>0</sub>)). Early arrivals add too little noise (1.5&ndash;5&times;; 1&ndash;22% welfare loss against a planner), and admitting small data holders first lifts final precision from 28.0 to 34.2. Checked against grid search and 10<sup>6</sup>-run Monte Carlo. Stylised."
     }
    ]
   },
@@ -1030,6 +1045,41 @@
      "slug": "mount-twin",
      "title": "What does a twin that assumes the radar is aligned with the body get wrong about dead reckoning, and can loop-closure validation see it?",
      "summary": "With a planar mount-yaw error <em>e</em>, radar ego-velocity dead reckoning is exactly the true path rotated by <em>e</em>: error 2&nbsp;sin(<em>e</em>/2)&middot;|displacement|, bounded by the path diameter and zero after any closed loop, so loop and out-and-back validations pass while a straight 157&nbsp;m run is off by 27&nbsp;m at 10&deg;. A closed-form rotation fit recovers <em>e</em> with standard deviation &sigma;/&radic;&Sigma;|p<sub>i</sub>|<sup>2</sup> (matched by simulation, 95% coverage). Stylised: the result is planar; a pitched mount drifts vertically by exactly laps&middot;2&pi;R&nbsp;sin <em>e</em> despite perfect x-y closure."
+    },
+    {
+     "slug": "twin-control-variate",
+     "title": "How many real rollouts does a biased digital twin save when certifying a policy?",
+     "summary": "A twin evaluated alone is biased however many rollouts you run (nominal 95% intervals cover the truth 0&ndash;0.4% of the time at a 12% bias, 20% gain error); used as a control variate it removes variance without bias. In scalar LQ the rollout cost is a Gaussian quadratic form, so the twin/plant correlation <em>&rho;</em> = <em>&lambda;</em>&thinsp;tr(<em>GG&prime;</em>)/&radic;(tr <em>G</em><sup>2</sup> tr <em>G&prime;</em><sup>2</sup>) is exact, the optimal twin-to-real ratio is <em>&rho;</em>/&radic;((1&minus;<em>&rho;</em><sup>2</sup>)<em>w</em>) and the speed-up 1/(&radic;(1&minus;<em>&rho;</em><sup>2</sup>)+<em>&rho;</em>&radic;<em>w</em>)<sup>2</sup>, matched by simulation to a few percent. Twin gain error is first order in the bias (5% error &rarr; 2.7%) but second order in 1&minus;<em>&rho;</em>, so the twin&rsquo;s value is capped by the fraction <em>&lambda;</em> of the real disturbance it can replay: a 5% certificate costs 168 real-only, 28 with <em>&lambda;</em>&nbsp;=&nbsp;0.95 and 163 with <em>&lambda;</em>&nbsp;=&nbsp;0.3. Twin-only beats real-only only below <em>&sigma;</em><sup>2</sup>/bias<sup>2</sup> real rollouts (35 at 10% error). Stylised."
+    },
+    {
+     "slug": "radar-detection-twin",
+     "title": "What does a Gaussian-clutter radar twin promise about detection, not just false alarms?",
+     "summary": "With CA- and OS-CFAR thresholds set in a Gaussian twin and deployed in gamma-textured clutter, the exact false-alarm and detection laws (including a new one-dimensional OS-CFAR law) match simulation to ~1%. OS-CFAR is inflated much like CA (design 1e-4, &nu;=2: 30&times; vs 35&times;). Repairing the threshold costs 3.7&ndash;4.6 dB, yet the SNR needed for Pd&nbsp;=&nbsp;0.9 at Pfa&nbsp;=&nbsp;1e-4 is 6.3 dB above the twin&rsquo;s promise at &nu;=2 (2.8 dB at &nu;=5, 0.8 dB at &nu;=20), and at the twin&rsquo;s own threshold and promised SNR real Pd is 0.84 while Pfa is 30&times; design. Texture does not reverse the CA-beats-OS ranking (a negative result). Stylised: iid gamma texture, constant-SNR target, no interferers, no real radar data."
+    },
+    {
+     "slug": "twin-multifidelity",
+     "title": "How do you estimate a controller's real-world cost with a biased digital twin?",
+     "summary": "A twin-only cost estimate is biased by the twin&rsquo;s error, a real-only one is noisy; as a control variate the twin keeps the estimate unbiased and is worth its <em>correlation</em> with real rollouts, not its accuracy. Under common disturbances the cost correlation has a closed form and decays as (1+<em>c</em><sup>4</sup>)/(1&minus;<em>c</em><sup>4</sup>)<sup>2</sup>(<em>k&delta;</em>)<sup>2</sup> in the twin&rsquo;s gain error (0.985, 0.941, 0.782, 0.472 for gains 1.15, 1.3, 1.6, 2.0 while the twin-only bias grows 0.004 to 1.34); replaying only a fraction &lambda; of the real disturbance multiplies it by exactly &lambda;<sup>2</sup>. The optimal twin-to-real rollout ratio is &radic;(<em>c<sub>r</sub></em>&rho;<sup>2</sup>/(<em>c<sub>t</sub></em>(1&minus;&rho;<sup>2</sup>))), the twin pays only below price (1&minus;&radic;(1&minus;&rho;<sup>2</sup>))<sup>2</sup>/&rho;<sup>2</sup>, and a simulated estimator cut variance to 0.228 of real-only against 0.225 predicted. Twin-only wins at tiny budgets or tiny bias; the control variate is best elsewhere. Stylised."
+    },
+    {
+     "slug": "twin-monitor",
+     "title": "How fast can a deployed digital twin be caught going stale, and when is it invisible?",
+     "summary": "An e-process on the twin's closed-loop prediction residuals is valid however often it is checked (2.3% false alarms versus 51.6% for a repeatedly refit &chi;<sup>2</sup> test at nominal 5%). Its detection rate is exactly the twin-transfer score gap, affine in the exploration variance <em>v</em>; a mixture-delay formula matches simulated medians within 10&ndash;20% (leading order <em>L</em>/rate is 40&ndash;55% too fast). Twins on the line &Delta;a&nbsp;=&nbsp;<em>k</em>&Delta;<em>b</em> are invisible under the deployed policy (rate exactly 0) and detectable at rate &Delta;<em>b</em><sup>2</sup><em>v</em>/2&sigma;<sup>2</sup> with dither; most of them cost almost nothing (regret 6&middot;10<sup>&minus;4</sup>) so dither does not pay, but the one that thinks the actuator is nearly dead (regret 0.23) is worth a <em>v</em>&asymp;0.006 dither that cuts expected cost 12&times;. Stylised."
+    },
+    {
+     "slug": "compressed-outer",
+     "title": "How far can DiLoCo reports be compressed?",
+     "summary": "Unbiased compression of each worker&rsquo;s pseudo-gradient (noise proportional to the signal, &omega;) has exact stationary variance &alpha;<em>V</em><sub>w</sub>(1+&omega;)/(<em>Ms</em>(2&minus;&alpha;<em>sc</em>)), <em>c</em>&nbsp;=&nbsp;1+&omega;/<em>M</em>: it caps the outer step at 2/(<em>sc</em>) and the contraction at 1&minus;1/<em>c</em> (keeping 10% of coordinates with 8 workers: 0.53, 22 rounds to 10<sup>&minus;6</sup> against 1), and random participation is the special case &omega;&nbsp;=&nbsp;1/<em>p</em>&minus;1. Dithered quantisation only adds &Delta;<sup>2</sup>/12 to the variance and leaves stability alone. At fixed bandwidth, sparsifying favours few full reports, while quantising has an interior optimum near 1.3 bits per coordinate with many workers, about 4&times; below 8-bit reports (the textbook high-resolution law understates the noise 2.9&times; at 1 bit). Matched to simulation within 3%. Stylised."
+    },
+    {
+     "slug": "sparse-outer-sync",
+     "title": "What does it cost to send only a fraction of the outer update, and does error feedback help?",
+     "summary": "Each worker transmits a random fraction <em>p</em> of its pseudo-gradient. Rescaling the subset (unbiased) inflates the stationary noise floor by exactly 1/<em>p</em>. Adding a per-worker error-feedback memory gives an exact closed form from a four-dimensional second-moment recursion and costs only 1 + <em>&alpha;s</em>(1/<em>p</em> &minus; 1) at small steps, for any number of workers, because the virtual iterate follows uncompressed SGD. The price is speed: the mean dynamics have determinant 1 &minus; <em>p</em>, so the contraction cannot beat &radic;(1 &minus; <em>p</em>) per round; over a 400-round horizon error feedback reaches 0.39, 0.24 and 0.17 of the unbiased loss at <em>p</em> = 0.25, 0.1, 0.03, and the advantage disappears when the horizon is shorter than about 1/<em>p</em>. Stylised: diagonal quadratics, Bernoulli masks, no top-<em>k</em>."
+    },
+    {
+     "slug": "outer-delay",
+     "title": "Can a DiLoCo-style run hide its synchronisation by applying the outer update rounds late?",
+     "summary": "Applying the outer step <em>&tau;</em> rounds late gives a mode the recursion <em>x</em><sub><em>t</em>+1</sub> = <em>x</em><sub><em>t</em></sub> &minus; &alpha;<em>s</em> <em>x</em><sub><em>t</em>&minus;<em>&tau;</em></sub>, stable iff &alpha;<em>s</em> &lt; 2 sin(&pi;/(4&tau;+2)) &asymp; &pi;/(2&tau;+1). The best step sits at that edge, so the rate is 1 &minus; 2 sin(&pi;/(4&tau;+2))/&kappa;<sub><em>H</em></sub> (exactly &kappa;<sub><em>H</em></sub>/(&kappa;<sub><em>H</em></sub>+1) at &tau;=1), and outer momentum stops helping the moment &tau; &ge; 1 (69 rounds at &tau;=0 become 1388 at &kappa;<sub><em>H</em></sub>=100). Even with the sync fully hidden the gain over blocking averaging is at most (&tau;+1) sin(&pi;/(4&tau;+2)) &le; 1, and an exact search over (<em>H</em>, &tau;) finds overlapped training 1.5&ndash;4.9&times; slower than blocking averaging and 2.3&ndash;31&times; slower than blocking with tuned momentum. Giving the fresh pseudo-gradient weight above &frac12; removes the penalty entirely (stable for every &tau;; at weight 0.75 and &tau;=1 the stale term acts as negative momentum, 2&times; faster than no delay). Stylised: noiseless quadratic, shared Hessian, one common delay."
     }
    ]
   }
