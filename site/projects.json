@@ -258,6 +258,11 @@
      "slug": "sybil-stake",
      "title": "Are reward pools identity-proof?",
      "summary": "Sybil splitting and whale merging under stake-weighted pools: only linear-in-stake weights are split-invariant, per-head pools are captured at k* = &radic;(Rn/c) &minus; n identities (exact match), a sharp per-identity deterrence fee, exponents above 1 reward merging, and weighted-score wagering is split-neutral. Stylised."
+    },
+    {
+     "slug": "milestone-schedules",
+     "title": "How many milestones does an unenforced job need?",
+     "summary": "A requester and an anonymous worker split a job into milestones, each a stage of pre-payment, work and late payment, with a grim trigger that forfeits the remaining surplus and a relationship value <em>W</em>. A milestone is self-enforcing under some pre-payment split iff its cost is at most the <em>pooled</em> continuation value, so pay-after-delivery needs <em>P</em>/<em>W<sub>r</sub></em> equal milestones, pay-before <em>C</em>/<em>W<sub>w</sub></em>, and the best split <em>C</em>/(<em>W<sub>r</sub></em>+<em>W<sub>w</sub></em>) (110, 25 and 20 in the example), whoever holds the value. Because early defection also forfeits the remaining work, the largest milestone shrinks geometrically and the minimum count is &lceil;ln(1+(<em>V</em>&minus;<em>C</em>)/<em>W</em>)/ln(<em>V</em>/<em>C</em>)&rceil;: 17 instead of 100 at <em>C</em>=100, <em>V</em>=120, <em>W</em>=1, with the first milestone 1&minus;(<em>C</em>&minus;<em>W</em>)/<em>V</em> of the job. Cheap re-entry caps <em>W</em> and costs ln(1/<em>e</em>) milestones. Matched on 2000 random instances. Stylised: complete information, pro-rata value."
     }
    ]
   },
