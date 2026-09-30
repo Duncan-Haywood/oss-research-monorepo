@@ -970,6 +970,11 @@
      "slug": "inertia-twin",
      "title": "A point-mass twin of a rolling body ignores rotational inertia: how wrong are acceleration, slip and coast distance, and what does one calibration fix?",
      "summary": "A frictionless point mass overstates down-ramp acceleration by exactly 1+<em>k</em> (<em>k</em>=<em>I</em>/<em>mr</em><sup>2</sup>: 1.4, 1.5, 2.0 for sphere, disc, hoop), so a 2&nbsp;m descent takes 0.90&nbsp;s instead of 1.07&ndash;1.28&nbsp;s; a stick/slip simulation matches the closed forms to 3&times;10<sup>&minus;4</sup>&nbsp;m/s<sup>2</sup>. The slip threshold <em>&mu;</em>* = <em>k</em>&nbsp;tan&alpha;/(1+<em>k</em>) is invisible to the twin, and a launch speed picked in the twin to coast 1&nbsp;m carries a rolling body 40&ndash;100% farther. A gain fitted on one shape removes its own error but leaves &minus;16% to +20% fall-time error on the others (pooled fit +6.7% to &minus;10.7%), and the twin cannot rank the shapes. Stylised: planar incline, Coulomb friction, no rolling resistance or drag, no hardware data."
+    },
+    {
+     "slug": "lens-twin",
+     "title": "A pinhole twin of a radially distorted camera mis-ranges the near field: how far off does a twin-trained braking policy stop, and does focal calibration fix it?",
+     "summary": "With Brown distortion <em>x</em><sub><em>d</em></sub>=<em>x</em>(1+<em>k</em><sub>1</sub><em>r</em><sup>2</sup>) and a camera at height <em>h</em>, the pinhole twin reads floor range off by exactly 1/(1+<em>k</em><sub>1</sub><em>h</em><sup>2</sup>/<em>R</em><sup>2</sup>): for <em>k</em><sub>1</sub>=&minus;0.3, <em>h</em>=0.5&nbsp;m that is +15.4% at 0.75&nbsp;m, +8.1% at 1&nbsp;m and +0.5% at 4&nbsp;m. A policy trained to stop at 1.0&nbsp;m stops at 0.909&nbsp;m (16.4&nbsp;cm short at 0.75&nbsp;m; the first-order formula understates this at large &rho;). Least-squares focal calibration (<em>s</em>=1+3<em>k</em><sub>1</sub>&rho;<sub>max</sub><sup>2</sup>/5) moves the error rather than removing it: near-field 8.1% &rarr; 3.2% but a new 4.4% far-field under-read, and a 4&nbsp;m stop lands 17&nbsp;cm long. One image of a known grid identifies <em>k</em><sub>1</sub> (RMS 0.001 at 0.002 normalised-pixel noise). Stylised: one distortion term, axis-column floor points, known grid pose, no real lens."
     }
    ]
   }
