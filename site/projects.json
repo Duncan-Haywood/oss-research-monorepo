@@ -885,6 +885,11 @@
      "slug": "deadband-noise-twin",
      "title": "Does measurement noise, or dither, hide an actuator deadband the twin lacks?",
      "summary": "At <em>K</em>=0.5, <em>d</em>=0.1 the linear twin&rsquo;s exact stationary rms is <em>s</em>&radic;(<em>K</em>/(2&minus;<em>K</em>)); the real deadband loop is 27&times; worse at <em>s</em>=0.01 (0.1591 vs 0.0058) but 0.37&times; at <em>s</em>=0.05 (0.0107 vs 0.0289), because noise dithers the actuator, so a validation in the high-noise regime would call the deadband harmless. Deliberate dither removes the noise-free stall (rms 0.2000 to 0.0001 at <em>a</em>=<em>d</em>) but only hurts at <em>s</em>=0.05 (0.0103 to 0.0226), and under noise mild under-compensation of the width beats the exact width (0.0053 vs 0.0116 at <em>s</em>=0.02). Follow-up to the deadband twin. Stylised: scalar integrator, single-seed simulations without confidence intervals."
+    },
+    {
+     "slug": "slew-twin",
+     "title": "How large a manoeuvre can a twin without an actuator rate limit be trusted for?",
+     "summary": "The real loop <em>x</em>&#8314; = <em>x</em> + <em>a</em>&#8314;, with the command rate-limited to <em>r</em> per step, is scale-invariant: it depends only on <em>&rho;</em> = <em>x</em><sub>0</sub>/<em>r</em>, while the first-order twin does not. The twin is exact iff <em>x</em><sub>0</sub> &le; <em>r</em>/<em>k</em> (difference 0 at 0.999&times;, 0.1&ndash;0.6% of <em>x</em><sub>0</sub> at 1.01&times;). Beyond that the real loop overshoots the target (0.23 of <em>x</em><sub>0</sub> at <em>&rho;</em>=100, 0.90 at 10<sup>4</sup>, <em>k</em>=0.3) and settles in O(<em>&rho;</em>) steps (29418 at <em>&rho;</em>=10<sup>5</sup> vs the twin&rsquo;s 13). For <em>k</em>=1/<em>n</em> the overshoot threshold is empirically <em>&rho;</em>*=2<em>n</em>(2<em>n</em>&minus;1) (not proved); avoiding overshoot needs a rate limit 12&ndash;38&times; lower than keeping the twin exact. Stylised: scalar plant, no noise or delay."
     }
    ]
   }
