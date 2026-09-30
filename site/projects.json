@@ -312,6 +312,11 @@
      "summary": "For fixed reports r<sub>A</sub>, r<sub>B</sub> and binary outcomes with frequency q, the Brier difference is a two-point gamble and A is better exactly when q is on A&rsquo;s side of the midpoint &pi;=(r<sub>A</sub>+r<sub>B</sub>)/2. Betting a fraction &lambda; of wealth on it gives an anytime-valid e-process whose best bet grows at exactly KL(q&#8214;&pi;), so the expected decision time is ln(1/&alpha;)/KL. A z-test checked after every task falsely declares a winner in 19&ndash;38% of null runs at nominal 5%; a uniform mixture over bets stays at or below 3.8% and costs 15&ndash;41% extra tasks; a bet twice too large has negative growth. Fixed reports, i.i.d. outcomes. Stylised."
     },
     {
+     "slug": "verifier-league",
+     "title": "Which of n verifiers is best, decided at any time?",
+     "summary": "Under Brier loss the best verifier is the one whose report is closest to the outcome frequency q, and each pair has an anytime-valid betting e-process growing at KL(q&#8214;midpoint). Certifying the leader means beating every rival, so the delay is ln(1/&alpha;) over the smallest such rate, which belongs to the rival whose midpoint with the leader is nearest q: the best rival on the <em>opposite</em> side of q, not the runner-up (rate 0.0026 against 0.0086 in a six-verifier league). A bet mixture certifies within 1.35&ndash;1.60&times; of the oracle prediction; successive elimination cuts verifier evaluations 4cuts evaluation cost 2&ndash;4&times; at n=8&ndash;12ndash;5&times; at n=8&ndash;12; a peeking z-test declares a false strict best in 59% of exact-tie runs against 1.6% for the e-process. Stylised: fixed reports, i.i.d. tasks."
+    },
+    {
      "slug": "robust-aggregation",
      "title": "How much can Byzantine verifiers move an aggregate?",
      "summary": "Mean, median and trimmed-mean aggregation of verifier reports under a Byzantine fraction &beta;: mean bias &beta;B is unbounded, median bias &sigma;&Phi;<sup>&minus;1</sup>(1/(2(1&minus;&beta;))) is independent of B and diverges at &beta;=&frac12;, trimmed-mean closed form for &tau;&ge;&beta; matches simulation, and trimming below &beta; fails. Stylised."
