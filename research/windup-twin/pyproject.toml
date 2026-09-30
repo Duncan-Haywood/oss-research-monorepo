@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "windup-twin"
+version = "0.1.0"
+description = "Integrator windup a saturation-free twin does not show: exact real PI undershoot after a large step, its 100% deep-saturation limit, and the conditional-integration fix"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
