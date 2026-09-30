@@ -895,6 +895,11 @@
      "slug": "backlash-twin",
      "title": "Does a twin with a rigid drivetrain miss the hunting cycle caused by gear backlash?",
      "summary": "On a discrete PI loop the rigid twin has spectral radius 0.71&ndash;0.89 and converges, yet the real loop with a gap of half-width <em>h</em> settles on a limit cycle of motor amplitude 1.30&ndash;2.94<em>h</em> that scales exactly with <em>h</em> (1.302317 for <em>h</em>=0.01, 1, 100). The backlash describing function is an excitation-dependent gain (0.21 at <em>A</em>/<em>h</em>=1.2, 0.99 at 30) with a phase lag, and harmonic balance predicts the cycle but overestimates its amplitude by 6.7&ndash;10.1%. Negative result: the loop is bistable in some settings (hunting 1.165<em>h</em> from small starts, converging from large steps), so a large-step validation can pass a configuration that hunts. Follow-up to the deadband twin. Stylised: scalar loop, symmetric known gap, noiseless."
+   },
+   {
+     "slug": "friction-twin",
+     "title": "How wrong is the stopping distance of a twin that models friction as purely viscous?",
+     "summary": "With Coulomb friction <em>c</em> the real coast-down stops in finite time with exact distance (<em>m</em>/<em>b</em>)[<em>v</em><sub>0</sub>&minus;(<em>c</em>/<em>b</em>)ln(1+<em>b</em>&thinsp;<em>v</em><sub>0</sub>/<em>c</em>)] (RK4 agreement 9&times;10<sup>&minus;9</sup>), while the viscous twin only decays exponentially (6.5&thinsp;s to reach 10<sup>&minus;3</sup> vs 1.95&thinsp;s real). The least-squares gain <em>b</em>+<em>c</em>E[<em>v</em>]/E[<em>v</em><sup>2</sup>] depends on the logged speed range (1.23 on [1,3], 3.44 on [0.05,0.3]); fitted on [1,3] the twin overestimates stopping distance &times;1.8 at <em>v</em><sub>0</sub>=1 and &times;17 at 0.05, is exact at 7.34 and underestimates above. Negative result: no single viscous gain does better than 0.87 worst relative error over [0.05,3], while an affine fit recovers (<em>b</em>,<em>c</em>) exactly. Stylised: one mass, noiseless logs."
    }
    ]
   }
