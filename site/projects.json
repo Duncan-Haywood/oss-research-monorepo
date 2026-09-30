@@ -891,11 +891,16 @@
      "title": "How large a manoeuvre can a twin without an actuator rate limit be trusted for?",
      "summary": "The real loop <em>x</em>&#8314; = <em>x</em> + <em>a</em>&#8314;, with the command rate-limited to <em>r</em> per step, is scale-invariant: it depends only on <em>&rho;</em> = <em>x</em><sub>0</sub>/<em>r</em>, while the first-order twin does not. The twin is exact iff <em>x</em><sub>0</sub> &le; <em>r</em>/<em>k</em> (difference 0 at 0.999&times;, 0.1&ndash;0.6% of <em>x</em><sub>0</sub> at 1.01&times;). Beyond that the real loop overshoots the target (0.23 of <em>x</em><sub>0</sub> at <em>&rho;</em>=100, 0.90 at 10<sup>4</sup>, <em>k</em>=0.3) and settles in O(<em>&rho;</em>) steps (29418 at <em>&rho;</em>=10<sup>5</sup> vs the twin&rsquo;s 13). For <em>k</em>=1/<em>n</em> the overshoot threshold is empirically <em>&rho;</em>*=2<em>n</em>(2<em>n</em>&minus;1) (not proved); avoiding overshoot needs a rate limit 12&ndash;38&times; lower than keeping the twin exact. Stylised: scalar plant, no noise or delay."
     },
-   {
+    {
      "slug": "backlash-twin",
      "title": "Does a twin with a rigid drivetrain miss the hunting cycle caused by gear backlash?",
      "summary": "On a discrete PI loop the rigid twin has spectral radius 0.71&ndash;0.89 and converges, yet the real loop with a gap of half-width <em>h</em> settles on a limit cycle of motor amplitude 1.30&ndash;2.94<em>h</em> that scales exactly with <em>h</em> (1.302317 for <em>h</em>=0.01, 1, 100). The backlash describing function is an excitation-dependent gain (0.21 at <em>A</em>/<em>h</em>=1.2, 0.99 at 30) with a phase lag, and harmonic balance predicts the cycle but overestimates its amplitude by 6.7&ndash;10.1%. Negative result: the loop is bistable in some settings (hunting 1.165<em>h</em> from small starts, converging from large steps), so a large-step validation can pass a configuration that hunts. Follow-up to the deadband twin. Stylised: scalar loop, symmetric known gap, noiseless."
-   }
+    },
+    {
+     "slug": "stiction-twin",
+     "title": "Does a twin with correct sliding friction still miss stick-slip hunting from static friction?",
+     "summary": "Unit mass under PID, frictionless twin stable (error below 1e-58). With <em>F</em><sub>s</sub>=<em>F</em><sub>c</sub> (sliding friction identified correctly) the real loop converges in all 15 cases tried, so that twin validates. With a stiction excess &Delta;<em>F</em>=<em>F</em><sub>s</sub>&minus;<em>F</em><sub>c</sub> it hunts in stick-slip at 0.54&ndash;0.93 &Delta;<em>F</em>/<em>k</em><sub>p</sub> in four of five gain settings, independent of <em>F</em><sub>c</sub> (0 to 20) and of the start, falling with damping; one setting (<em>k</em><sub>d</sub>=4, <em>k</em><sub>i</sub>=5) converges. Scaling is bit-exact for power-of-two scales but the cycle is unique only to about three digits. Negative result: a 1000 s run can show a motionless &ldquo;converged&rdquo; error for large <em>F</em><sub>c</sub>/<em>k</em><sub>i</sub> while a 20&thinsp;000 s run still hunts; the amplitude constant has no closed form here. Follow-up to the backlash twin. Stylised: unit mass, Coulomb plus static friction, noiseless."
+    }
    ]
   }
  ],
