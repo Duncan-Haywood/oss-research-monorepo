@@ -1000,6 +1000,11 @@
      "slug": "range-twin",
      "title": "What does a twin whose sensor reads at any distance get wrong about a loop with a range-limited lidar or radar?",
      "summary": "A twin with unlimited sensor range predicts geometric convergence; a real sensor reading clip(<em>x</em>, &minus;<em>R</em>, <em>R</em>) caps the approach speed at <em>kR</em>. The exact step-count law matches simulation in 108/108 cases; for <em>k</em>=0.25 the twin says 49 steps from 1000<em>R</em> and the real loop takes 4021 (82&times;), an error linear in <em>x</em><sub>0</sub>/<em>R</em> with slope 1/<em>k</em>. For a PI loop the twin's overshoot is neither a bound nor a lower bound: smaller at 2&ndash;5<em>R</em>, 4.1&times; larger at 1000<em>R</em>; conditional integration repairs overshoot but not settling time. Logs within range fit the gain exactly and cannot reveal <em>R</em>; from logs uniform on [&minus;<em>L</em>, <em>L</em>] the fitted gain factor is 1.5<em>q</em>&minus;0.5<em>q</em><sup>3</sup>, <em>q</em>=<em>R</em>/<em>L</em>. Stylised: scalar noiseless loop, hard symmetric clip."
+    },
+    {
+     "slug": "replicate-twin",
+     "title": "One long twin run or many replications when every run starts in the wrong state?",
+     "summary": "Splitting a fixed budget of <em>N</em> twin draws into <em>r</em> replications, each started at an offset and with <em>d</em> draws deleted, gives iid replication means, but the warm-up bias does not shrink with <em>r</em>. For an AR(1) the MSE and the exact coverage of the Student-<em>t</em> interval are closed-form (0.921 vs 0.921 simulated at <em>r</em>=50): a single run minimises MSE, replication costs at most 1.07&times; at <em>&phi;</em>=0.9 but 2.2&times; at <em>&phi;</em>=0.99, and the nominal-95% interval covers 92% at the MSE-optimal deletion once replications are short (no deletion reaches 94% at 40 draws each). Single-run batch means were not worse in this model. Preliminary M/M/1 simulation: 30 short replications cover 5.8% of the time, and no setting tried reaches 95%. Stylised: Gaussian AR(1), one start offset, simulated &ldquo;real&rdquo; system."
     }
    ]
   }
