@@ -810,6 +810,11 @@
      "slug": "autocorr-twin",
      "title": "How much is one long digital-twin run worth when its output is serially correlated?",
      "summary": "Twin output such as queue waits is autocorrelated, but a run is usually summarised as mean &plusmn; 1.96&thinsp;<em>s</em>/&radic;<em>n</em>. For AR(1) output the run-mean variance is exact (matched to simulation), so 1000 draws at <em>&phi;</em>=0.9 are worth 53. For an M/M/1 lab instrument the variance of the run mean is 9.7&times;, 33&times; and 363&times; the iid value at <em>&rho;</em>=0.5, 0.7, 0.9: from 10<sup>4</sup> jobs the naive 95% interval covers the true mean wait 53%, 26% and 9% of the time, and a twin &ldquo;certifies&rdquo; an SLA of 8 against a true mean of 9 in 26% of runs. Higher load needs a longer run (470 jobs by the iid formula, 170,268 exactly at <em>&rho;</em>=0.9). Batch means restore coverage (94&ndash;95%) only when batches outlast the correlation time; it is 53.5% at <em>&phi;</em>=0.99 and 82.5% at <em>&rho;</em>=0.9, <em>n</em>=10<sup>4</sup>. Stylised (Gaussian AR(1) and M/M/1, simulated &ldquo;real&rdquo; system)."
+    },
+    {
+     "slug": "warmstart-twin",
+     "title": "How biased is a short digital-twin run that starts from a default state?",
+     "summary": "A twin reset to an empty queue and averaged over <em>n</em> steps is biased toward that start. For AR(1) output the bias, variance and best warm-up deletion are exact (bias/sd 1.88 to 0.12 for <em>n</em>=20 to 2500 at <em>&phi;</em>=0.9). For the M/M/1 wait the summed empty-start bias is <em>&rho;</em>/(1&minus;<em>&rho;</em>)<sup>3</sup> (verified numerically against an exact series and coupled simulation), so it equals one standard deviation only at 23 jobs at <em>&rho;</em>=0.9: at run lengths that give a valid interval it costs 1&ndash;3 coverage points. Short runs are different: 50 jobs from an empty start read 5.6 below the true mean wait of 9; starting at the mean reduces bias but not reliably RMSE; a noisy real-state start is unbiased with 3.6&times; the sd; MSER-5 truncation made bias and coverage worse here. Stylised (AR(1) and M/M/1, simulated &ldquo;real&rdquo; system)."
     }
    ]
   }
