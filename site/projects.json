@@ -965,6 +965,11 @@
      "slug": "shutter-twin",
      "title": "A global-shutter twin of a rolling-shutter camera ignores target motion: how biased is a twin-trained orientation estimate, and what does the same frame reveal?",
      "summary": "Row <em>r</em> is exposed at <em>t</em>=<em>r&tau;</em>/<em>H</em>, so a moving rectangle is imaged sheared and stretched; closed-form edge normals match a row-by-row simulation. At 1000 px/s horizontal speed the vertical edges tilt 3.58&deg; and the horizontal ones 0, so averaging the two edge families (what a global-shutter twin certifies) is biased 1.79&deg;; 1000 px/s vertical speed makes the target 6.7% taller. One frame of a known-size rectangle identifies orientation and both velocities in closed form: with 0.25 px edge noise orientation error falls from 0.24&ndash;0.97&deg; to 0.027&deg; and speeds are recovered to 16 and 4.8 px/s, but vertical speed is very sensitive to the assumed size (a 5% height error moves it by about 800 px/s). Stylised: straight edges, constant velocity, known size, no real footage."
+    },
+    {
+     "slug": "lens-twin",
+     "title": "A pinhole twin of a radially distorted camera mis-ranges the near field: how far off does a twin-trained braking policy stop, and does focal calibration fix it?",
+     "summary": "With Brown distortion <em>x</em><sub><em>d</em></sub>=<em>x</em>(1+<em>k</em><sub>1</sub><em>r</em><sup>2</sup>) and a camera at height <em>h</em>, the pinhole twin reads floor range off by exactly 1/(1+<em>k</em><sub>1</sub><em>h</em><sup>2</sup>/<em>R</em><sup>2</sup>): for <em>k</em><sub>1</sub>=&minus;0.3, <em>h</em>=0.5&nbsp;m that is +15.4% at 0.75&nbsp;m, +8.1% at 1&nbsp;m and +0.5% at 4&nbsp;m. A policy trained to stop at 1.0&nbsp;m stops at 0.909&nbsp;m (16.4&nbsp;cm short at 0.75&nbsp;m; the first-order formula understates this at large &rho;). Least-squares focal calibration (<em>s</em>=1+3<em>k</em><sub>1</sub>&rho;<sub>max</sub><sup>2</sup>/5) moves the error rather than removing it: near-field 8.1% &rarr; 3.2% but a new 4.4% far-field under-read, and a 4&nbsp;m stop lands 17&nbsp;cm long. One image of a known grid identifies <em>k</em><sub>1</sub> (RMS 0.001 at 0.002 normalised-pixel noise). Stylised: one distortion term, axis-column floor points, known grid pose, no real lens."
     }
    ]
   }
