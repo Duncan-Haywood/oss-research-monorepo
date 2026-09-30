@@ -750,6 +750,11 @@
      "slug": "scenario-twin",
      "title": "What does a too-narrow scenario generator do to a digital twin's estimate of a rare failure?",
      "summary": "With real scenarios <em>x</em>~N(0,1), failure iff <em>x</em>&gt;<em>a</em>, and a twin generator of width <em>s</em>, the raw twin claims Q(<em>a</em>/<em>s</em>) and the reweighted (importance-sampling) estimate has per-sample second moment <em>s&tau;</em>Q(<em>a</em>/&tau;), &tau;<sup>2</sup>=<em>s</em><sup>2</sup>/(2<em>s</em><sup>2</sup>&minus;1), finite only for <em>s</em><sup>2</sup>&gt;&frac12;. In a braking example (<em>P</em>=1.2&times;10<sup>&minus;3</sup>) a generator 0.6&times; too narrow claims 2.1&times;10<sup>&minus;7</sup> and reported zero failures in all 4,000 simulated runs of 2,000 scenarios; a wide one over-claims but reweighting repairs it, with optimal width &asymp;1.05<em>a</em> needing 2,179 runs for 10% error against 83,459 for plain Monte Carlo. A defensive mixture with the real prior makes a narrow twin's variance finite but no better than plain Monte Carlo. Stylised: one-dimensional Gaussian scenarios, known threshold and density, correct twin failure indicator."
+    },
+    {
+     "slug": "finetune-twin",
+     "title": "How many real steps does a twin-pretrained policy save, and which twin errors does fine-tuning inherit?",
+     "summary": "On a quadratic real loss with SGD noise, the expected loss after <em>k</em> real steps from a twin start is exact (matched to Monte Carlo within 0.3%). A twin start with 0.6&times; the cold-start error saves 64&ndash;67% of the steps to every target from 8&times; to 1.2&times; the SGD floor; at equal error it saves nothing and at 1.5&times; it costs 138 extra steps (negative transfer). For any curvature spectrum the loss left by a twin error of norm <em>b</em> is at most <em>b</em><sup>2</sup>/(4<em>e&eta;k</em>), attained by the direction &lambda;<sub>*</sub>=1/(2&eta;<em>k</em>), so twin error decays as 1/<em>k</em>, not geometrically. At the same initial loss, an error in the stiffest direction needs 13 steps to reach 2&times; the floor and one in the flattest 1,541. Stylised: fixed offset, isotropic noise, no robot data."
     }
    ]
   }
