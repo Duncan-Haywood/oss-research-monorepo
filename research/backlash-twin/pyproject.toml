@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "backlash-twin"
+version = "0.1.0"
+description = "Backlash twin: gear play a linear twin lacks; exact limit-cycle law, load stalls below an amplitude and the loop is bistable"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

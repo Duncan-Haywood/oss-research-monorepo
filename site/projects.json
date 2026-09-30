@@ -885,6 +885,11 @@
      "slug": "deadband-noise-twin",
      "title": "Does measurement noise, or dither, hide an actuator deadband the twin lacks?",
      "summary": "At <em>K</em>=0.5, <em>d</em>=0.1 the linear twin&rsquo;s exact stationary rms is <em>s</em>&radic;(<em>K</em>/(2&minus;<em>K</em>)); the real deadband loop is 27&times; worse at <em>s</em>=0.01 (0.1591 vs 0.0058) but 0.37&times; at <em>s</em>=0.05 (0.0107 vs 0.0289), because noise dithers the actuator, so a validation in the high-noise regime would call the deadband harmless. Deliberate dither removes the noise-free stall (rms 0.2000 to 0.0001 at <em>a</em>=<em>d</em>) but only hurts at <em>s</em>=0.05 (0.0103 to 0.0226), and under noise mild under-compensation of the width beats the exact width (0.0053 vs 0.0116 at <em>s</em>=0.02). Follow-up to the deadband twin. Stylised: scalar integrator, single-seed simulations without confidence intervals."
+    },
+    {
+     "slug": "backlash-twin",
+     "title": "What does gear play, which a linear twin lacks, do to a reversing tracking loop?",
+     "summary": "A motor integrating the tracking error drives a load through play of half-width <em>d</em>. The loop has an exact symmetric limit cycle (load stuck <em>n</em>&nbsp;=&nbsp;&lceil;2<em>d</em>/(<em>K</em>(<em>A</em>/2+<em>a</em>))&rceil; steps per half-period) whose swing and rms error match simulation to every printed digit; against the linear twin the real rms error is 1.98&times; at <em>A</em>=0.1, 1.58&times; at 0.2, 1.25&times; at 0.5 and 1.11&times; at 1.0 (<em>K</em>=0.5, <em>d</em>=0.1, half-period 10). If <em>KPA</em>/2&nbsp;&le;&nbsp;2<em>d</em> the load can also rest with error exactly <em>A</em>/2, and for <em>A</em>&nbsp;=&nbsp;0.065&ndash;0.075 the loop is bistable: it rests or moves depending only on the initial gap, which a twin cannot represent. At the rest threshold 4<em>d</em>/(<em>KP</em>) the real/twin error ratio grows with half-period (1.0, 1.4, 1.9, 2.7 for <em>P</em>&nbsp;=&nbsp;5, 10, 20, 40). Stylised: scalar servo, symmetric play, no noise, square-wave reference; stability of each cycle is inferred from simulation."
     }
    ]
   }
