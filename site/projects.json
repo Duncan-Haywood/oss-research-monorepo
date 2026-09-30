@@ -46,6 +46,11 @@
      "summary": "Not from one re-execution (variance&rsquo;s level sets are not convex), but two independent ones suffice: D=(y<sub>1</sub>&minus;y<sub>2</sub>)&sup2;/2 is unbiased with variance &sigma;<sup>4</sup>(&kappa;+1)/2. Brier excess is exactly (r&minus;&sigma;&sup2;)&sup2;; the scale-free loss D/r+ln r has excess 1/&lambda;+ln &lambda;&minus;1, so halving the report costs 0.307 and doubling 0.193. Catching a 10% misreport at 95% takes about 2&ndash;4 thousand tasks (2z&sup2;(&kappa;+1)/(&lambda;&minus;1)&sup2;, simulated 0.93&ndash;0.97); disjoint pairs are 1.8&times; worse than the sample variance at n=10; with Pareto tail index 3 the error decays like m<sup>&minus;1/3</sup>, not m<sup>&minus;1/2</sup>. Stylised."
     },
     {
+     "slug": "multi-observation-elicitation",
+     "title": "What can be elicited from several independent draws of benign drift?",
+     "summary": "The pair score (r&minus;(y<sub>1</sub>&minus;y<sub>2</sub>)&sup2;/2)&sup2; has excess loss exactly (r&minus;&sigma;&sup2;)&sup2;, and kernels for mean&sup2;, the third central moment and &sigma;<sup>4</sup> need 2, 3 and 4 draws. Detecting a variance under-report takes ((z<sub>&alpha;</sub>+z<sub>&beta;</sub>)/&rho;)&sup2;(&kappa;+1)/2 pairs (Monte Carlo power 0.70&ndash;0.79 against a nominal 0.8); scoring |y<sub>1</sub>&minus;y<sub>2</sub>| beats the variance score for Laplace and t<sub>5</sub>; all-pairs pooling cuts payment variance by (&kappa;+1)/(&kappa;&minus;1); correlated draws make the score elicit &sigma;&sup2;(1&minus;&rho;). Stylised distributions, no measured drift."
+    },
+    {
      "slug": "tangent-log",
      "title": "Can the log score be made payable?",
      "summary": "Log score is ideal for rare faults but a confident wrong report costs unbounded stake. Extending the log generator past [&epsilon;,1&minus;&epsilon;] by its second-order Taylor polynomial gives a strictly proper score, identical to log up to a constant inside, with worst-case payment exactly ln((1&minus;&epsilon;)/&epsilon;)+1/(1&minus;&epsilon;). Per unit of payment range it has 63&times; Brier&rsquo;s curvature at p=10<sup>&minus;3</sup> but loses to Brier above a closed-form crossover (&asymp;0.07), and &epsilon;=p is the best cutoff for truth p."
