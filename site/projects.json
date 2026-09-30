@@ -885,7 +885,12 @@
      "slug": "deadband-noise-twin",
      "title": "Does measurement noise, or dither, hide an actuator deadband the twin lacks?",
      "summary": "At <em>K</em>=0.5, <em>d</em>=0.1 the linear twin&rsquo;s exact stationary rms is <em>s</em>&radic;(<em>K</em>/(2&minus;<em>K</em>)); the real deadband loop is 27&times; worse at <em>s</em>=0.01 (0.1591 vs 0.0058) but 0.37&times; at <em>s</em>=0.05 (0.0107 vs 0.0289), because noise dithers the actuator, so a validation in the high-noise regime would call the deadband harmless. Deliberate dither removes the noise-free stall (rms 0.2000 to 0.0001 at <em>a</em>=<em>d</em>) but only hurts at <em>s</em>=0.05 (0.0103 to 0.0226), and under noise mild under-compensation of the width beats the exact width (0.0053 vs 0.0116 at <em>s</em>=0.02). Follow-up to the deadband twin. Stylised: scalar integrator, single-seed simulations without confidence intervals."
-    }
+    },
+   {
+     "slug": "backlash-twin",
+     "title": "Does a twin with a rigid drivetrain miss the hunting cycle caused by gear backlash?",
+     "summary": "On a discrete PI loop the rigid twin has spectral radius 0.71&ndash;0.89 and converges, yet the real loop with a gap of half-width <em>h</em> settles on a limit cycle of motor amplitude 1.30&ndash;2.94<em>h</em> that scales exactly with <em>h</em> (1.302317 for <em>h</em>=0.01, 1, 100). The backlash describing function is an excitation-dependent gain (0.21 at <em>A</em>/<em>h</em>=1.2, 0.99 at 30) with a phase lag, and harmonic balance predicts the cycle but overestimates its amplitude by 6.7&ndash;10.1%. Negative result: the loop is bistable in some settings (hunting 1.165<em>h</em> from small starts, converging from large steps), so a large-step validation can pass a configuration that hunts. Follow-up to the deadband twin. Stylised: scalar loop, symmetric known gap, noiseless."
+   }
    ]
   }
  ],
