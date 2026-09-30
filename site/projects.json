@@ -1030,6 +1030,11 @@
      "slug": "mount-twin",
      "title": "What does a twin that assumes the radar is aligned with the body get wrong about dead reckoning, and can loop-closure validation see it?",
      "summary": "With a planar mount-yaw error <em>e</em>, radar ego-velocity dead reckoning is exactly the true path rotated by <em>e</em>: error 2&nbsp;sin(<em>e</em>/2)&middot;|displacement|, bounded by the path diameter and zero after any closed loop, so loop and out-and-back validations pass while a straight 157&nbsp;m run is off by 27&nbsp;m at 10&deg;. A closed-form rotation fit recovers <em>e</em> with standard deviation &sigma;/&radic;&Sigma;|p<sub>i</sub>|<sup>2</sup> (matched by simulation, 95% coverage). Stylised: the result is planar; a pitched mount drifts vertically by exactly laps&middot;2&pi;R&nbsp;sin <em>e</em> despite perfect x-y closure."
+    },
+    {
+     "slug": "twin-control-variate",
+     "title": "How many real rollouts does a biased digital twin save when certifying a policy?",
+     "summary": "A twin evaluated alone is biased however many rollouts you run (nominal 95% intervals cover the truth 0&ndash;0.4% of the time at a 12% bias, 20% gain error); used as a control variate it removes variance without bias. In scalar LQ the rollout cost is a Gaussian quadratic form, so the twin/plant correlation <em>&rho;</em> = <em>&lambda;</em>&thinsp;tr(<em>GG&prime;</em>)/&radic;(tr <em>G</em><sup>2</sup> tr <em>G&prime;</em><sup>2</sup>) is exact, the optimal twin-to-real ratio is <em>&rho;</em>/&radic;((1&minus;<em>&rho;</em><sup>2</sup>)<em>w</em>) and the speed-up 1/(&radic;(1&minus;<em>&rho;</em><sup>2</sup>)+<em>&rho;</em>&radic;<em>w</em>)<sup>2</sup>, matched by simulation to a few percent. Twin gain error is first order in the bias (5% error &rarr; 2.7%) but second order in 1&minus;<em>&rho;</em>, so the twin&rsquo;s value is capped by the fraction <em>&lambda;</em> of the real disturbance it can replay: a 5% certificate costs 168 real-only, 28 with <em>&lambda;</em>&nbsp;=&nbsp;0.95 and 163 with <em>&lambda;</em>&nbsp;=&nbsp;0.3. Twin-only beats real-only only below <em>&sigma;</em><sup>2</sup>/bias<sup>2</sup> real rollouts (35 at 10% error). Stylised."
     }
    ]
   }
