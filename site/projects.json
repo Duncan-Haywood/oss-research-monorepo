@@ -124,6 +124,11 @@
      "slug": "collision-elicitation",
      "title": "Can a protocol pay workers to report how often honest replicas agree?",
      "summary": "Yes, from two runs and no more: the squared error against the agreement indicator is proper for the collision probability &Gamma;=&Sigma;<em>p</em><sub><em>i</em></sub><sup>2</sup> with exact regret (<em>r</em>&minus;&Gamma;)<sup>2</sup>, and one run provably cannot (the level sets are not convex). The all-pairs U-statistic has exact variance and needs about a quarter of the runs of disjoint pairs (variance ratio 0.27 at <em>n</em>=100). A fleet of <em>H</em> equal hardware classes has &Gamma;=1/<em>H</em>, so strict equality over <em>k</em> honest replicas false-slashes with probability 1&minus;<em>H</em><sup>1&minus;<em>k</em></sup>. Colluders returning one common wrong value leave agreement unchanged at &epsilon;=2&Gamma;/(1+&Gamma;), so &Gamma; cannot be used alone. Runs are i.i.d. and float32 fleets are simulated summation orders."
+    },
+    {
+     "slug": "skill-score-normalisation",
+     "title": "Is a skill score normalised by the realised base rate safe to pay on?",
+     "summary": "Ranking verifiers by the Brier skill score 1&minus;Brier/(<em>y</em>&#772;(1&minus;<em>y</em>&#772;)) divides a proper score by an outcome-dependent baseline, and that breaks properness. The optimal report is exactly the hit rate reweighted by the inverse baseline variance: it is &frac12; for any belief with two tasks, and for larger <em>n</em> is biased by about &minus;(1&minus;2<em>p</em>)/<em>n</em> (0.232 against a true 0.1 at <em>n</em>=5), with misreporting gaining 0.042 skill for a 0.017 true-Brier cost. Because the baseline pools all of a verifier&rsquo;s tasks, the report on one task type also shifts with beliefs on the others (0.090 vs 0.133 for the rare type). A leave-one-out or ex-ante baseline restores properness. Independent tasks, constant reports, Brier only; exact enumeration agrees with 200,000-trial simulation. Pure-Python, 9 tests."
     }
    ]
   },
@@ -392,6 +397,11 @@
      "slug": "decision-markets",
      "title": "What does it cost to route between models with conditional markets, and what does a stake do to the answer?",
      "summary": "Markets that forecast each model&rsquo;s loss <em>if chosen</em> only ever see the chosen arm. An inverse-propensity Brier payment is exactly proper even when the router reads the report (without the weight a trader shades its forecast, or hides), and its price is exact: E[1/&pi;] = 1+(K&minus;1)e<sup>&omega;<sup>2</sup>/2&tau;<sup>2</sup></sup>, so payment variance blows up as the router cools (a probit router has infinite variance for &tau; &le; &omega;; Monte Carlo at &tau;=0.3 sees 29 against the exact 195). Exploration regret is at most 0.2785&tau;. Equal owner stakes cancel in the decision, a stake gap shifts the reported gap by a closed-form fixed point, and the loss it causes is second order, &prop;(&Delta;B/k)<sup>2</sup>. Gaussian, one-shot, stylised."
+    },
+    {
+     "slug": "module-entry",
+     "title": "What share of the mass should a new module get?",
+     "summary": "When a modular system adds an expert to a Hedge/LMSR router, the regret certificate to every expert is <em>c<sub>i</sub></em>/&eta; + &eta;<em>T</em>/8 with <em>c<sub>i</sub></em> = ln(1/&pi;<sub>i</sub>) + &Sigma;<sub>j&gt;i</sub> ln(1/(1&minus;&pi;<sub>j</sub>)), and for <em>any</em> share sequence &Sigma;<sub>i</sub> e<sup>&minus;<em>c<sub>i</sub></em></sup> = 1 (a Kraft identity). So uniform entry &pi; = 1/(<em>n</em>+1) is the unique minimax rule (every <em>c<sub>i</sub></em> = ln <em>N</em>, against 4.1&ndash;9.7 for constant shares at 4+12 modules), and against a prior on which module will be best the optimal shares are <em>P<sub>j</sub></em>/<em>S<sub>j</sub></em> with expected coefficient equal to the entropy of the prior. The price of entry is exactly ln(1/&pi;)/&eta; for a better arrival and ln(1/(1&minus;&pi;))/&eta; for a worse one, independent of the quality gap; a recency prior cuts simulated regret from 3.11 to 2.70 nats. Known arrival rounds, fixed &eta;. Pure-Python, 6 tests."
     }
    ]
   },
@@ -439,6 +449,11 @@
      "slug": "market-subspace-descent",
      "title": "How fast does a prediction market converge when traders only understand part of it?",
      "summary": "Traders who each move prices within a subspace of securities make a cost-function market a randomized subspace descent. The market maker&rsquo;s expected loss telescopes to &frac12;(<em>e</em><sub>0</sub>&prime;<em>Ae</em><sub>0</sub> &minus; <em>e</em><sub><em>T</em></sub>&prime;<em>Ae</em><sub><em>T</em></sub>) whoever trades, so accuracy is bought once. Correlated securities slow single-security traders in closed form (5 securities: 31 rounds to reach 10<sup>&minus;3</sup> of the error uncorrelated, 356 at correlation 0.95), while offering A-conjugate bundles restores the exact rate 1&minus;1/<em>d</em> at any correlation. With noisy beliefs the fraction &kappa; a trader moves acts as an SGD step size: floor <em>d</em>&kappa;&sigma;<sup>2</sup>/(2&minus;&kappa;), and a per-security running-mean step beats the best constant step (error 0.26 vs 0.47 at 100 rounds; full steps stay at 5). A simulated 4-outcome LMSR matches the local rate predictions to within 0.01 for two of three bundle designs and is faster than predicted for the third, for a reason not isolated. Quadratic-cost theory with i.i.d. trader arrival and Gaussian belief noise."
+    },
+    {
+     "slug": "cfmm-markets",
+     "title": "What does a constant-product pool concede to informed traders?",
+     "summary": "A Uniswap-style pool with invariant &prod;<em>r</em><sub><em>i</em></sub> = <em>C</em><sub>0</sub><sup><em>n</em></sup> is a cost-function prediction market: its worst-case loss is <em>C</em><sub>0</sub> and is never attained, and a trader who moves the price to belief &pi; earns exactly <em>C</em><sub>0</sub>(1 &minus; <em>n</em>&middot;GM(&pi;)) with GM the geometric mean, against <em>C</em><sub>0</sub>(1 &minus; <em>H</em>(&pi;)/ln <em>n</em>) for LMSR at equal worst-case loss. Near uniform beliefs the ratio is exactly ln <em>n</em>, so the pool is cheaper than LMSR for two outcomes and dearer from three. Its price tails are polynomial, (<em>C</em><sub>0</sub>/gap)<sup><em>n</em></sup>, so pushing a binary price to 0.999 costs 3.4&times; LMSR. As an expert router it satisfies an exact regret identity (settlement term &le; <em>C</em><sub>0</sub> plus Bregman terms), but under regime switches it shows no advantage over Hedge (negative result). Symmetric pools, no fees. Pure-Python, 10 tests."
     }
    ]
   },
