@@ -5,7 +5,7 @@ Pure Python, no dependencies. Real receiver: 2-D position and clock solved by le
 ```bash
 cd research/gnss-twin
 PYTHONPATH=src python3 -m unittest discover -s tests -v   # 9 tests, under 1 s
-PYTHONPATH=src python3 experiments/run.py                 # about a minute; output in experiments/results.txt
+PYTHONPATH=src python3 experiments/run.py                 # about 15 s; output in experiments/results.txt
 ```
 
 **Builds on.** The sensor-simulation and sim-to-real-for-perception direction of ARPG (<https://arpg.colorado.edu/>; perception, localisation and field robotics) and the Autonomous Systems IRT (<https://www.colorado.edu/irt/autonomous-systems/>) and RECUV (<https://www.colorado.edu/recuv/>; unmanned vehicles navigating outdoors); no specific paper from those groups is reproduced and nothing here is affiliated with or endorsed by them. Dilution of precision, receiver autonomous integrity monitoring and the effect of time-correlated errors are textbook (Misra & Enge 2011; Parkinson & Axelrad 1988). Companion to `sweep-twin`, `odometry-twin` and `twin-monitor` in this repository.
