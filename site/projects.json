@@ -1015,6 +1015,11 @@
      "slug": "twin-shrinkage",
      "title": "How far should a real-plant estimate be pulled toward its digital twin?",
      "summary": "Shrinking a real estimate of d plant parameters toward the twin's prediction (James&ndash;Stein) has an exact risk d&minus;(d&minus;2)<sup>2</sup>E[1/(d&minus;2+2K)], K~Poisson(&lambda;/2): it never raises total error for d&ge;3, a perfect twin gives risk 2 at any d (saving 33% at d=3, 80% at d=10), and a twin as noisy as the data (&lambda;/d=1) still saves 14&ndash;49% while using it alone saves nothing. At large d the twin is worth n+&sigma;<sup>2</sup>/&tau;<sup>2</sup> real samples (exact values 0.72&ndash;0.998 of that at d=5&ndash;100). The guarantee is aggregate only: one badly mismatched parameter among d takes about d/4 noise variances of damage (measured 2.9 at d=10, 25.5 at d=100 against 1), and blocks of 5 cap that at 1.65 (d=30) while keeping 72% of the perfect-twin saving. Stylised: Gaussian noise, orthogonal design, no robot data."
+    },
+    {
+     "slug": "mount-twin",
+     "title": "What does a twin that assumes the radar is aligned with the body get wrong about dead reckoning, and can loop-closure validation see it?",
+     "summary": "With a planar mount-yaw error <em>e</em>, radar ego-velocity dead reckoning is exactly the true path rotated by <em>e</em>: error 2&nbsp;sin(<em>e</em>/2)&middot;|displacement|, bounded by the path diameter and zero after any closed loop, so loop and out-and-back validations pass while a straight 157&nbsp;m run is off by 27&nbsp;m at 10&deg;. A closed-form rotation fit recovers <em>e</em> with standard deviation &sigma;/&radic;&Sigma;|p<sub>i</sub>|<sup>2</sup> (matched by simulation, 95% coverage). Stylised: the result is planar; a pitched mount drifts vertically by exactly laps&middot;2&pi;R&nbsp;sin <em>e</em> despite perfect x-y closure."
     }
    ]
   }
