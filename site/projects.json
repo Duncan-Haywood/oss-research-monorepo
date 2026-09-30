@@ -705,6 +705,11 @@
      "slug": "twin-certification",
      "title": "Can a digital twin shorten a real-world safety certification?",
      "summary": "Certifying a failure rate <em>p</em>&nbsp;&lt;&nbsp;&epsilon; from <em>n</em> real trials with a twin-derived prior. The worst-case false-certification probability of any &lsquo;certify iff <em>k</em>&nbsp;&le;&nbsp;<em>c</em>&rsquo; rule is exactly P(Bin(<em>n</em>,&epsilon;)&nbsp;&le;&nbsp;<em>c</em>), so by Karlin&ndash;Rubin the twin cannot cut real trials at a fixed level: at &epsilon;=0.01, &delta;=0.05 the exact test needs 299 zero-failure trials, a twin prior reaches 133 only at worst-case size 0.26, and the exact test held to the same size needs the same <em>n</em> (1057 vs 1057 for 90% power at <em>p</em>=&epsilon;/3). A weakly informative Jeffreys bound is already anti-conservative (size 0.147 at 191 trials). Optimistic twins inflate size, pessimistic ones (claim 2&epsilon;) block certification entirely, and the largest safe twin weight is about 90 twin-trial equivalents at <em>n</em>=299. Stylised: one Bernoulli failure rate, no continuous margins."
+    },
+    {
+     "slug": "retry-twin",
+     "title": "How many retries does a grasp need when the simulator treats attempts as independent?",
+     "summary": "A pick skill is retried until success. The twin draws attempts independently at <em>p</em>&nbsp;=&nbsp;0.6; in the &ldquo;real&rdquo; system each object has a latent success probability (Beta, same mean), so single-attempt validation cannot tell them apart while attempts on one object are correlated. Real failure after <em>k</em> attempts is exactly &prod;(<em>b</em>+<em>j</em>)/(<em>a</em>+<em>b</em>+<em>j</em>), a power law <em>k</em><sup>&minus;<em>a</em></sup> against the twin&rsquo;s geometric law (matched to simulation). At the twin&rsquo;s 6-attempt budget for &delta;&nbsp;=&nbsp;0.01 (claimed 0.004) real failure is 0.010, 0.042 or 0.151 at correlation 0.05, 0.2 or 0.5, and the budget actually needed is 7, 13 or 571. The payoff cost of a wrong budget is mostly small (0&ndash;6%, 23% in one case) because the optimal give-up rule is closed-form. Two forced attempts per object identify the correlation, but a budget aimed at &delta; still needs a safety margin (met in 51&ndash;79% of repeats). Stylised."
     }
    ]
   }
