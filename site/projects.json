@@ -930,6 +930,11 @@
      "slug": "gravity-twin",
      "title": "Does a twin with no gravity certify PD gains that sag, or cannot hold a pose at all?",
      "summary": "A pendulum under PD control <em>u</em>=<em>k</em><sub>p</sub>(&theta;*&minus;&theta;)&minus;<em>k</em><sub>d</sub>&omega;; the twin omits gravity and promises zero error at every gain. The real hold sags to the root of <em>k</em><sub>p</sub>(&theta;*&minus;&theta;)=<em>g</em>&thinsp;sin&theta; nearest the target (RK4 agrees to six digits; 0.182&thinsp;rad at <em>k</em><sub>p</sub>=4, &theta;*=1), falling only as &asymp;1/<em>k</em><sub>p</sub>. Holding upright is stable iff <em>k</em><sub>p</sub>&gt;<em>g</em>: below it the arm settles 0.2&ndash;1.9&thinsp;rad away, and just above it the basin is tiny (0.116&thinsp;rad at 1.02<em>g</em>, 0.519 at 1.05<em>g</em>, none below 3&thinsp;rad from 1.1<em>g</em>; numerical scan). A gravity feedforward with calibration error leaves a sag linear in (<em>g</em>(<em>g</em>&minus;<em>g</em><sub>ff</sub>)minus;<em>g</em><sub>ff</sub>) (&plusmn;0.0185&thinsp;rad at &plusmn;10%). Companion to the lag and flex twins. Stylised: one rigid joint, noiseless, no friction."
+    },
+    {
+     "slug": "sample-twin",
+     "title": "A continuous-time twin certifies PD at every gain: which gains survive a zero-order-hold sampled loop?",
+     "summary": "Double integrator under PD control computed at period <em>T</em> and held. The twin (<em>T</em>&rarr;0) is stable for every gain; the exact step matrix gives the real stable region <em>k</em><sub>p</sub><em>T</em>/2 &lt; <em>k</em><sub>d</sub> &lt; 2/<em>T</em>, i.e. <em>&omega;</em><sub>n</sub><em>T</em> &lt; min(4<em>&zeta;</em>, 1/<em>&zeta;</em>), matched to bisection and an independent RK4 held-input run (<em>&zeta;</em>=0.7 fails at <em>&omega;</em><sub>n</sub><em>T</em>=1.4286). The twin is accurate for <em>&omega;</em><sub>n</sub><em>T</em> &lesssim; 0.2 but at 1.2 the real overshoot is 0.234 against its 0.046, and at fixed <em>T</em> raising <em>&omega;</em><sub>n</sub> past <em>&omega;</em><sub>n</sub><em>T</em>&asymp;1 slows settling (0.4 &rarr; 5.2) then diverges. Deadbeat gains (<em>k</em><sub>p</sub><em>T</em><sup>2</sup>=1, <em>k</em><sub>d</sub><em>T</em>=3/2) settle in 2 samples, the real speed limit. Stylised: noiseless, no computation delay."
     }
    ]
   }
