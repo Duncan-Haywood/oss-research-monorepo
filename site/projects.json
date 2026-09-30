@@ -905,6 +905,11 @@
      "slug": "stiction-twin",
      "title": "Does a twin with correct sliding friction still miss stick-slip hunting from static friction?",
      "summary": "Unit mass under PID, frictionless twin stable (error below 1e-58). With <em>F</em><sub>s</sub>=<em>F</em><sub>c</sub> (sliding friction identified correctly) the real loop converges in all 15 cases tried, so that twin validates. With a stiction excess &Delta;<em>F</em>=<em>F</em><sub>s</sub>&minus;<em>F</em><sub>c</sub> it hunts in stick-slip at 0.54&ndash;0.93 &Delta;<em>F</em>/<em>k</em><sub>p</sub> in four of five gain settings, independent of <em>F</em><sub>c</sub> (0 to 20) and of the start, falling with damping; one setting (<em>k</em><sub>d</sub>=4, <em>k</em><sub>i</sub>=5) converges. Scaling is bit-exact for power-of-two scales but the cycle is unique only to about three digits. Negative result: a 1000 s run can show a motionless &ldquo;converged&rdquo; error for large <em>F</em><sub>c</sub>/<em>k</em><sub>i</sub> while a 20&thinsp;000 s run still hunts; the amplitude constant has no closed form here. Follow-up to the backlash twin. Stylised: unit mass, Coulomb plus static friction, noiseless."
+    },
+   {
+     "slug": "lag-twin",
+     "title": "How much bandwidth can a controller tuned in a twin with an instantaneous actuator really have?",
+     "summary": "Unit mass under PD control with a first-order actuator lag &tau; the twin omits. The twin&rsquo;s loop is stable for every gain; the real loop is stable iff &tau;&lt;&tau;*=<em>k</em><sub>d</sub>/<em>k</em><sub>p</sub>=2&zeta;/&omega;<sub>n</sub> (Routh, agreeing with the roots in 168 of 168 cases), hunts at exactly the twin&rsquo;s own &omega;<sub>n</sub>, and grows at &omega;<sub>n</sub><sup>2</sup>/(2(1+4&zeta;<sup>2</sup>)) per unit excess lag (formula, numeric slope and simulation agree). &ldquo;Faster is better&rdquo; fails: at &tau;=0.05, &zeta;=0.7 the real decay rate peaks at 4.8 (&omega;<sub>n</sub>&asymp;8) and is zero at &omega;<sub>n</sub>=28 where the twin promises 19.6; the poles sum to &minus;1/&tau;, so no gains decay faster than 1/(3&tau;). Mild lag is nearly invisible in a step test (twin RMS error &asymp;0.04&thinsp;&epsilon;). Companion to the slew, deadband and backlash twins. Stylised: linear, one lag, noiseless."
     }
    ]
   }
