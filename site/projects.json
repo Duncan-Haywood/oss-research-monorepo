@@ -615,6 +615,11 @@
      "slug": "twin-audit",
      "title": "How long can a digital twin be wrong before you can prove it, and what does waiting cost?",
      "summary": "A Gaussian-mixture e-process on the closed-loop residual audits a deployed twin continuously: it false-alarms 2.4% of the time against 58% for a z-test checked every step. Detection delay follows &asymp;&nbsp;2[ln(1/&alpha;)+&frac12;ln(1+&tau;<sup>2</sup><em>nU</em>)]/(&Delta;<sup>2</sup><em>U</em>) with <em>U</em> the controller&rsquo;s own excitation (simulation 0&ndash;18% earlier); expected regret accumulated before detection is nearly independent of the gap (8&ndash;10 while per-step regret spans 38&times;); an expensive-control operator needs 11&times; longer to catch the same gap; and added probing pays only for gross errors (true gain above 2.25&times; or below 0.35&times; the twin&rsquo;s), with the rule failing at the near-cliff edge. Stylised."
+    },
+    {
+     "slug": "radar-clutter-twin",
+     "title": "What does a Gaussian-clutter radar simulator do to a CFAR detector's false-alarm rate?",
+     "summary": "A CA-CFAR threshold set in a Gaussian-clutter twin and deployed in gamma-textured (K-distributed) clutter has an exact false-alarm law, matched to direct simulation to ~1%. At design 10<sup>&minus;4</sup> the real rate is 9&times; (&nu;=5) to 30&times; (&nu;=2) too high, and 50&times; to 358&times; at 10<sup>&minus;6</sup>; restoring it costs 1.9&ndash;3.7&nbsp;dB of threshold at 10<sup>&minus;4</sup>. If texture is shared across the window CFAR is unaffected, so the twin must model spatial correlation. A moment fit of &nu; from 1000 real clutter cells brings the median to 1.1&times; (90th percentile 2&times;), versus ~10<sup>6</sup> cells to threshold empirically. Stylised: no target, no measured data."
     }
    ]
   }
