@@ -730,6 +730,11 @@
      "slug": "twin-evaluation",
      "title": "How many real rollouts does a biased digital twin save when evaluating a robot policy?",
      "summary": "Using the twin as a control variate keeps the estimate unbiased whatever the twin's bias (twin-only error +0.700 vs +0.001) with exact variance &sigma;<sub>R</sub>&sup2;((1&minus;&rho;&sup2;)/n + &rho;&sup2;/N). Real and twin cannot share execution noise, so &rho; is set by the observed scenario context: a faithful twin gets &rho;=&eta; but a noise-free twin gets &rho;=&radic;&eta; (1.33&times; vs 2.0&times; real-sample equivalent at &eta;=0.5). A twin is worth its compute only if c<sub>T</sub>/c<sub>R</sub> &lt; (1&minus;&radic;(1&minus;&rho;&sup2;))&sup2;/&rho;&sup2; (0.072 at &rho;=0.5), and where twin bias favours the wrong policy, twin-only ranking is wrong while 86&ndash;125 real episodes per policy give a 90% correct order against 164 real-only. Stylised: Gaussian returns, exact context replay, no robot data."
+    },
+    {
+     "slug": "twin-pilot",
+     "title": "How big a pilot decides whether a biased digital twin is worth using?",
+     "summary": "The twin pays iff its correlation with the real return exceeds &rho;*=2&radic;r/(1+r) (0.426 at cost ratio r=0.05), and the gain is linear in &rho;&minus;&rho;* there, so a small pilot's wrong calls are frequent but cheap (probability 0.36&ndash;0.11 at &rho;=0.5 for m=10&ndash;160 pairs, regret 0.004&ndash;0.016 of real-only variance). Decision regret follows f&middot;slope&middot;(1&minus;&rho;*<sup>2</sup>)<sup>2</sup>/(2m) (simulated/law 0.63 at m=10, 1.00 at 160) and plug-in allocation costs &asymp;0.27&ndash;0.30/m extra variance. The adaptive two-stage design (pilot reused) stays unbiased (|bias| &le; 0.002 against twin bias 0.7) with 95% intervals covering 0.946&ndash;0.955. Stylised: Gaussian returns, exact context replay, asymptotic law, no robot data."
     }
    ]
   }
