@@ -610,6 +610,11 @@
      "slug": "twin-elicitation",
      "title": "What should you pay a digital-twin provider for?",
      "summary": "A provider paid Brier score on the twin&rsquo;s parameter reports its posterior mean; one paid the deployed control cost reports the Bayes gain, which is more conservative (0.778 vs 0.823 at posterior sd 0.3, mean 1) and equals domain randomization under the provider&rsquo;s own uncertainty. Certainty equivalence costs a quartic in spread (16&times; per doubling); reports with equal squared error have regret ratios of 1.3&ndash;24&times;; a payment cap makes the elicited gain jump at a closed-form threshold <em>M</em>* (19.3 in the example) that decides whether rare catastrophic plants are priced in; and Brier under- or over-pays probing by a 15&times; spread in decision value per unit variance. Stylised."
+    },
+    {
+     "slug": "twin-control-variate",
+     "title": "How many real rollouts does a biased digital twin save when certifying a policy?",
+     "summary": "A twin evaluated alone is biased however many rollouts you run (nominal 95% intervals cover the truth 0&ndash;0.4% of the time at a 12% bias, 20% gain error); used as a control variate it removes variance without bias. In scalar LQ the rollout cost is a Gaussian quadratic form, so the twin/plant correlation <em>&rho;</em> = <em>&lambda;</em>&thinsp;tr(<em>GG&prime;</em>)/&radic;(tr <em>G</em><sup>2</sup> tr <em>G&prime;</em><sup>2</sup>) is exact, the optimal twin-to-real ratio is <em>&rho;</em>/&radic;((1&minus;<em>&rho;</em><sup>2</sup>)<em>w</em>) and the speed-up 1/(&radic;(1&minus;<em>&rho;</em><sup>2</sup>)+<em>&rho;</em>&radic;<em>w</em>)<sup>2</sup>, matched by simulation to a few percent. Twin gain error is first order in the bias (5% error &rarr; 2.7%) but second order in 1&minus;<em>&rho;</em>, so the twin&rsquo;s value is capped by the fraction <em>&lambda;</em> of the real disturbance it can replay: a 5% certificate costs 168 real-only, 28 with <em>&lambda;</em>&nbsp;=&nbsp;0.95 and 163 with <em>&lambda;</em>&nbsp;=&nbsp;0.3. Twin-only beats real-only only below <em>&sigma;</em><sup>2</sup>/bias<sup>2</sup> real rollouts (35 at 10% error). Stylised."
     }
    ]
   }
