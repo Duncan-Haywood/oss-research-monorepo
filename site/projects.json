@@ -890,6 +890,11 @@
      "slug": "backlash-twin",
      "title": "What does gear play, which a linear twin lacks, do to a reversing tracking loop?",
      "summary": "A motor integrating the tracking error drives a load through play of half-width <em>d</em>. The loop has an exact symmetric limit cycle (load stuck <em>n</em>&nbsp;=&nbsp;&lceil;2<em>d</em>/(<em>K</em>(<em>A</em>/2+<em>a</em>))&rceil; steps per half-period) whose swing and rms error match simulation to every printed digit; against the linear twin the real rms error is 1.98&times; at <em>A</em>=0.1, 1.58&times; at 0.2, 1.25&times; at 0.5 and 1.11&times; at 1.0 (<em>K</em>=0.5, <em>d</em>=0.1, half-period 10). If <em>KPA</em>/2&nbsp;&le;&nbsp;2<em>d</em> the load can also rest with error exactly <em>A</em>/2, and for <em>A</em>&nbsp;=&nbsp;0.065&ndash;0.075 the loop is bistable: it rests or moves depending only on the initial gap, which a twin cannot represent. At the rest threshold 4<em>d</em>/(<em>KP</em>) the real/twin error ratio grows with half-period (1.0, 1.4, 1.9, 2.7 for <em>P</em>&nbsp;=&nbsp;5, 10, 20, 40). Stylised: scalar servo, symmetric play, no noise, square-wave reference; stability of each cycle is inferred from simulation."
+    },
+    {
+     "slug": "slew-twin",
+     "title": "How large a manoeuvre can a twin without an actuator rate limit be trusted for?",
+     "summary": "The real loop <em>x</em>&#8314; = <em>x</em> + <em>a</em>&#8314;, with the command rate-limited to <em>r</em> per step, is scale-invariant: it depends only on <em>&rho;</em> = <em>x</em><sub>0</sub>/<em>r</em>, while the first-order twin does not. The twin is exact iff <em>x</em><sub>0</sub> &le; <em>r</em>/<em>k</em> (difference 0 at 0.999&times;, 0.1&ndash;0.6% of <em>x</em><sub>0</sub> at 1.01&times;). Beyond that the real loop overshoots the target (0.23 of <em>x</em><sub>0</sub> at <em>&rho;</em>=100, 0.90 at 10<sup>4</sup>, <em>k</em>=0.3) and settles in O(<em>&rho;</em>) steps (29418 at <em>&rho;</em>=10<sup>5</sup> vs the twin&rsquo;s 13). For <em>k</em>=1/<em>n</em> the overshoot threshold is empirically <em>&rho;</em>*=2<em>n</em>(2<em>n</em>&minus;1) (not proved); avoiding overshoot needs a rate limit 12&ndash;38&times; lower than keeping the twin exact. Stylised: scalar plant, no noise or delay."
     }
    ]
   }
