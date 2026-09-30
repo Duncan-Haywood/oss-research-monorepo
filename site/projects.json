@@ -925,6 +925,11 @@
      "slug": "windup-twin",
      "title": "A twin with an unlimited actuator says a PI step response ignores step size: what does the real loop with a command limit do?",
      "summary": "Integrator plant under PI control, real actuator limited to |u|&le;<em>U</em> with constant load <em>d</em>; the twin has neither. The twin is exact iff <em>k</em><sub>p</sub><em>x</em><sub>0</sub>&le;<em>U</em> (zero deviation up to <em>x</em><sub>0</sub>=0.714), so gentle step tests certify it. Beyond that the integrator winds up to exactly <em>x</em><sub>0</sub><sup>2</sup>/(2<em>U</em>): overshoot rises from the twin&rsquo;s 21% to 74%, 93%, 97% and the settling time from 4.9 to 17, 165, 944 (<em>x</em><sub>0</sub>/<em>U</em>=5, 20, 50); a load <em>d</em>&ge;<em>U</em> is never rejected and settling blows up as <em>d</em>&rarr;<em>U</em>. &ldquo;Faster is better&rdquo; fails: the twin&rsquo;s settling time falls 32&times; over &omega;<sub>n</sub>=0.25&ndash;8 while the real one is best near &omega;<sub>n</sub>=1 and rises to 77; conditional integration recovers most of it. Companion to the lag and slew twins. Stylised: one integrator, static limit, noiseless."
+    },
+    {
+     "slug": "gravity-twin",
+     "title": "Does a twin with no gravity certify PD gains that sag, or cannot hold a pose at all?",
+     "summary": "A pendulum under PD control <em>u</em>=<em>k</em><sub>p</sub>(&theta;*&minus;&theta;)&minus;<em>k</em><sub>d</sub>&omega;; the twin omits gravity and promises zero error at every gain. The real hold sags to the root of <em>k</em><sub>p</sub>(&theta;*&minus;&theta;)=<em>g</em>&thinsp;sin&theta; nearest the target (RK4 agrees to six digits; 0.182&thinsp;rad at <em>k</em><sub>p</sub>=4, &theta;*=1), falling only as &asymp;1/<em>k</em><sub>p</sub>. Holding upright is stable iff <em>k</em><sub>p</sub>&gt;<em>g</em>: below it the arm settles 0.2&ndash;1.9&thinsp;rad away, and just above it the basin is tiny (0.116&thinsp;rad at 1.02<em>g</em>, 0.519 at 1.05<em>g</em>, none below 3&thinsp;rad from 1.1<em>g</em>; numerical scan). A gravity feedforward with calibration error leaves a sag linear in (<em>g</em>(<em>g</em>&minus;<em>g</em><sub>ff</sub>)minus;<em>g</em><sub>ff</sub>) (&plusmn;0.0185&thinsp;rad at &plusmn;10%). Companion to the lag and flex twins. Stylised: one rigid joint, noiseless, no friction."
     }
    ]
   }
