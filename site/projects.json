@@ -508,6 +508,11 @@
      "slug": "stale-rollouts",
      "title": "How stale can a shared rollout be before it is worthless?",
      "summary": "With Gaussian policies whose mean has moved by &delta; standard deviations, the importance weight has exact moments <em>E&nbsp;w</em>&nbsp;=&nbsp;1 and <em>E&nbsp;w</em>&sup2;&nbsp;=&nbsp;e<sup>&delta;&sup2;</sup>, so the effective-sample fraction is e<sup>&minus;&delta;&sup2;</sup> (0.37 at &delta;=1) and a learner needing fraction &rho; accepts a lag of &radic;ln(1/&rho;)/drift policy versions. Truncating weights has closed-form lost mass, bias and variance (matched by simulation); the best cap cuts the mean-shift estimator&rsquo;s MSE 1.9&times; at &delta;=1, 12.8&times; at &delta;=2 and about 750&times; at &delta;=3, and finite-sample ESS is optimistic once weights are heavy-tailed. Equal-variance Gaussians, one statistic."
+    },
+    {
+     "slug": "forgetting-law",
+     "title": "How fast does a shared model forget a task, and does splitting it into modules help?",
+     "summary": "Training to convergence on random rank-<em>r</em> tasks in <em>R<sup>d</sup></em> is a projection, and the expected loss on a task learned <em>k</em> tasks ago is exactly (<em>r</em>/<em>d</em>)(1&minus;<em>r</em>/<em>d</em>)(&rho;<sup><em>k</em></sup>&minus;&lambda;<sup><em>k</em></sup>): zero when learned, a peak (0.044 at <em>d</em>=12, <em>r</em>=3, lag 2.5) at a lag near 0.7<em>d</em>/<em>r</em>, then decay because the tasks agree; matched by simulation to the third decimal. Routing tasks to <em>m</em> modules dilutes both rates by <em>m</em> and cuts short-horizon forgetting (5.9&times; at <em>T</em>=4, <em>m</em>=8) but a single shared model minimises seen-plus-fresh loss at every horizon tried, and two modules forget more than one at <em>T</em>=12. With conflicting tasks forgetting has a floor 2<em>r</em>&tau;&sup2;/<em>d</em> that only task-specific modules remove. Stylised: linear regression, exact convergence, isotropic tasks."
     }
    ]
   }
