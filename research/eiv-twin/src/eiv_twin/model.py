@@ -71,5 +71,6 @@ def r2(x, y, b):
 
 
 def resid_corr(x, y, b):
-    e = [(t - _mean(y)) - b * (s - _mean(x)) for s, t in zip(x, y)]
+    mx, my = _mean(x), _mean(y)
+    e = [(t - my) - b * (s - mx) for s, t in zip(x, y)]
     return cov(x, e) / math.sqrt(cov(x, x) * cov(e, e))

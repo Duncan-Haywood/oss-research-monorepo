@@ -840,7 +840,12 @@
      "slug": "tilt-twin",
      "title": "How do you estimate a one-in-a-million failure from a twin you can only run a thousand times?",
      "summary": "Shifting the twin's disturbances and reweighting failures is unbiased for any shift, with an exact variance <em>e</em><sup><em>n&theta;</em>&sup2;</sup><em>Q</em>((<em>b</em>+<em>n&theta;</em>)/&radic;<em>n</em>) (5.53 vs 5.51 simulated). At the optimal shift, 10% error at <em>p</em>=10<sup>&minus;6</sup> takes 535 runs instead of 10<sup>8</sup>. But the shift is a narrow target: half the optimum costs 23&times; the variance, twice the optimum 1.7&times;10<sup>5</sup>&times;, and a shift tuned for one design is 1.6&ndash;17.6&times; worse at thresholds 0.8&ndash;1.5&times; away. The usual 95% interval covers 94.9% at the optimum but 2.8% at twice it, and only the effective sample size warns. Stylised: Gaussian additive disturbances, constant shift, no field data."
-    }
+    },
+     {
+      "slug": "eiv-twin",
+      "title": "What does a twin get wrong when its gain is fitted from a noisy logged input, and does more data fix it?",
+      "summary": "Regressing the plant output on a logged input that carries sensor noise attenuates the fitted gain by the reliability ratio <em>&lambda;</em>&nbsp;=&nbsp;&sigma;<sub><em>u</em></sub><sup>2</sup>/(&sigma;<sub><em>u</em></sub><sup>2</sup>+&sigma;<sub><em>v</em></sub><sup>2</sup>) exactly (0.800 vs 0.802 simulated at <em>&lambda;</em>=0.8). It is bias, not variance, so more data makes it worse: the twin's own 95% interval covers the true gain 53% / 15% / 0% at <em>n</em>=20 / 50 / 200 while covering the attenuated value 94&ndash;97%, and the twin's fit residuals are exactly uncorrelated with its regressor, so nothing warns. A feedforward controller built on it overshoots the real plant by exactly 1/<em>&lambda;</em> (1.25&times; at <em>&lambda;</em>=0.8, 2&times; at 0.5). A known-noise correction or a second independent measurement as instrument removes the bias (RMSE 0.20 to 0.02&ndash;0.05 at <em>n</em>=200&ndash;1000), but a 20% misjudged noise variance leaves a &plusmn;5% bias and at <em>n</em>=20 with <em>&lambda;</em>=0.5 the repairs are far worse than the biased fit. Stylised: scalar Gaussian plant, simulated &ldquo;real&rdquo; system."
+     }
    ]
   }
  ],
