@@ -119,6 +119,11 @@
      "slug": "calibration-hedging",
      "title": "Can a calibration test certify a verifier?",
      "summary": "No. A hedger with no information at all keeps its expected calibration error below &radic;(<em>K</em>+1)(1/(2<em>K</em>)+1/&radic;<em>T</em>) against any outcome sequence, even one that sees its forecast distribution: ECE 0.016 at T=2000 while its Brier score is 0.254 against 0 for a verifier who knows the rule. A lazy constant forecaster is slashed; the hedger passes every calibration threshold tried, but a Brier-gap test against an informed benchmark catches it in 100/100 runs."
+    },
+    {
+     "slug": "collision-elicitation",
+     "title": "Can a protocol pay workers to report how often honest replicas agree?",
+     "summary": "Yes, from two runs and no more: the squared error against the agreement indicator is proper for the collision probability &Gamma;=&Sigma;<em>p</em><sub><em>i</em></sub><sup>2</sup> with exact regret (<em>r</em>&minus;&Gamma;)<sup>2</sup>, and one run provably cannot (the level sets are not convex). The all-pairs U-statistic has exact variance and needs about a quarter of the runs of disjoint pairs (variance ratio 0.27 at <em>n</em>=100). A fleet of <em>H</em> equal hardware classes has &Gamma;=1/<em>H</em>, so strict equality over <em>k</em> honest replicas false-slashes with probability 1&minus;<em>H</em><sup>1&minus;<em>k</em></sup>. Colluders returning one common wrong value leave agreement unchanged at &epsilon;=2&Gamma;/(1+&Gamma;), so &Gamma; cannot be used alone. Runs are i.i.d. and float32 fleets are simulated summation orders."
     }
    ]
   },
