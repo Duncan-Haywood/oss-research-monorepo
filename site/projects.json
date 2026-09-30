@@ -810,6 +810,11 @@
      "slug": "autocorr-twin",
      "title": "How much is one long digital-twin run worth when its output is serially correlated?",
      "summary": "Twin output such as queue waits is autocorrelated, but a run is usually summarised as mean &plusmn; 1.96&thinsp;<em>s</em>/&radic;<em>n</em>. For AR(1) output the run-mean variance is exact (matched to simulation), so 1000 draws at <em>&phi;</em>=0.9 are worth 53. For an M/M/1 lab instrument the variance of the run mean is 9.7&times;, 33&times; and 363&times; the iid value at <em>&rho;</em>=0.5, 0.7, 0.9: from 10<sup>4</sup> jobs the naive 95% interval covers the true mean wait 53%, 26% and 9% of the time, and a twin &ldquo;certifies&rdquo; an SLA of 8 against a true mean of 9 in 26% of runs. Higher load needs a longer run (470 jobs by the iid formula, 170,268 exactly at <em>&rho;</em>=0.9). Batch means restore coverage (94&ndash;95%) only when batches outlast the correlation time; it is 53.5% at <em>&phi;</em>=0.99 and 82.5% at <em>&rho;</em>=0.9, <em>n</em>=10<sup>4</sup>. Stylised (Gaussian AR(1) and M/M/1, simulated &ldquo;real&rdquo; system)."
+    },
+    {
+     "slug": "stop-twin",
+     "title": "When should a twin run that counts rare failures stop?",
+     "summary": "Running a safety twin &ldquo;until the interval is narrow&rdquo; stops on zero failures, because <em>p&#770;</em>=0 has Wald half-width 0: with a target of <em>p</em>/5, 90% of runs stop at the first check for <em>p</em>=10<sup>&minus;3</sup> (99% at 10<sup>&minus;4</sup>), the interval covers <em>p</em> in 9.6% of runs and the reported rate is 10&times; too low. Running until <em>m</em> failures (inverse sampling) makes (<em>m</em>&minus;1)/(<em>N</em>&minus;1) exactly unbiased while <em>m</em>/<em>N</em> is about <em>m</em>/(<em>m</em>&minus;1) too high, gives relative sd &asymp;1/&radic;(<em>m</em>&minus;2) whatever <em>p</em> is (<em>m</em>=102 for 10%; measured 0.101), and an exact interval covers 95.0&ndash;95.5%. A fixed run planned for <em>p</em>=10<sup>&minus;3</sup> delivers a 20% relative half-width there but 63% at 10<sup>&minus;4</sup>. A one-failure minimum alone restores Wald coverage in this configuration, because the target already forces ~96 failures. Stylised (iid Bernoulli failures, faithful twin, no run cap)."
     }
    ]
   }
