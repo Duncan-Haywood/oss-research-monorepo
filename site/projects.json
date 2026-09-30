@@ -815,6 +815,16 @@
      "slug": "warmup-twin",
      "title": "How much of a digital-twin run should be thrown away because it started in the wrong state?",
      "summary": "A twin started from an empty queue or a nominal sensor value is biased at first. For AR(1) output the bias and variance of the run mean are exact (0.300 vs 0.300 simulated at <em>&phi;</em>=0.9, <em>n</em>=100), and the MSE-optimal warm-up is about one relaxation time 1/(1&minus;<em>&phi;</em>) with a gain of at most 1.5&times; and 1.03&times; once <em>n</em> is about a hundred relaxation times. An M/M/1 instrument started empty underestimates the mean wait by 21%, 6% and 1.2% at <em>&rho;</em>=0.9 with 500, 2000 and 10<sup>4</sup> jobs, but at 5000 jobs the bias (&minus;0.14) is far below the run-to-run RMSE (2.4). Negative result: fixed deletion does not lower RMSE, and MSER-5 truncation leaves a larger bias (&minus;0.77), covers 61% against 72% for no truncation, and passes a violating system 28% of the time against 18%. Stylised (Gaussian AR(1), M/M/1, simulated &ldquo;real&rdquo; system)."
+    },
+    {
+     "slug": "stop-twin",
+     "title": "When should a twin run that counts rare failures stop?",
+     "summary": "Running a safety twin &ldquo;until the interval is narrow&rdquo; stops on zero failures, because <em>p&#770;</em>=0 has Wald half-width 0: with a target of <em>p</em>/5, 90% of runs stop at the first check for <em>p</em>=10<sup>&minus;3</sup> (99% at 10<sup>&minus;4</sup>), the interval covers <em>p</em> in 9.6% of runs and the reported rate is 10&times; too low. Running until <em>m</em> failures (inverse sampling) makes (<em>m</em>&minus;1)/(<em>N</em>&minus;1) exactly unbiased while <em>m</em>/<em>N</em> is about <em>m</em>/(<em>m</em>&minus;1) too high, gives relative sd &asymp;1/&radic;(<em>m</em>&minus;2) whatever <em>p</em> is (<em>m</em>=102 for 10%; measured 0.101), and an exact interval covers 95.0&ndash;95.5%. A fixed run planned for <em>p</em>=10<sup>&minus;3</sup> delivers a 20% relative half-width there but 63% at 10<sup>&minus;4</sup>. A one-failure minimum alone restores Wald coverage in this configuration, because the target already forces ~96 failures. Stylised (iid Bernoulli failures, faithful twin, no run cap)."
+    },
+    {
+     "slug": "terrain-twin",
+     "title": "What stopping distance can a twin with independent terrain cells certify?",
+     "summary": "Braking on Gamma-distributed patch friction has an exact incomplete-gamma law. A twin drawing 100 independent cells across the stopping distance certifies 1.17&times; the mean-friction distance at level 10<sup>&minus;3</sup>; on real terrain with 1, 3 or 10 patches across it the exceedance is 0.44, 0.33 and 0.18, and finer twin cells make it worse. The mean stopping distance is nearly right (1.00&ndash;1.32&times;) while the tail is not. Matching the measured patch count restores the level; overstating it 2&times; gives 16&times; the claimed risk. Stylised."
     }
    ]
   }
