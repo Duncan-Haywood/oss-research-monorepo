@@ -965,6 +965,11 @@
      "slug": "shutter-twin",
      "title": "A global-shutter twin of a rolling-shutter camera ignores target motion: how biased is a twin-trained orientation estimate, and what does the same frame reveal?",
      "summary": "Row <em>r</em> is exposed at <em>t</em>=<em>r&tau;</em>/<em>H</em>, so a moving rectangle is imaged sheared and stretched; closed-form edge normals match a row-by-row simulation. At 1000 px/s horizontal speed the vertical edges tilt 3.58&deg; and the horizontal ones 0, so averaging the two edge families (what a global-shutter twin certifies) is biased 1.79&deg;; 1000 px/s vertical speed makes the target 6.7% taller. One frame of a known-size rectangle identifies orientation and both velocities in closed form: with 0.25 px edge noise orientation error falls from 0.24&ndash;0.97&deg; to 0.027&deg; and speeds are recovered to 16 and 4.8 px/s, but vertical speed is very sensitive to the assumed size (a 5% height error moves it by about 800 px/s). Stylised: straight edges, constant velocity, known size, no real footage."
+    },
+    {
+     "slug": "inertia-twin",
+     "title": "A point-mass twin of a rolling body ignores rotational inertia: how wrong are acceleration, slip and coast distance, and what does one calibration fix?",
+     "summary": "A frictionless point mass overstates down-ramp acceleration by exactly 1+<em>k</em> (<em>k</em>=<em>I</em>/<em>mr</em><sup>2</sup>: 1.4, 1.5, 2.0 for sphere, disc, hoop), so a 2&nbsp;m descent takes 0.90&nbsp;s instead of 1.07&ndash;1.28&nbsp;s; a stick/slip simulation matches the closed forms to 3&times;10<sup>&minus;4</sup>&nbsp;m/s<sup>2</sup>. The slip threshold <em>&mu;</em>* = <em>k</em>&nbsp;tan&alpha;/(1+<em>k</em>) is invisible to the twin, and a launch speed picked in the twin to coast 1&nbsp;m carries a rolling body 40&ndash;100% farther. A gain fitted on one shape removes its own error but leaves &minus;16% to +20% fall-time error on the others (pooled fit +6.7% to &minus;10.7%), and the twin cannot rank the shapes. Stylised: planar incline, Coulomb friction, no rolling resistance or drag, no hardware data."
     }
    ]
   }
