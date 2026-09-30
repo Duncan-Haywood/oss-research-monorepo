@@ -362,6 +362,11 @@
      "slug": "sleeping-incentives",
      "title": "Can a module game a ledger by choosing when to sleep?",
      "summary": "Yes, if it declares after seeing its loss. The wealth ledger pays each awake module exactly its leave-one-out saving, &eta;<em>W<sub>A</sub></em>(1&minus;<em>p<sub>i</sub></em>)<em>S<sub>i</sub></em>, but a module that sleeps whenever its own loss exceeds &theta; earns &eta;<em>p<sub>B</sub></em>&theta;(1&minus;&theta;)/2 per unit wealth against an equal-skill honest rival (best 1/8 at &theta;=1/2) and takes the market from a 0.1 share in about 130 rounds, while the router&rsquo;s realised loss stays at 0.5. Declared <em>before</em> the router serves, the same wealth is a real saving that falls from 0.125 to 0.011 as the module&rsquo;s signal about its own loss gets noisier. A sleeping tax that stops the exploit must be at least &eta;<em>p<sub>B</sub></em>/2, a fixed-share rate that halves an honest specialist asleep 90% of the time in 6 rounds, so commitment, not taxation, is the fix. Two modules, uniform losses, threshold strategies; mean-field predictions 3&ndash;8% slow."
+    },
+    {
+     "slug": "decision-markets",
+     "title": "What does it cost to route between models with conditional markets, and what does a stake do to the answer?",
+     "summary": "Markets that forecast each model&rsquo;s loss <em>if chosen</em> only ever see the chosen arm. An inverse-propensity Brier payment is exactly proper even when the router reads the report (without the weight a trader shades its forecast, or hides), and its price is exact: E[1/&pi;] = 1+(K&minus;1)e<sup>&omega;<sup>2</sup>/2&tau;<sup>2</sup></sup>, so payment variance blows up as the router cools (a probit router has infinite variance for &tau; &le; &omega;; Monte Carlo at &tau;=0.3 sees 29 against the exact 195). Exploration regret is at most 0.2785&tau;. Equal owner stakes cancel in the decision, a stake gap shifts the reported gap by a closed-form fixed point, and the loss it causes is second order, &prop;(&Delta;B/k)<sup>2</sup>. Gaussian, one-shot, stylised."
     }
    ]
   },
