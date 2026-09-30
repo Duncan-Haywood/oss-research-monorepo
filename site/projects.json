@@ -523,6 +523,11 @@
      "slug": "merge-law",
      "title": "How should independently trained modules be merged, and how much does parallel training buy?",
      "summary": "Averaging <em>m</em> modules trained to convergence on random rank-<em>r</em> tasks has an exact residual error 1&minus;2<em>amp</em>+<em>a</em><sup>2</sup>(<em>mp</em>+<em>m</em>(<em>m</em>&minus;1)<em>p</em><sup>2</sup>) with <em>p</em>=<em>r</em>/<em>d</em>, needing only isotropy. The optimal scale is 1/(1+(<em>m</em>&minus;1)<em>p</em>) and leaves (1&minus;<em>p</em>)/(1+(<em>m</em>&minus;1)<em>p</em>): plain averaging stalls at (1&minus;<em>p</em>)<sup>2</sup> (0.78 vs 0.47 at <em>m</em>=8, <em>d</em>/<em>r</em>=8) and unscaled task arithmetic diverges (56 at <em>m</em>=64). The decay is harmonic, not geometric, so <em>m</em> parallel workers give a wall-clock speedup that grows only logarithmically (8.9&times; at <em>m</em>=16, 17&times; at <em>m</em>=64) and halves in efficiency near <em>m</em>&asymp;<em>d</em>/<em>r</em>&times;2.5. Seen and fresh losses are closed forms matched by simulation. Stylised: linear regression, exact convergence, consistent isotropic tasks."
+    },
+    {
+     "slug": "replay-law",
+     "title": "When should a continual learner replay an old task, and does a fixed schedule beat random replay?",
+     "summary": "Replaying a task alongside each fresh one is a joint projection, so the expected loss on a tracked task is an exact product of 2&times;2 matrices for any schedule (matched to simulation at every step; recovers the no-replay law). One replay is best at the forgetting-peak lag &mdash; 5 at <em>d</em>=32, <em>r</em>=4; 89 at <em>d</em>=128, <em>r</em>=1 &mdash; yet removes only 25&ndash;42% of total forgetting (replaying at step 1 barely helps at small <em>r</em>/<em>d</em>). A period longer than the peak lag never touches the peak, and a fixed period beats random replay at the same rate only below roughly 1.2&ndash;3 peak lags (e.g. 1/8 at <em>d</em>=32, <em>r</em>=4, but random wins at 1/12). Halving forgetting needs a rate 0.25 at <em>d</em>=12, <em>r</em>=3 and 0.015 at <em>d</em>=128, <em>r</em>=1; tasks with 2<em>r</em>&ge;<em>d</em> are fully recovered by one replay. Stylised: realizable linear regression, exact convergence, one tracked task."
     }
    ]
   }
