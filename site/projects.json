@@ -645,6 +645,11 @@
      "slug": "twin-distillation",
      "title": "What does a too-clean digital twin do to a student cloned from a privileged teacher?",
      "summary": "A teacher that sees the true state is trained in a twin and cloned into a student that sees only a noisy sensor. Least-squares cloning attenuates the gain to <em>gP</em>/(<em>P</em>+<em>s</em>), where <em>P</em> is the demonstration state variance, so the student depends on the twin only through its process-noise-to-sensor-noise ratio. A twin with a quarter of the real process noise yields a lazy student with excess cost 0.36 (<em>s</em>=0.5) to 1.11 (<em>s</em>=2) against 0.005 to 0.10 from an exact twin, 2.8&ndash;3.6&times; worse than on-policy DAgger in the same twin. On-policy imitation of an exact teacher is within 3.5% of the best memoryless student over 252 cases; cloning can cancel an actuator error, but the cancellation point moves with sensor noise. Injecting demonstration noise in the twin, set from one real scalar (Var <em>z</em>&nbsp;&minus;&nbsp;<em>s</em>), recovers the on-policy gain in two rounds (regret 0.357&nbsp;&rarr;&nbsp;0.0035&nbsp;&rarr;&nbsp;0.00003). Stylised: scalar linear&ndash;quadratic, no robot data."
+    },
+    {
+     "slug": "latency-twin",
+     "title": "What does a digital twin without sensor latency do to a tuned controller?",
+     "summary": "A scalar unstable plant is controlled by the LQR gain designed in a twin with no measurement delay. The exact stable-gain interval shrinks with the real delay (upper edge 1 at one step, 0.59 at two), so the twin-tuned gain (0.70) tolerates one step at 1.6&times; the delay-aware cost and is unstable from two; a retuned static gain costs 1.1&ndash;2.6&times; for delays 1&ndash;5, and a predictor built for the wrong delay is unstable in nearly every off-diagonal case tested. Identifying the delay from an i.i.d. probe takes about 2<em>z</em><sup>2</sup>(1+1/snr) samples. Stylised: scalar plant, integer delay, known dynamics."
     }
    ]
   }
