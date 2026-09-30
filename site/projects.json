@@ -735,6 +735,11 @@
      "slug": "crn-twin",
      "title": "Does giving two policies the same seed in a digital twin actually pair them?",
      "summary": "Common random numbers pair two policies only while their read pointers into the random stream stay aligned. If one policy consumes an extra draw with probability <em>q</em> per step, the paired correlation is exactly &rho; = &sum;<sub>t</sub>&sum;<sub>d</sub> Bin(t,q)(d) w<sub>t</sub>w<sub>t+d</sub>/&sum;w<sub>t</sub>&sup2; (matched to simulation within 0.012). A flat 20-step score keeps &rho;=0.95/0.77 at <em>q</em>=0.05/0.3, but a terminal-only score has &rho;=(1&minus;<em>q</em>)<sup>T</sup> (0.36/0.001). Sizing a comparison as if seeds stayed synchronised (n=12) gives power 0.85 to 0.11 against a nominal 0.90; keying each draw by (episode, step) restores &rho;=1. Stylised: Gaussian per-step noise, policies differing only in draw consumption, no robot data."
+    },
+    {
+     "slug": "timestep-twin",
+     "title": "What overshoot does a controller tuned in a fixed-step digital twin really have?",
+     "summary": "A twin's integrator adds or removes damping the plant does not have. Per-step pole moduli are exact (real e<sup>&minus;hc</sup>; explicit 1&minus;hc+h&sup2;k; semi-implicit 1&minus;hc; implicit 1/(1+hc+h&sup2;k)), and the first-order damping bias of explicit and implicit Euler changes sign at &zeta;=1/&radic;2 (measured 0.742&rarr;0.711 and 0.675&rarr;0.703 as h falls 0.2&rarr;0.025). Tuned to 10% overshoot in the twin, the real plant overshoots 0.105&ndash;0.192 (semi-implicit and implicit, h=0.05&ndash;0.4) while forward Euler is conservative (0.091&ndash;0.036); at a 1% target the semi-implicit twin under-claims by up to 4.9&times;. The excess halves with h (first order); Richardson extrapolation of the twin&rsquo;s overshoot at fixed gain recovers the real value to 0.0003&ndash;0.0012, and re-tuning with substeps costs &times;4 to &times;32. Stylised: one linear oscillator, textbook integrators (not any engine&rsquo;s scheme), overshoot read from samples, no robot data."
     }
    ]
   }
