@@ -620,6 +620,11 @@
      "slug": "radar-clutter-twin",
      "title": "What does a Gaussian-clutter radar simulator do to a CFAR detector's false-alarm rate?",
      "summary": "A CA-CFAR threshold set in a Gaussian-clutter twin and deployed in gamma-textured (K-distributed) clutter has an exact false-alarm law, matched to direct simulation to ~1%. At design 10<sup>&minus;4</sup> the real rate is 9&times; (&nu;=5) to 30&times; (&nu;=2) too high, and 50&times; to 358&times; at 10<sup>&minus;6</sup>; restoring it costs 1.9&ndash;3.7&nbsp;dB of threshold at 10<sup>&minus;4</sup>. If texture is shared across the window CFAR is unaffected, so the twin must model spatial correlation. A moment fit of &nu; from 1000 real clutter cells brings the median to 1.1&times; (90th percentile 2&times;), versus ~10<sup>6</sup> cells to threshold empirically. Stylised: no target, no measured data."
+    },
+    {
+     "slug": "occupancy-twin",
+     "title": "What does a too-clean sensor twin do to a mapper's commit error?",
+     "summary": "A grid cell committed when log-odds built with a twin's sensor model reach &plusmn;<em>A</em> has, under the real sensor, an exact error set by the Lundberg exponent &theta;* (equal to 1 for a correct twin) with a rigorous optional-stopping sandwich. A twin whose free-space false-hit rate is 0.05 against a real 0.15 turns a 10<sup>&minus;3</sup> design into 1.45&times;10<sup>&minus;2</sup> (14.5&times;, matched by simulation; 260&times; at 0.30), and an optimistic occupied hit rate (0.8 vs 0.6) gives 26&times;. Committing at ln(1/&epsilon;)/&theta;* restores the target at 1.4&ndash;16&times; the latency, and the real-data estimate of &theta;* needs several hundred known-free observations before the tempered mapper stops exceeding target in over a quarter of maps. Stylised: one independent-beam cell."
     }
    ]
   }
