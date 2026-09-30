@@ -950,6 +950,11 @@
      "slug": "drag-twin",
      "title": "A linear-drag twin of a quadratic-drag vehicle: what does it get wrong about braking, terminal speed and the safe speed under a stopping limit?",
      "summary": "Real drag <em>c</em>v|v|, twin <em>k</em>v with <em>k</em> matched at one speed. Coast-down time to fall to <em>v</em><sub>0</sub>/10 is 9/(<em>c</em><em>v</em><sub>0</sub>) for the truth and independent of <em>v</em><sub>0</sub> in the twin (0.05&times;, 0.51&times;, 1.02&times; the truth at <em>v</em><sub>0</sub>=1, 10, 20 for a fit at 5); terminal speed is off by <em>v</em><sub>term</sub>/<em>v</em><sub>fit</sub>; a least-squares fit over [0, <em>v</em><sub>max</sub>] has <em>k</em>=3<em>c</em><em>v</em><sub>max</sub>/4, exact only at 0.75<em>v</em><sub>max</sub>. The safe speed under a 10&thinsp;m stopping limit is mis-stated by &minus;20.8%, &minus;8.9%, +7.0%, +41.1% for fits at 1, 5, 10, 20&thinsp;m/s, so the error changes sign with the fit speed, and trace-fitted <em>k</em> falls from 0.382 to 0.223 as the coast-down lengthens because the slow tail dominates. Stylised: one dimension, pure quadratic drag, closed-form noiseless truth."
+    },
+    {
+     "slug": "roundtrip-twin",
+     "title": "A zero-wind twin of a UAV out-and-back leg: does a tailwind repay the headwind, and what does a twin calibrated on one leg say about the return?",
+     "summary": "Real round-trip energy is (<em>v</em><sup>4</sup>+1)/(<em>v</em><sup>2</sup>&minus;<em>w</em><sup>2</sup>), so wind does not cancel: real/twin is exactly 1/(1&minus;(<em>w</em>/<em>v</em>)<sup>2</sup>), 1.33&times; at <em>w</em>/<em>v</em>=0.5 and 5.3&times; at 0.9, the same for either sign, with no return at |<em>w</em>|&ge;<em>v</em>. The twin-optimal airspeed is 1 for every wind while the real optimum solves <em>v</em><sup>2</sup>=<em>w</em><sup>2</sup>+&radic;(<em>w</em><sup>4</sup>+1), so flying the twin's optimum costs 1.5%, 9.8%, 52% extra at <em>w</em>=0.4, 0.6, 0.8. A twin calibrated on one leg and assumed to see the same wind back is off by exactly +<em>w</em>/<em>v</em> (headwind leg) or &minus;<em>w</em>/<em>v</em> (tailwind leg): &plusmn;33% at <em>w</em>=0.5, <em>v</em>=1.5, with a sign set by which leg was flown. Stylised: steady along-track wind, constant airspeed, two-term power law."
     }
    ]
   }
