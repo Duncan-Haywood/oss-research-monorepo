@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "delayed-outer"
+version = "0.1.0"
+description = "Overlapped (streaming) DiLoCo-style outer sync on quadratics: exact stability limit 2 sin(pi/(4 tau+2)) on the outer step, optimal delayed rates, and the hidden-latency wallclock trade-off"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

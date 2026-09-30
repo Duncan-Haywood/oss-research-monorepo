@@ -548,6 +548,11 @@
      "slug": "outer-momentum",
      "title": "How should the outer optimiser and sync interval be set when workers run H local steps per round?",
      "summary": "On a quadratic, H inner steps make the outer optimiser see curvatures 1 &minus; (1 &minus; &eta;<em>a</em>)<sup><em>H</em></sup>, which saturate at 1: the outer condition number shrinks from &kappa; to about &kappa;/<em>H</em> (1000 &rarr; 16.1 at <em>H</em>=64). Per-round rates are exact 2&times;2 spectral radii (matching literal simulation), the tuned heavy-ball outer step puts every mode at exactly &radic;&beta;*, and the best momentum falls from 0.88 at <em>H</em>=1 to 0.01 at <em>H</em>=1024, so a fixed Nesterov 0.7/0.9 needs 4&ndash;8&times; more rounds. With a sync costing <em>C</em> inner steps, the wallclock-optimal interval is <em>H</em>* &asymp; <em>C</em>, worth about &radic;<em>C</em>/2 over syncing every step (16&times; at <em>C</em>=1000), while plain averaging has no interior optimum. Stylised: noiseless quadratic with a shared Hessian."
+    },
+    {
+     "slug": "delayed-outer",
+     "title": "Can a stale outer step hide synchronisation latency?",
+     "summary": "Overlapped (streaming) DiLoCo-style sync applies the outer step to a pseudo-gradient &tau; rounds old: on a quadratic the outer step x<sub>t+1</sub> = x<sub>t</sub> &minus; &alpha;s&middot;x<sub>t&minus;&tau;</sub> is stable iff &alpha;s &lt; 2 sin(&pi;/(4&tau;+2)) &asymp; &pi;/(2&tau;), so plain averaging (&alpha;=1) is marginal at &tau;=1 and diverges for &tau;&ge;2, and the fastest single mode has radius exactly &tau;/(&tau;+1). The step-size cap exactly cancels the throughput gained: (&tau;+1)&middot;2 sin(&pi;/(4&tau;+2)) falls from 2 to &pi;/2, so naive overlap is 1.01&ndash;1.25&times; <em>slower</em> than blocking sync and an exhaustive (H,&tau;) search never chooses &tau;&gt;0. Extrapolating the stale gradient with a curvature estimate ratio &lambda; removes the delay exactly at &lambda;=1 and reaches the delay-free rate for &lambda;&isin;[0.75,1]; under-estimating is safe, over-estimating tightens the stability cap (1.54, 1.09, 0.70 at &lambda;=1.25, 1.5, 2), and full compensation gives 2&ndash;17&times; shorter wallclock at sync cost C=64&ndash;1024. Literal simulation matches the exact rates. Stylised (noiseless quadratic, exact curvature)."
     }
    ]
   }
