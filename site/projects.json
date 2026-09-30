@@ -960,6 +960,11 @@
      "slug": "grid-twin",
      "title": "A grid twin over-states every route by a heading-dependent factor: does a finer grid fix it, and can it rank two routes the wrong way round?",
      "summary": "Real route: a straight line of length <em>L</em>; twin: shortest path on a <em>k</em>-connected lattice. The grid/Euclid ratio depends on heading and connectivity, not cell size: 8-connected it is cos<em>&phi;</em>+(&radic;2&minus;1)sin<em>&phi;</em>, mean 8(&radic;2&minus;1)/<em>&pi;</em>=1.0548 and worst 1.0824 at 22.5&deg; (4-connected mean 1.2732, worst 1.4142; 16-connected 1.0144, 1.0275), matched by Dijkstra; refining the cell from 8 m to 0.1 m leaves a 100 m route at 22.5&deg; at 1.0824. Calibrating by the mean leaves &minus;5.2% to +2.6% (8-connected). For two routes of Euclidean length 1 and 1.03 at random headings the twin ranks the longer one shorter with probability 0.194 (0 at ratio &ge; 1.0824), and for a fixed pair 22.5&deg; apart rotating the map flips the ranking for 31% of orientations. Stylised: free space only, no obstacles, length as a proxy for time or energy."
+    },
+    {
+     "slug": "shutter-twin",
+     "title": "A global-shutter twin of a rolling-shutter camera ignores target motion: how biased is a twin-trained orientation estimate, and what does the same frame reveal?",
+     "summary": "Row <em>r</em> is exposed at <em>t</em>=<em>r&tau;</em>/<em>H</em>, so a moving rectangle is imaged sheared and stretched; closed-form edge normals match a row-by-row simulation. At 1000 px/s horizontal speed the vertical edges tilt 3.58&deg; and the horizontal ones 0, so averaging the two edge families (what a global-shutter twin certifies) is biased 1.79&deg;; 1000 px/s vertical speed makes the target 6.7% taller. One frame of a known-size rectangle identifies orientation and both velocities in closed form: with 0.25 px edge noise orientation error falls from 0.24&ndash;0.97&deg; to 0.027&deg; and speeds are recovered to 16 and 4.8 px/s, but vertical speed is very sensitive to the assumed size (a 5% height error moves it by about 800 px/s). Stylised: straight edges, constant velocity, known size, no real footage."
     }
    ]
   }
