@@ -600,6 +600,11 @@
      "slug": "randomized-twin",
      "title": "How wide should domain randomization be, and what does it buy?",
      "summary": "Randomizing the twin's input gain over &plusmn;&epsilon; trains a more conservative gain (monotone in &epsilon;; small-width law <em>k</em><sub>&epsilon;</sub>&minus;<em>k</em>* = &minus;(&epsilon;<em>b</em>)<sup>2</sup><em>J</em><sub>kbb</sub>/(6<em>J</em><sub>kk</sub>)) at a quartic price when the twin was right, and moves the deployment stability cliff out by about 15%. At 2.3&times; the twin's gain the nominal controller has regret 84 versus 1.4 at &epsilon;=0.9. But uniform-average training is not minimax: its worst-case regret exceeds the nominal gain's for &epsilon;&nbsp;&le;&nbsp;0.7, and the best width equals the prior's half-width, paying off only when the prior reaches the cliff. Stylised."
+    },
+    {
+     "slug": "twin-monitor",
+     "title": "How fast can a deployed digital twin be caught going stale, and when is it invisible?",
+     "summary": "An e-process on the twin's closed-loop prediction residuals is valid however often it is checked (2.3% false alarms versus 51.6% for a repeatedly refit &chi;<sup>2</sup> test at nominal 5%). Its detection rate is exactly the twin-transfer score gap, affine in the exploration variance <em>v</em>; a mixture-delay formula matches simulated medians within 10&ndash;20% (leading order <em>L</em>/rate is 40&ndash;55% too fast). Twins on the line &Delta;a&nbsp;=&nbsp;<em>k</em>&Delta;<em>b</em> are invisible under the deployed policy (rate exactly 0) and detectable at rate &Delta;<em>b</em><sup>2</sup><em>v</em>/2&sigma;<sup>2</sup> with dither; most of them cost almost nothing (regret 6&middot;10<sup>&minus;4</sup>) so dither does not pay, but the one that thinks the actuator is nearly dead (regret 0.23) is worth a <em>v</em>&asymp;0.006 dither that cuts expected cost 12&times;. Stylised."
     }
    ]
   }
