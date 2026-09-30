@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deadband-twin"
+version = "0.1.0"
+description = "Actuator deadband a linear twin does not model: fitted gain equals the probability of leaving the deadband, so it only holds at the excitation it was fitted at"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

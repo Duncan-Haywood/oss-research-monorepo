@@ -1,0 +1,46 @@
+Deadband twin: real y = g D(u) + w, deadband delta=0.5, g=1.0, sw=0.10; twin is linear y = b u fitted by OLS.
+
+== 0. Fitted gain = P(|z| > delta/s) (n=200000, s=1) ==
+delta   law 2Q(d)   simulated b   R2 linear fit   R2 (g D(u) model)   corr(resid,u)
+0       1.0000      0.9998        0.990           0.990               -1.6e-13
+0.25    0.8026      0.8019        0.962           0.985               1.3e-14
+0.5     0.6171      0.6167        0.887           0.977               6.8e-16
+1       0.3173      0.3167        0.624           0.938               -6.5e-15
+1.5     0.1336      0.1349        0.324           0.823               5.4e-15
+2       0.0455      0.0456        0.096           0.536               1.8e-15
+
+== 1. Twin fitted at s=1 (n=200000), deployed at other excitation scales s (delta=0.5) ==
+fitted twin gain b = 0.6161 (law 0.6171)
+s      real gain 2Q(d/s)   twin/real   held-out R2 of twin   RMSE twin / sd(y)
+0.1    0.0000              1074720.020 -0.375                1.173
+0.25   0.0455              13.541      -1.898                1.702
+0.5    0.3173              1.942       0.043                 0.978
+1      0.6171              0.998       0.887                 0.337
+2      0.8026              0.768       0.921                 0.282
+4      0.9005              0.684       0.894                 0.325
+
+== 2. Feedforward u = r/b with the twin gain b (s=1 fit), real output D(u) ==
+twin b = 0.6171 (exact law); commands below delta*b = 0.309 produce exactly zero output
+target r   command u   real output / target
+0.1        0.162       0.000
+0.2        0.324       0.000
+0.3        0.486       0.000
+0.5        0.810       0.621
+1          1.621       1.121
+2          3.241       1.371
+5          8.103       1.521
+
+== 3. Closed-loop stall: x <- x + D(k (r-x)); twin predicts error -> 0 for any 0<k<2 ==
+k     delta/k   max |final error| over e0 in (0,5]   attained at e0
+0.25  2.000     2.000                                2.00
+0.5   1.000     1.000                                1.00
+1     0.500     0.500                                0.50
+1.5   0.333     0.333                                1.67
+1.9   0.263     0.263                                2.22
+k=1 (deadbeat in the twin): final |e| = min(|e0|, delta) exactly: e0=0.3 -> 0.300, 0.5 -> 0.500, 2.0 -> 0.500
+
+== 4. Repair: fit (g, delta) instead of one gain (train s=1; 300 repeats) ==
+n      mean g   sd g    mean delta   sd delta   RMSE at s=0.25: linear twin   deadband twin   (RMSE / sd(y))
+100    1.003    0.027   0.502        0.022      1.670                        0.953
+300    1.001    0.013   0.501        0.011      1.673                        0.952
+1000   1.000    0.008   0.500        0.006      1.674                        0.952
