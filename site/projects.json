@@ -900,6 +900,11 @@
      "slug": "friction-twin",
      "title": "How wrong is the stopping distance of a twin that models friction as purely viscous?",
      "summary": "With Coulomb friction <em>c</em> the real coast-down stops in finite time with exact distance (<em>m</em>/<em>b</em>)[<em>v</em><sub>0</sub>&minus;(<em>c</em>/<em>b</em>)ln(1+<em>b</em>&thinsp;<em>v</em><sub>0</sub>/<em>c</em>)] (RK4 agreement 9&times;10<sup>&minus;9</sup>), while the viscous twin only decays exponentially (6.5&thinsp;s to reach 10<sup>&minus;3</sup> vs 1.95&thinsp;s real). The least-squares gain <em>b</em>+<em>c</em>E[<em>v</em>]/E[<em>v</em><sup>2</sup>] depends on the logged speed range (1.23 on [1,3], 3.44 on [0.05,0.3]); fitted on [1,3] the twin overestimates stopping distance &times;1.8 at <em>v</em><sub>0</sub>=1 and &times;17 at 0.05, is exact at 7.34 and underestimates above. Negative result: no single viscous gain does better than 0.87 worst relative error over [0.05,3], while an affine fit recovers (<em>b</em>,<em>c</em>) exactly. Stylised: one mass, noiseless logs."
+   },
+   {
+     "slug": "range-twin",
+     "title": "What does a twin whose sensor reads at any distance get wrong about a loop with a range-limited lidar or radar?",
+     "summary": "A twin with unlimited sensor range predicts geometric convergence; a real sensor reading clip(<em>x</em>, &minus;<em>R</em>, <em>R</em>) caps the approach speed at <em>kR</em>. The exact step-count law matches simulation in 108/108 cases; for <em>k</em>=0.25 the twin says 49 steps from 1000<em>R</em> and the real loop takes 4021 (82&times;), an error linear in <em>x</em><sub>0</sub>/<em>R</em> with slope 1/<em>k</em>. For a PI loop the twin's overshoot is neither a bound nor a lower bound: smaller at 2&ndash;5<em>R</em>, 4.1&times; larger at 1000<em>R</em>; conditional integration repairs overshoot but not settling time. Logs within range fit the gain exactly and cannot reveal <em>R</em>; from logs uniform on [&minus;<em>L</em>, <em>L</em>] the fitted gain factor is 1.5<em>q</em>&minus;0.5<em>q</em><sup>3</sup>, <em>q</em>=<em>R</em>/<em>L</em>. Stylised: scalar noiseless loop, hard symmetric clip."
    }
    ]
   }
