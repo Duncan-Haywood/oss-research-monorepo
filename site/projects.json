@@ -620,6 +620,11 @@
      "slug": "radar-clutter-twin",
      "title": "What does a Gaussian-clutter radar simulator do to a CFAR detector's false-alarm rate?",
      "summary": "A CA-CFAR threshold set in a Gaussian-clutter twin and deployed in gamma-textured (K-distributed) clutter has an exact false-alarm law, matched to direct simulation to ~1%. At design 10<sup>&minus;4</sup> the real rate is 9&times; (&nu;=5) to 30&times; (&nu;=2) too high, and 50&times; to 358&times; at 10<sup>&minus;6</sup>; restoring it costs 1.9&ndash;3.7&nbsp;dB of threshold at 10<sup>&minus;4</sup>. If texture is shared across the window CFAR is unaffected, so the twin must model spatial correlation. A moment fit of &nu; from 1000 real clutter cells brings the median to 1.1&times; (90th percentile 2&times;), versus ~10<sup>6</sup> cells to threshold empirically. Stylised: no target, no measured data."
+    },
+    {
+     "slug": "radar-detection-twin",
+     "title": "What does a Gaussian-clutter radar twin promise about detection, not just false alarms?",
+     "summary": "With CA- and OS-CFAR thresholds set in a Gaussian twin and deployed in gamma-textured clutter, the exact false-alarm and detection laws (including a new one-dimensional OS-CFAR law) match simulation to ~1%. OS-CFAR is inflated much like CA (design 1e-4, &nu;=2: 30&times; vs 35&times;). Repairing the threshold costs 3.7&ndash;4.6 dB, yet the SNR needed for Pd&nbsp;=&nbsp;0.9 at Pfa&nbsp;=&nbsp;1e-4 is 6.3 dB above the twin&rsquo;s promise at &nu;=2 (2.8 dB at &nu;=5, 0.8 dB at &nu;=20), and at the twin&rsquo;s own threshold and promised SNR real Pd is 0.84 while Pfa is 30&times; design. Texture does not reverse the CA-beats-OS ranking (a negative result). Stylised: iid gamma texture, constant-SNR target, no interferers, no real radar data."
     }
    ]
   }
