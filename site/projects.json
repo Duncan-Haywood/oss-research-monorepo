@@ -775,6 +775,11 @@
      "slug": "finetune-twin",
      "title": "How many real steps does a twin-pretrained policy save, and which twin errors does fine-tuning inherit?",
      "summary": "On a quadratic real loss with SGD noise, the expected loss after <em>k</em> real steps from a twin start is exact (matched to Monte Carlo within 0.3%). A twin start with 0.6&times; the cold-start error saves 64&ndash;67% of the steps to every target from 8&times; to 1.2&times; the SGD floor; at equal error it saves nothing and at 1.5&times; it costs 138 extra steps (negative transfer). For any curvature spectrum the loss left by a twin error of norm <em>b</em> is at most <em>b</em><sup>2</sup>/(4<em>e&eta;k</em>), attained by the direction &lambda;<sub>*</sub>=1/(2&eta;<em>k</em>), so twin error decays as 1/<em>k</em>, not geometrically. At the same initial loss, an error in the stiffest direction needs 13 steps to reach 2&times; the floor and one in the flattest 1,541. Stylised: fixed offset, isotropic noise, no robot data."
+    },
+    {
+     "slug": "mix-twin",
+     "title": "How should cheap biased twin samples be weighted against scarce real ones?",
+     "summary": "For a mean estimated from <em>n</em> real and <em>m</em> twin samples with twin bias &delta;, the optimal weight and MSE are exact and the twin is worth at most &sigma;<sup>2</sup>/&delta;<sup>2</sup> real samples however large <em>m</em> is (e.g. 157.5 of a 160 cap at <em>m</em>=10<sup>4</sup>). Equal-weight pooling beats real-only iff &delta;<sup>2</sup> &lt; &sigma;<sup>2</sup>/<em>n</em> + &sigma;<sup>2</sup>/<em>m</em>, so more twin data narrows the safe range (3.99&times; worse than real-only at &delta;=2&radic;a). Estimating the bias from the data is costly: the plug-in weight is worse than real-only for large bias (peak 1.24&times;), and a 5% pretest peaks at 2.41&times;. Stylised: scalar Gaussian, constant bias, no robot data."
     }
    ]
   }
