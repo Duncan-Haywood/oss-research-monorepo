@@ -690,6 +690,11 @@
      "slug": "odometry-twin",
      "title": "What does a simulator tuned on one-step odometry noise get wrong about drift, relocalisation and loop closure?",
      "summary": "A traversal has a persistent bias plus white noise, so real error after <em>T</em> steps has variance &sigma;<sub>1</sub><sup>2</sup>(&rho;<em>T</em><sup>2</sup>+(1&minus;&rho;)<em>T</em>); a twin fitted to one-step increments, identical for every &rho;, predicts &sigma;<sub>1</sub><sup>2</sup><em>T</em> and is off by exactly 1+(<em>T</em>&minus;1)&rho;. With 5% of step variance persistent, the twin&rsquo;s relocalisation interval is 3.4&times; too long (real miss probability 51.6% against a claimed 5%), and a 3&sigma; loop-closure gate tuned in it accepts true closures with probability 0.64 at <em>T</em>&nbsp;=&nbsp;200 instead of 0.997; in a closed loop the rejections let error run away (RMS 8.8&nbsp;m against 0.17&nbsp;m calibrated). A calibrated gate accepts 97&ndash;99% of aliased closures once drift uncertainty exceeds the alias offset, and a variance ratio fitted at one loop length does not transfer to others. Stylised: 1-D Gaussian, assumed one-step-fitted twin, no real odometry data."
+    },
+    {
+     "slug": "twin-certification",
+     "title": "Can a digital twin shorten a real-world safety certification?",
+     "summary": "Certifying a failure rate <em>p</em>&nbsp;&lt;&nbsp;&epsilon; from <em>n</em> real trials with a twin-derived prior. The worst-case false-certification probability of any &lsquo;certify iff <em>k</em>&nbsp;&le;&nbsp;<em>c</em>&rsquo; rule is exactly P(Bin(<em>n</em>,&epsilon;)&nbsp;&le;&nbsp;<em>c</em>), so by Karlin&ndash;Rubin the twin cannot cut real trials at a fixed level: at &epsilon;=0.01, &delta;=0.05 the exact test needs 299 zero-failure trials, a twin prior reaches 133 only at worst-case size 0.26, and the exact test held to the same size needs the same <em>n</em> (1057 vs 1057 for 90% power at <em>p</em>=&epsilon;/3). A weakly informative Jeffreys bound is already anti-conservative (size 0.147 at 191 trials). Optimistic twins inflate size, pessimistic ones (claim 2&epsilon;) block certification entirely, and the largest safe twin weight is about 90 twin-trial equivalents at <em>n</em>=299. Stylised: one Bernoulli failure rate, no continuous margins."
     }
    ]
   }
