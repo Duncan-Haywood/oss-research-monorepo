@@ -760,6 +760,11 @@
      "slug": "quantization-twin",
      "title": "What does a Kalman filter tuned in an ideal-sensor twin cost on a quantizing real sensor?",
      "summary": "A twin whose sensor is ideal (<em>y</em>=<em>x</em>+<em>v</em>) tunes the gain for variance <em>R</em>, but the real sensor rounds to a step <em>D</em>. In simulation (<em>a</em>=0.9, <em>Q</em>=1) the twin&rsquo;s gain costs +11% at <em>D</em>=4 for <em>R</em>=1, and up to +64% when <em>R</em>=0.01. Retuning on <em>R</em>+<em>D</em><sup>2</sup>/12 (Sheppard) lands within 1% of the best gain in all 12 configurations, but its closed-form MSE claim under-predicts the real error by 28&ndash;43% once <em>D</em> exceeds the state&rsquo;s scale (1.61 vs 2.82 at <em>D</em>=8, <em>R</em>=0.01). Stylised: scalar linear-Gaussian plant, fixed gain, one seed per cell."
+    },
+    {
+     "slug": "ladder-twin",
+     "title": "How should a simulation budget be split across twin fidelities?",
+     "summary": "A twin runs at several fixed-step fidelities (n=2<sup>l+1</sup> Euler steps). Multilevel Monte Carlo telescopes the finest-level answer over coupled pairs sharing scenario draws, with allocation N<sub>l</sub> &prop; &radic;(V<sub>l</sub>/C<sub>l</sub>). For a smooth terminal state (bias rate &alpha;=1.000, variance rate &beta;=2.001, cost rate 1) it needs 3.6&times; fewer steps than one fine twin at RMSE 10<sup>&minus;2</sup> and 897&times; fewer at 3&times;10<sup>&minus;5</sup>. For a failure probability the variance only halves per level (&beta;=1.000), so multilevel <em>loses</em> at loose targets (0.4&times; at 3&times;10<sup>&minus;2</sup>), breaks even near 10<sup>&minus;3</sup> and reaches 7.7&times; at 10<sup>&minus;4</sup>. Equal samples per level cost 156&times; (smooth) and 3.9&times; (failure) the optimum; a coarse twin alone is off by 10&ndash;48% however many runs. Stylised: one scalar linear system, exact level moments."
     }
    ]
   }
