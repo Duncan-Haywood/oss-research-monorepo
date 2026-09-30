@@ -320,6 +320,11 @@
      "slug": "robust-aggregation",
      "title": "How much can Byzantine verifiers move an aggregate?",
      "summary": "Mean, median and trimmed-mean aggregation of verifier reports under a Byzantine fraction &beta;: mean bias &beta;B is unbounded, median bias &sigma;&Phi;<sup>&minus;1</sup>(1/(2(1&minus;&beta;))) is independent of B and diverges at &beta;=&frac12;, trimmed-mean closed form for &tau;&ge;&beta; matches simulation, and trimming below &beta; fails. Stylised."
+    },
+    {
+     "slug": "forgetting-audit",
+     "title": "Can a verifier tell from old-task losses that a continual-learning job skipped or shortchanged tasks?",
+     "summary": "Extends the forgetting law to a trainer that skips each task with probability <em>s</em> or takes a step fraction <em>a</em>: the final-checkpoint loss on the task at position <em>t</em> is exactly &rho;<sup><em>t</em>&minus;1</sup>[(1&minus;2<em>m</em><sub>1</sub>+<em>m</em><sub>2</sub>)(<em>r</em>/<em>d</em>)&lambda;<sup><em>k</em></sup> + (<em>r</em>/<em>d</em>)&rho;(&rho;<sup><em>k</em></sup>&minus;&lambda;<sup><em>k</em></sup>)], matching exact quadrature and simulation. A skipped task is at least <em>d</em>/(<em>d</em>&minus;<em>r</em>) times worse than a trained one at every lag but clearly so only in a window (ratio &ge;2 for lags &le;6.7 at <em>d</em>=16, <em>r</em>=2). Catching a skipping <em>trainer</em> is lag-free: about 17&ndash;20 jobs for 20% skipping at any audit lag, scaling as 0.7/<em>s</em><sup>2</sup> and falling with job length, while a 10% step shortfall needs about 9,600 jobs. Stylised: linear regression, Haar-random tasks, known initial error."
     }
    ]
   },
