@@ -1180,6 +1180,11 @@
      "slug": "twin-ladder",
      "title": "Which rungs of a ladder of digital twins are worth running?",
      "summary": "For twins of decreasing cost and fidelity used as nested control variates the variance is exact, &sigma;<sup>2</sup>&Sigma;(&rho;<sub>i</sub><sup>2</sup>&minus;&rho;<sub>i+1</sub><sup>2</sup>)/m<sub>i</sub>, and a cheaper rung pays below a twin already in use iff &rho;<sub>2</sub>/&rho;<sub>1</sub> &gt; 2&radic;r/(1+r) (0.943 for halved cost, 0.575 for a 10&times; drop), the single-twin threshold applied to the step correlation. Using every rung is not best (q=0.99, r=0.5, six rungs: 0.284 of real-only variance vs 0.196 for the best two; q=0.9 makes all rungs 1.41&times; worse than real-only while the best subset gets 0.83), and 10 of 336 paying grid points are infeasible. On a saturated PD mass-spring timestep ladder the best ladder reaches 0.156 of real-only variance (0.204 for the best single twin), collapsing to the cheapest twin at 90%/70% disturbance replay (0.52/0.89 simulated); a coarser rung diverged in 2 of 20,000 contexts. Stylised: one plant, known correlations, step-count costs."
+    },
+    {
+     "slug": "watchdog-twin",
+     "title": "A heartbeat twin that drops packets independently: how often does the real bursty link trip a missed-beat watchdog, and what timeout is safe?",
+     "summary": "At 5% mean loss a watchdog that e-stops after <em>m</em>&nbsp;=&nbsp;5 missed heartbeats false-trips once in 3.4&times;10<sup>6</sup> ticks (18.7&nbsp;h at 50&nbsp;Hz) in the i.i.d.-loss twin but every 235&ndash;990 ticks (5&ndash;20&nbsp;s) on a two-state bursty link with mean burst 2&ndash;50, from an exact recursion checked against enumeration and Monte Carlo. The error is not monotone in burst length: it is worst at <em>L</em>&nbsp;&asymp;&nbsp;<em>m</em>, where the mean time to trip is only &asymp;&nbsp;<em>e</em><em>m</em>/<em>p</em>. For a 10<sup>6</sup>-tick target the twin picks <em>m</em>&nbsp;=&nbsp;5 (0.10&nbsp;s to detect a dead link) while the real link needs 16&ndash;154 (0.3&ndash;3.1&nbsp;s) growing linearly in <em>L</em>, and with <em>L</em> unknown no affordable timeout guarantees it. Stylised: Gilbert channel, plain miss counter, no link traces."
     }
    ]
   }
