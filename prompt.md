@@ -65,15 +65,24 @@ Files:
 
 At the start of each run:
 1. Read `prompts/routing.json`. Draw a uniform random number; if it is below `candidate_share`, follow `prompts/prompt-<candidate>.md` for this run instead of this file. Record which version you used.
-2. Add a `Prompt-Version: <n>` trailer to every commit, so outcomes can be traced from git history.
+2. Add a `Prompt-Version: <n>` trailer to every commit, alongside the existing `Co-Authored-By` (model) and `Claude-Session` trailers, so prompt version, model and session can be traced from git history.
 
 At the end of each run, append a line to `prompts/runs.jsonl`:
 ```json
-{"date": "YYYY-MM-DD", "session": "<session url>", "prompt_version": 0, "task": "new-project|extend|fix|merge|meta",
- "projects": ["<slug>"], "pr": "<url or null>", "merged": true, "ci_failures_before_green": 0,
- "review_findings": 0, "tests_added": 0, "build_ok": true, "outcome": "success|partial|failed",
+{"date": "YYYY-MM-DD", "session": "<session url>", "prompt_version": 0,
+ "input": "<the user or trigger message that started the run, verbatim>", "input_sha256": "<hash of input>",
+ "follow_up_inputs": ["<later user messages in the session, verbatim>"],
+ "model": "<model id that made the commits>", "models_seen": ["<every model that served a turn, incl. fallbacks>"],
+ "started": "<ISO time>", "ended": "<ISO time>", "wall_minutes": 0,
+ "tokens_in": null, "tokens_out": null, "cost_usd": null, "tool_calls": null,
+ "task": "new-project|extend|fix|merge|meta", "projects": ["<slug>"], "pr": "<url or null>",
+ "commits": ["<sha>"], "lines_added": 0, "lines_removed": 0,
+ "merged": true, "ci_failures_before_green": 0, "review_findings": 0, "tests_added": 0, "build_ok": true,
+ "outcome": "success|partial|failed",
  "errors": ["short description of anything that went wrong"], "integrity_issues": [], "notes": ""}
 ```
+Record every field you can observe; use `null` for anything unavailable rather than guessing (token counts and cost may only be visible to the owner). Take the model from the session metadata, not from memory. Redact secrets, tokens and personal data from recorded inputs.
+
 Report honestly: a failed or abandoned run is data. Never edit past lines except to append a correction line that references the original.
 
 Measures, in order of importance:
@@ -83,8 +92,9 @@ Measures, in order of importance:
 4. Quality: in each review session, audit a random sample of about five recent projects. Re-run their code, check that README numbers match the output, and check every citation. Log what you find as integrity issues or errors against the run that produced the project.
 
 Review session (about every 20 runs, or when `runs.jsonl` gains 20 lines since the last review):
-1. On the first review, backfill `runs.jsonl` from prior runs: merged PRs, CI history, review comments and fix-up commits in git history. Mark backfilled lines `"backfilled": true` and use `prompt_version: 0`.
-2. Compute success and error rates per prompt version, with counts. Do not draw conclusions from fewer than about 10 runs per version, and say how uncertain the comparison is.
-3. Decide the active candidate's fate: promote it (copy it to `prompt.md`) if it has no more integrity issues than the champion and is clearly better on success or error rate; retire it if it is worse; otherwise keep collecting runs.
-4. If no candidate is active, write `prompts/prompt-<n+1>.md` targeting the most common failure in the log, make one focused change so its effect can be measured, log the hypothesis in `prompts/experiments.md`, and route about 20% of runs to it.
-5. Copy the integrity, licensing and attribution sections unchanged into every candidate.
+1. On the first review, backfill `runs.jsonl` from prior runs, one line per `Claude-Session` trailer in git history. Take the model from each commit's `Co-Authored-By` trailer, timing and diff size from the commits, and outcomes from merged PRs, CI history, review comments and fix-up commits. Where a session's transcript is still readable, recover its prompt inputs, models served, duration and token use from it. Mark backfilled lines `"backfilled": true`, use `prompt_version: 0`, and leave unrecoverable fields `null`.
+2. Group runs by input as well as by prompt version: the same brief with different starting messages is a different treatment, so note which inputs led to the best and worst outcomes and to the most tokens or time per merged project.
+3. Compute success and error rates, and tokens, time and cost per merged project, per prompt version and per model, with counts. Do not draw conclusions from fewer than about 10 runs per version, and say how uncertain the comparison is.
+4. Decide the active candidate's fate: promote it (copy it to `prompt.md`) if it has no more integrity issues than the champion and is clearly better on success or error rate; retire it if it is worse; otherwise keep collecting runs.
+5. If no candidate is active, write `prompts/prompt-<n+1>.md` targeting the most common failure in the log, make one focused change so its effect can be measured, log the hypothesis in `prompts/experiments.md`, and route about 20% of runs to it.
+6. Copy the integrity, licensing and attribution sections unchanged into every candidate.
