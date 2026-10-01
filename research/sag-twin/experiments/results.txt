@@ -1,0 +1,64 @@
+Sag twin: 6S pack, OCV 25.2 -> 18.0 V linear over C = 5 Ah, cutoff 19.8 V under load; real = series resistance R, twin = R = 0 (energy bucket)
+twin energy claim = 108.0 Wh
+
+== 1. Closed form vs numerical integration of dt = dx/I (minutes) ==
+  R (ohm)  P (W)   closed form    numeric     twin
+  0.06      150      30.6651      30.6651     33.7500
+  0.06      300      13.8086      13.8085     16.8750
+  0.06      450       8.2027       8.2027     11.2500
+  0.24      150      21.6396      21.6396     33.7500
+  0.24      300       5.1107       5.1107     16.8750
+  0.24      450       0.0000       0.0000     11.2500
+
+== 2. Delivered fraction of the twin's energy claim, eta = real / twin runtime ==
+  P (W)   R=0.03   R=0.06   R=0.12   R=0.24
+    50     0.985    0.969    0.939    0.878
+   100     0.969    0.939    0.878    0.759
+   150     0.954    0.909    0.818    0.641
+   250     0.924    0.848    0.700    0.413
+   350     0.893    0.788    0.583    0.196
+   450     0.863    0.729    0.469    0.000
+   550     0.833    0.670    0.358    0.000
+
+== 3. A twin with one calibrated constant efficiency (fitted at P = 150 W, R = 0.12) vs the real runtime ==
+  calibrated eta = 0.8183
+  P (W)   real (min)   twin (min)   calibrated twin (min)   calibrated error
+    50      95.07       101.25         82.85               -12.9%
+   100      44.47        50.62         41.43                -6.8%
+   150      27.62        33.75         27.62                +0.0%
+   250      14.17        20.25         16.57               +17.0%
+   350       8.44        14.46         11.84               +40.3%
+   450       5.28        11.25          9.21               +74.4%
+  the ideal twin overstates real runtime by 1/eta - 1; at R = 0.12:
+    P = 150 W: +22.2%
+    P = 350 W: +71.5%
+    P = 450 W: +113.1%
+
+== 4. Largest power with a non-empty flight, P_start = Vc (V0 - Vc) / R; the energy twin has no such limit ==
+  R = 0.03   P_start =  3564.0 W   (23.76 x the 150 W hover power)
+  R = 0.06   P_start =  1782.0 W   (11.88 x the 150 W hover power)
+  R = 0.12   P_start =   891.0 W   (5.94 x the 150 W hover power)
+  R = 0.24   P_start =   445.5 W   (2.97 x the 150 W hover power)
+
+== 5. Max payload for a 20-minute hover (150 W at 1 kg, power ~ mass^1.5): twin vs real ==
+  twin payload = 0.417 kg (hover power 253 W)
+  R (ohm)   real payload (kg)   twin overstates payload by   real hover power at twin payload   real runtime there (min)
+  0.03         0.349              19.7%                         253.1                             18.46
+  0.06         0.288              44.7%                         253.1                             16.93
+  0.12         0.187             123.7%                         253.1                             13.92
+  0.24         0.034            1123.5%                         253.1                              8.12
+
+== 6. Fleet with lognormal resistance R = 0.12 exp(0.35 z) (cold, aged and cheap packs): shortfall at the twin's payload ==
+  the twin's payload sits on its own boundary (runtime exactly 20 min at R = 0), so every pack with R > 0 falls short: failure probability 1 by construction
+  the informative quantity is the shortfall; real runtime at the twin's payload (253 W), exact quantiles of the R distribution (runtime falls in R):
+    50% of packs run no longer than 13.92 min (30% short)
+    10% of packs run no longer than 10.60 min (47% short)
+    5% of packs run no longer than  9.38 min (53% short)
+    1% of packs run no longer than  6.68 min (67% short)
+  Monte Carlo (200000 packs): median 13.92 min, 5th percentile 9.38 min, 1st percentile 6.66 min
+  payload so that a fraction eps of packs fall short (sized at the (1-eps) quantile of R) and its cost vs the twin payload:
+  eps      z       R_q (ohm)   payload (kg)   cut vs twin
+  0.50    0.000    0.1200      0.187          -55.3%
+  0.10    1.282    0.1879      0.094          -77.6%
+  0.05    1.645    0.2134      0.063          -84.8%
+  0.01    2.326    0.2709      0.003          -99.4%

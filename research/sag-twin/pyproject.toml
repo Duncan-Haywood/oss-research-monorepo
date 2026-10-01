@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sag-twin"
+version = "0.1.0"
+description = "Sag twin: an ideal-source battery twin (energy bucket) overstates constant-power flight time; the real cell loses I^2R and hits the voltage cutoff earlier, by a power-dependent factor with exact closed forms"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
