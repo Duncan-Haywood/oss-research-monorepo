@@ -50,8 +50,8 @@ def extract(repo, out):
 
 def report(harvest, csv_out, md_out, public):
     rows = [json.loads(line) for line in open(harvest) if line.strip()]
-    fields = ["session", "commit_first", "status", "title", "origin", "created_at",
-              "model", "cost_usd", "commits"]
+    fields = ["session", "commit_first", "status", "title", "routine", "origin", "created_at",
+              "model", "cost_usd", "prompt_version", "prompt_source", "commits", "subjects"]
     if not public:
         fields += ["prompt", "result"]
     with open(csv_out, "w", newline="") as f:
@@ -59,10 +59,13 @@ def report(harvest, csv_out, md_out, public):
         w.writeheader()
         for r in rows:
             r = dict(r)
-            r["commits"] = r["commits"] if isinstance(r.get("commits"), int) else len(r.get("commits") or [])
+            c = r.get("commits")
+            r["commits"] = len(c) if isinstance(c, list) else c
+            r["subjects"] = " | ".join(r.get("subjects") or [])
             if not public:
                 res = r.get("results") or []
-                r["result"] = (res[-1].get("result") if res and isinstance(res[-1], dict) else "") or ""
+                last = res[-1] if res and isinstance(res[-1], dict) else {}
+                r["result"] = last.get("result") or last.get("text") or ""
             w.writerow(r)
 
     found = [r for r in rows if r.get("status") == "found"]
@@ -71,6 +74,7 @@ def report(harvest, csv_out, md_out, public):
         by_month[(r.get("commit_first") or "?")[:7]][r.get("status") == "found"] += 1
     cost = sum(float(r.get("cost_usd") or 0) for r in found)
     by_title = collections.Counter(r.get("title") or "?" for r in found)
+    by_version = collections.Counter(r.get("prompt_version") or "?" for r in found)
     lines = [
         f"# Agent runs traced from commit trailers",
         "",
@@ -85,7 +89,11 @@ def report(harvest, csv_out, md_out, public):
         "",
         "| Retrievable runs by session title | count |",
         "|---|---|",
-    ] + [f"| {t} | {n} |" for t, n in by_title.most_common()]
+    ] + [f"| {t} | {n} |" for t, n in by_title.most_common()] + [
+        "",
+        "| Prompt version | runs |",
+        "|---|---|",
+    ] + [f"| {v} | {n} |" for v, n in sorted(by_version.items())]
     with open(md_out, "w") as f:
         f.write("\n".join(lines) + "\n")
     print(f"{len(rows)} rows -> {csv_out}, {md_out}")
