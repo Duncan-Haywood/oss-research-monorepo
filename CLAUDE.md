@@ -1,5 +1,9 @@
 # Repo instructions
 
+**Moved.** Work on the research portfolio now happens in `Duncan-Haywood/fp-monorepo` under
+`research/` (see `research/CLAUDE.md` there). Do not add, change or remove projects in this
+repository; it is frozen and will be archived.
+
 ## Keep the GitHub Pages homepage up to date
 
 The portfolio homepage <https://duncan-haywood.github.io/oss-research-monorepo/> is generated

@@ -1,6 +1,12 @@
 # oss-research-monorepo
 Duncan's open source software monorepo (MIT licensed). Portfolio homepage: <https://duncan-haywood.github.io/oss-research-monorepo/> (built from `site/` by `.github/workflows/pages.yml`).
 
+> **This repository has moved.** The research portfolio now lives in
+> [`Duncan-Haywood/fp-monorepo`](https://github.com/Duncan-Haywood/fp-monorepo) under
+> `research/`, with this repository's full history. Do not add new work here; this
+> copy is frozen and will be archived.
+
+
 - [`research/decentralized-verification-markets`](research/decentralized-verification-markets) — peer-prediction and prediction-market mechanisms for verifying decentralized ML training, with adversarial evaluation.
 - [`research/market-routing`](research/market-routing) — cost-function markets as expert routers: LMSR = Hedge, quadratic potential = sparsemax; regret/loss bounds verified, continual-learning simulation.
 - [`research/wagering-modular-experts`](research/wagering-modular-experts) — self-financed wagering mechanisms as verifiable routers for modular, continually learning experts; shows plain WSWM locks in under recurring regimes and a fixed-share tax fixes it at the cost of subsidising free-riders.
