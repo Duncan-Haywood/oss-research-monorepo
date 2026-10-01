@@ -29,3 +29,15 @@ results, in the same commit:
    project is missing from `projects.json` or `README.md`, or if either lists one that no
    longer exists. CI runs the same build on every pull request and it blocks the deploy.
    Open `_site/index.html` to preview.
+
+## Inputs and runs are tracked in git
+
+- **Prompts.** `.claude/settings.json` runs `.claude/hooks/log_prompt.py` on every prompt
+  (yours or a routine's), writing it verbatim to `.claude/prompts/<date>/<session>.md`.
+  Commit any new or changed files under `.claude/prompts/` in the same PR as your work,
+  or on their own if you ship nothing. Never edit or delete existing prompt files.
+- **Routine instructions.** Scheduled routines read their instructions from
+  `.claude/routines/<name>.md` on `main`. Change what a routine does by editing that
+  file in a PR, not by editing the routine.
+- **Run records.** Each routine run adds one `.claude/runs/<timestamp>-<session>.json`
+  (format in the routine file).
