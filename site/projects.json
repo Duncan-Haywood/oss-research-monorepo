@@ -1215,6 +1215,11 @@
      "slug": "chirp-twin",
      "title": "What does an FMCW radar twin without range&ndash;Doppler coupling get wrong about a moving target?",
      "summary": "A sawtooth chirp radar reads a moving target&rsquo;s range as <em>R</em>&nbsp;+&nbsp;&kappa;<em>v</em>, &kappa;&nbsp;=&nbsp;<em>f</em><sub>c</sub><em>T</em>/<em>B</em>; the twin reads <em>R</em>. A signal-level beat-tone simulation matches the formula to &le;&nbsp;10<sup>&minus;4</sup> range cells, and the bias is <em>f</em><sub>D</sub><em>T</em> cells independent of bandwidth: 0.6, 3.1 and 4.8 cells (9&nbsp;cm, 46&nbsp;cm, 2.9&nbsp;m) at 30&nbsp;m/s for fast 77&nbsp;GHz, mid 77&nbsp;GHz and slow 24&nbsp;GHz ramps. Within the unambiguous speed it is under half a cell, but compensating with the radar&rsquo;s own wrapped Doppler is worse than doing nothing on exactly half of the over-range speeds. For a stationary scene (&plusmn;60&deg;) a centroid fit absorbs 0.71&kappa;<em>v</em> of along-track position error and leaves 0.46&kappa;<em>v</em> rms distortion. Stylised: single up ramp, noise-free tone, no radar data."
+    },
+    {
+     "slug": "footprint-twin",
+     "title": "Can a fixed inflation radius stand in for a rectangular robot's footprint in a narrow gap?",
+     "summary": "A 1.0&times;0.5&nbsp;m robot with Gaussian heading error crossing a gap: pass probability is exactly 2&Phi;(&theta;*/&sigma;)&minus;1 with &theta;* = asin(<em>g</em>/<em>R</em>)&minus;atan(<em>W</em>/<em>L</em>) (matches a corner-geometry Monte Carlo within 0.0013). Inscribed- and circumscribed-circle twins are step functions (always pass / always fail below 1.118&nbsp;m); an inflation calibrated to 95% at &sigma;&nbsp;=&nbsp;0.05 is 0.17&nbsp;m too small at &sigma;&nbsp;=&nbsp;0.15 (real pass 0.49), and ten-gap missions succeed only 0.60 of the time where the twin says 1. Stylised: simulated robot, Gaussian heading error, no sensing error."
     }
    ]
   }
