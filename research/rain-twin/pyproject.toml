@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rain-twin"
+version = "0.1.0"
+description = "Rain twin: radar detection range under rain attenuation is a Lambert-W function of rain rate; a twin run at the mean rain rate under-predicts the mean range (Jensen) and is the worst deterministic twin, while the median-rain twin is exact for the median range"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
