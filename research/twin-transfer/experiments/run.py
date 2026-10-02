@@ -13,9 +13,10 @@ for k in (0.4, ks, 1.6):
 
 print("\n== 2. Twin input-gain error (a known): regret of twin-trained gain on the plant ==")
 print("b_hat/b   twin gain   regret      local formula")
-for m in (0.15, 0.2, 0.25, 0.3, 0.5, 0.8, 0.9, 0.95, 1.05, 1.1, 1.25, 2.0, 3.0):
+for m in (0.15, 0.2, 0.25, 0.3, 0.5, 0.75, 0.8, 0.9, 0.95, 1.05, 1.1, 1.25, 2.0, 3.0):
     rg = twin_regret(a, b, a, m * b, q, r)
     print("%-8.2f  %.4f     %-10s  %.5f" % (m, twin_gain(a, m * b, q, r), "inf" if math.isinf(rg) else "%.5f" % rg, local_regret(a, b, m * b, q, r)))
+print("local law relative error (local/exact - 1): " + ", ".join("b_hat/b=%.2f %+.1f%%" % (m, 100 * (local_regret(a, b, m * b, q, r) / twin_regret(a, b, a, m * b, q, r) - 1)) for m in (0.75, 0.95, 1.05, 1.25)))
 print("cliff: twin gain k*(mb) stable on plant iff m > m_c; solve |a - b k*(m b)| < 1")
 lo, hi = 0.01, 1.0
 for _ in range(60):

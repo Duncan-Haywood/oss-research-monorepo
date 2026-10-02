@@ -13,9 +13,16 @@ print(" crossover p (tangent better below):", {e: round(crossover(e), 4) for e i
 
 print("\nE3 worst-case misreport: expected loss of report r when truth p=1e-3 (eps=1e-4)")
 p, eps = 1e-3, 1e-4
+log_el = lambda r: p * -math.log(r) + (1 - p) * -math.log(1 - r)
 for r in (1e-3, 1e-4, 1e-6, 1e-9, 0.0):
-    lg = "inf" if r == 0 else f"{p*-math.log(r)+(1-p)*-math.log(1-r):.4f}"
-    print(f" r={r:g}: tangent {exp_loss(r,p,eps):.4f}   log {lg}")
+    lg = "inf" if r == 0 else f"{log_el(r):.4f}"
+    lx = "inf" if r == 0 else f"{log_el(r) - log_el(p):.5f}"
+    print(f" r={r:g}: tangent {exp_loss(r,p,eps):.4f}   log {lg}   | excess over truthful r=p: tangent {exp_loss(r,p,eps)-exp_loss(p,p,eps):.5f}   log {lx}")
+H = -(p * math.log(p) + (1 - p) * math.log(1 - p))
+sat = p * score_range(eps) - H - kappa(eps)
+print(f" tangent excess saturates (r=0) at p*R_eps - H(p) - kappa_eps = {sat:.5f}; p*R_eps = {p*score_range(eps):.5f} is the total expected loss at r=0, {p*score_range(eps)/sat:.1f}x the excess")
+print(f" log excess at r=1e-9 / tangent saturated excess = {(log_el(1e-9)-log_el(p))/sat:.1f}")
+print(" saturated excess (r=0) vs cutoff, truth p=1e-3:", ", ".join(f"eps={e:g}: {exp_loss(0,p,e)-exp_loss(p,p,e):.5f} (R={score_range(e):.2f})" for e in (1e-3, 1e-4, 1e-6)))
 
 print("\nE4 best eps for curvature per range at truth p is eps=p")
 for p in (.3, .05, .001):

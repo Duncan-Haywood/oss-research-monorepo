@@ -27,18 +27,18 @@ for pf in (1e-2, 1e-4, 1e-6):
         row = ["%.2e (%.1fx)" % (f(a, 0), f(a, 0) / pf) for a, (_, f) in zip(al, dets(nu))]
         print("%-10g  %-4g  %s" % (pf, nu, "  ".join("%-16s" % r for r in row)))
 
-print("\n== 2. Exact laws vs direct Monte Carlo (design Pfa 1e-2, 400k trials) ==")
+print("\n== 2. Quadrature laws vs direct Monte Carlo (design Pfa 1e-2, 400k trials) ==")
 for nu in (2, 5):
     for name, kind, k in (("CA", "ca", None), ("OS k=12", "os", 12)):
         f = pd_fn(kind, N, k, None)
         a = alpha_for_pfa(1e-2, f)
         ex = pd_fn(kind, N, k, G(nu))
-        print("nu=%d %-8s MC Pfa %.4f exact %.4f | shared texture MC %.4f (twin design 0.0100)" % (
+        print("nu=%d %-8s MC Pfa %.4f quadrature %.4f | shared texture MC %.4f (twin design 0.0100)" % (
             nu, name, simulate(a, N, nu, 400000, 5 + nu, kind, k), ex(a, 0), simulate(a, N, nu, 400000, 50 + nu, kind, k, shared=True)))
     s = 8.0
     for name, kind, k in (("CA", "ca", None), ("OS k=12", "os", 12)):
         a = alpha_for_pfa(1e-2, pd_fn(kind, N, k, None))
-        print("nu=%d %-8s target SNR %.0f (%.1f dB): MC Pd %.4f exact %.4f" % (
+        print("nu=%d %-8s target SNR %.0f (%.1f dB): MC Pd %.4f quadrature %.4f" % (
             nu, name, s, db(s), simulate(a, N, nu, 400000, 70 + nu, kind, k, snr=s), pd_fn(kind, N, k, G(nu))(a, s)))
 
 print("\n== 3. Threshold multiplier restoring design Pfa in real clutter (vs the twin's), design 1e-4 ==")
@@ -78,3 +78,33 @@ for i, (name, ft) in enumerate(tw):
     for nu in (2, 5):
         fr = dets(nu)[i][1]
         print("%-9s  %-3g  %-12.2e  %.3f" % (name, nu, fr(at, 0), fr(at, s)))
+
+print("\n== 7. Numerical accuracy of the quadrature (it is a grid quadrature, not a closed form) ==")
+# (a) Degenerate texture (tau = 1): the same OS order-statistic integral and CA table must reproduce the closed-form twin laws.
+g1 = TextureGrid(2.0)
+g1.tau, g1.w = [1.0], [1.0]
+g1.g = [1 / (1 + math.exp(g1.slo + j * g1.hs)) for j in range(len(g1.g))]
+g1.S = [math.exp(-x) for x in g1.z]
+g1.logS = [math.log(s) if s > 1e-300 else -690.0 for s in g1.S]
+errs = []
+for pf in (1e-2, 1e-4, 1e-6):
+    a = alpha_ca_twin(pf, N)
+    errs.append(abs(pfa_ca_real(a, N, g1) / pf - 1))
+    for k in KS:
+        a = alpha_os_twin(pf, N, k)
+        errs.append(abs(pfa_os_real(a, N, k, g1) / pf - 1))
+print("texture fixed at 1, quadrature vs closed-form twin Pfa (CA, OS k=8/12/14; design 1e-2/1e-4/1e-6): max relative error %.1e" % max(errs))
+# (b) Grid refinement in textured clutter: double every grid resolution and compare.
+g2 = TextureGrid(2.0, n=1000, ns=960, nz=6000)
+errs = []
+for pf in (1e-2, 1e-4, 1e-6):
+    for kind, k in (("ca", None),) + tuple(("os", k) for k in KS):
+        a = alpha_for_pfa(pf, pd_fn(kind, N, k, None))
+        for s in (0.0, 8.0):
+            errs.append(abs(pd_fn(kind, N, k, G(2))(a, s) / pd_fn(kind, N, k, g2)(a, s) - 1))
+print("nu=2, all grids doubled: max relative change in Pfa and Pd (SNR 8) over CA, OS k=8/12/14 at twin thresholds for design 1e-2/1e-4/1e-6: %.1e" % max(errs))
+rse = lambda q: math.sqrt((1 - q) / (400000 * q))
+pf2 = [pd_fn(kind, N, k, G(nu))(alpha_for_pfa(1e-2, pd_fn(kind, N, k, None)), s) for nu in (2, 5) for kind, k in (("ca", None), ("os", 12)) for s in (0.0,)]
+pd2 = [pd_fn(kind, N, k, G(nu))(alpha_for_pfa(1e-2, pd_fn(kind, N, k, None)), 8.0) for nu in (2, 5) for kind, k in (("ca", None), ("os", 12))]
+print("Monte Carlo relative standard error in section 2 (400k trials): Pfa %.1f-%.1f%%, Pd %.2f-%.2f%%, so those checks cannot resolve quadrature errors this small" % (
+    100 * min(map(rse, pf2)), 100 * max(map(rse, pf2)), 100 * min(map(rse, pd2)), 100 * max(map(rse, pd2))))

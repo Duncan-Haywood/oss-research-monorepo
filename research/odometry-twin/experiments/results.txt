@@ -2,16 +2,16 @@ Along-track odometry: per-step error s1=0.02 m (sb^2+sw^2), persistent bias frac
 Twin: fitted to one-step increments, treats them as white, Var(T)=T s1^2.  Real: Var(T)=s1^2 (rho T^2 + (1-rho) T).
 
 == 1. Variance growth: twin vs real (checked against 30000 simulated traversals) ==
-rho    T     twin sd (m)  real sd (m)  exact ratio  simulated ratio
-0.01   10    0.063        0.066        1.09         1.09
-0.01   100   0.200        0.282        1.99         1.99
-0.01   400   0.400        0.894        4.99         4.95
-0.05   10    0.063        0.076        1.45         1.45
-0.05   100   0.200        0.488        5.95         5.96
-0.05   400   0.400        1.831        20.95         20.81
-0.2    10    0.063        0.106        2.80         2.81
-0.2    100   0.200        0.912        20.80         20.61
-0.2    400   0.400        3.596        80.80         80.70
+rho    T     twin sd (m)  real sd (m)  exact var ratio  simulated var ratio  exact sd ratio   (ratios are real/twin)
+0.01   10    0.063        0.066        1.09             1.09                 1.04
+0.01   100   0.200        0.282        1.99             1.99                 1.41
+0.01   400   0.400        0.894        4.99             4.95                 2.23
+0.05   10    0.063        0.076        1.45             1.45                 1.20
+0.05   100   0.200        0.488        5.95             5.96                 2.44
+0.05   400   0.400        1.831        20.95            20.81                4.58
+0.2    10    0.063        0.106        2.80             2.81                 1.67
+0.2    100   0.200        0.912        20.80            20.61                4.56
+0.2    400   0.400        3.596        80.80            80.70                8.99
 
 == 2. Relocalisation interval for P(|E|>0.5 m) <= 0.05 ==
 twin interval T_twin = 163 steps

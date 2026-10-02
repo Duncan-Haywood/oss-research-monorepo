@@ -9,11 +9,11 @@ print("Twin: fitted to one-step increments, treats them as white, Var(T)=T s1^2.
 
 print("\n== 1. Variance growth: twin vs real (checked against 30000 simulated traversals) ==")
 rng = random.Random(1)
-print("rho    T     twin sd (m)  real sd (m)  exact ratio  simulated ratio")
+print("rho    T     twin sd (m)  real sd (m)  exact var ratio  simulated var ratio  exact sd ratio   (ratios are real/twin)")
 for rho in (0.01, 0.05, 0.2):
     for T in (10, 100, 400):
         es = [sample_error(T, S1, rho, rng) for _ in range(30000)]
-        print("%-6g %-5d %.3f        %.3f        %.2f         %.2f" % (rho, T, math.sqrt(var_twin(T, S1)), math.sqrt(var_real(T, S1, rho)), ratio(T, rho), fit_ratio(es, T, S1)))
+        print("%-6g %-5d %.3f        %.3f        %-16.2f %-20.2f %.2f" % (rho, T, math.sqrt(var_twin(T, S1)), math.sqrt(var_real(T, S1, rho)), ratio(T, rho), fit_ratio(es, T, S1), math.sqrt(ratio(T, rho))))
 
 print("\n== 2. Relocalisation interval for P(|E|>%.1f m) <= %.2f ==" % (TOL, DELTA))
 Tt = interval_twin(TOL, S1, DELTA)

@@ -15,11 +15,14 @@ E2 curvature per unit range (Brier = 2.0) at truth p, eps=1e-3
  crossover p (tangent better below): {0.2: 0.2544, 0.05: 0.1466, 0.01: 0.099, 0.001: 0.0678}
 
 E3 worst-case misreport: expected loss of report r when truth p=1e-3 (eps=1e-4)
- r=0.001: tangent 0.0079   log 0.0079
- r=0.0001: tangent 0.0093   log 0.0093
- r=1e-06: tangent 0.0102   log 0.0138
- r=1e-09: tangent 0.0102   log 0.0207
- r=0: tangent 0.0102   log inf
+ r=0.001: tangent 0.0079   log 0.0079   | excess over truthful r=p: tangent 0.00000   log 0.00000
+ r=0.0001: tangent 0.0093   log 0.0093   | excess over truthful r=p: tangent 0.00140   log 0.00140
+ r=1e-06: tangent 0.0102   log 0.0138   | excess over truthful r=p: tangent 0.00234   log 0.00591
+ r=1e-09: tangent 0.0102   log 0.0207   | excess over truthful r=p: tangent 0.00235   log 0.01282
+ r=0: tangent 0.0102   log inf   | excess over truthful r=p: tangent 0.00235   log inf
+ tangent excess saturates (r=0) at p*R_eps - H(p) - kappa_eps = 0.00235; p*R_eps = 0.01021 is the total expected loss at r=0, 4.3x the excess
+ log excess at r=1e-9 / tangent saturated excess = 5.4
+ saturated excess (r=0) vs cutoff, truth p=1e-3: eps=0.001: 0.00050 (R=7.91), eps=0.0001: 0.00235 (R=10.21), eps=1e-06: 0.00691 (R=14.82)
 
 E4 best eps for curvature per range at truth p is eps=p
  p=0.3: eps*=0.300000  efficiency=2.092  at eps=p/3: 1.439  at 3p: 1.424

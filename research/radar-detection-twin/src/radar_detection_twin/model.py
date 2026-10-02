@@ -82,12 +82,13 @@ class TextureGrid:
 
 
 def pfa_ca_real(alpha, N, grid):
-    """Exact CA-CFAR probability of exceeding the threshold: E_{tau0} prod_i E_{tau_i} 1/(1 + alpha tau_i/(N tau0))."""
+    """CA-CFAR probability of exceeding the threshold, E_{tau0} prod_i E_{tau_i} 1/(1 + alpha tau_i/(N tau0)), by numerical quadrature
+    on the texture grid (an exact integral for the model, evaluated approximately)."""
     return sum(w * grid.gfun(alpha / (N * t)) ** N for t, w in zip(grid.tau, grid.w))
 
 
 def pfa_os_real(alpha, N, k, grid):
-    """Exact OS-CFAR probability with iid textured cells: integral of S(alpha z) k C(N,k) F^{k-1} (1-F)^{N-k} dF over the
+    """OS-CFAR probability with iid textured cells by numerical quadrature: integral of S(alpha z) k C(N,k) F^{k-1} (1-F)^{N-k} dF over the
     marginal cdf F = 1 - S of the reference cells (midpoint rule on the z grid; F(Z_(k)) has a Beta(k, N-k+1) law)."""
     c = math.log(k) + math.lgamma(N + 1) - math.lgamma(k + 1) - math.lgamma(N - k + 1)
     tot, S = 0.0, grid.S

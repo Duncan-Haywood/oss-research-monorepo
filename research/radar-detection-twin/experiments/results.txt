@@ -12,15 +12,15 @@ design Pfa  nu    CA                OS k=8            OS k=12           OS k=14
 1e-06       5     5.02e-05 (50.2x)  2.58e-05 (25.8x)  4.11e-05 (41.1x)  3.92e-05 (39.2x)
 1e-06       20    4.86e-06 (4.9x)   2.87e-06 (2.9x)   3.97e-06 (4.0x)   4.16e-06 (4.2x) 
 
-== 2. Exact laws vs direct Monte Carlo (design Pfa 1e-2, 400k trials) ==
-nu=2 CA       MC Pfa 0.0299 exact 0.0303 | shared texture MC 0.0101 (twin design 0.0100)
-nu=2 OS k=12  MC Pfa 0.0361 exact 0.0364 | shared texture MC 0.0102 (twin design 0.0100)
-nu=2 CA       target SNR 8 (9.0 dB): MC Pd 0.4752 exact 0.4743
-nu=2 OS k=12  target SNR 8 (9.0 dB): MC Pd 0.4889 exact 0.4877
-nu=5 CA       MC Pfa 0.0193 exact 0.0195 | shared texture MC 0.0102 (twin design 0.0100)
-nu=5 OS k=12  MC Pfa 0.0214 exact 0.0215 | shared texture MC 0.0103 (twin design 0.0100)
-nu=5 CA       target SNR 8 (9.0 dB): MC Pd 0.5193 exact 0.5194
-nu=5 OS k=12  target SNR 8 (9.0 dB): MC Pd 0.5149 exact 0.5159
+== 2. Quadrature laws vs direct Monte Carlo (design Pfa 1e-2, 400k trials) ==
+nu=2 CA       MC Pfa 0.0299 quadrature 0.0303 | shared texture MC 0.0101 (twin design 0.0100)
+nu=2 OS k=12  MC Pfa 0.0361 quadrature 0.0364 | shared texture MC 0.0102 (twin design 0.0100)
+nu=2 CA       target SNR 8 (9.0 dB): MC Pd 0.4752 quadrature 0.4743
+nu=2 OS k=12  target SNR 8 (9.0 dB): MC Pd 0.4889 quadrature 0.4877
+nu=5 CA       MC Pfa 0.0193 quadrature 0.0195 | shared texture MC 0.0102 (twin design 0.0100)
+nu=5 OS k=12  MC Pfa 0.0214 quadrature 0.0215 | shared texture MC 0.0103 (twin design 0.0100)
+nu=5 CA       target SNR 8 (9.0 dB): MC Pd 0.5193 quadrature 0.5194
+nu=5 OS k=12  target SNR 8 (9.0 dB): MC Pd 0.5149 quadrature 0.5159
 
 == 3. Threshold multiplier restoring design Pfa in real clutter (vs the twin's), design 1e-4 ==
 nu   CA                    OS k=8                OS k=12               OS k=14             
@@ -54,3 +54,8 @@ OS k=12    2    3.49e-03      0.853
 OS k=12    5    9.20e-04      0.885
 OS k=14    2    2.62e-03      0.836
 OS k=14    5    8.14e-04      0.878
+
+== 7. Numerical accuracy of the quadrature (it is a grid quadrature, not a closed form) ==
+texture fixed at 1, quadrature vs closed-form twin Pfa (CA, OS k=8/12/14; design 1e-2/1e-4/1e-6): max relative error 4.0e-04
+nu=2, all grids doubled: max relative change in Pfa and Pd (SNR 8) over CA, OS k=8/12/14 at twin thresholds for design 1e-2/1e-4/1e-6: 1.6e-04
+Monte Carlo relative standard error in section 2 (400k trials): Pfa 0.8-1.1%, Pd 0.15-0.17%, so those checks cannot resolve quadrature errors this small

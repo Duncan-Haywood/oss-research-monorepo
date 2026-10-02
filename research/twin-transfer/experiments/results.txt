@@ -12,6 +12,7 @@ b_hat/b   twin gain   regret      local formula
 0.25      1.8331     9.25356     0.31812
 0.30      1.7331     3.17550     0.27712
 0.50      1.3624     0.43389     0.14139
+0.75      1.0362     0.05418     0.03535
 0.80      0.9863     0.03141     0.02262
 0.90      0.8982     0.00659     0.00566
 0.95      0.8593     0.00152     0.00141
@@ -20,6 +21,7 @@ b_hat/b   twin gain   regret      local formula
 1.25      0.6786     0.02587     0.03535
 2.00      0.4392     0.21992     0.56556
 3.00      0.2967     0.51190     2.26222
+local law relative error (local/exact - 1): b_hat/b=0.75 -34.8%, b_hat/b=0.95 -7.1%, b_hat/b=1.05 +7.2%, b_hat/b=1.25 +36.6%
 cliff: twin gain k*(mb) stable on plant iff m > m_c; solve |a - b k*(m b)| < 1
 critical b_hat/b = 0.2138
 
