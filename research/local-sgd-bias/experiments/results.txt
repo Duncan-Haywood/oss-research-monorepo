@@ -15,10 +15,10 @@ H=50   plain bias  -0.0917  corrected bias  0.00e+00  contraction plain 0.2141 c
 H=500  plain bias   0.0616  corrected bias  1.11e-16  contraction plain 0.0005 corrected 0.0001
 
 E3. Wall-clock optimal H under a bias tolerance (t_step=1, t_comm=C, contract error by 1e-3)
-C=5.0   tol=0.01: H*=140 t=335 | tol=0.05: H*=7 t=194 | tol=0.2: H*=12 t=184 | H=1 t=556
-C=20.0  tol=0.01: H*=140 t=370 | tol=0.05: H*=95 t=344 | tol=0.2: H*=29 t=304 | H=1 t=1945
-C=100.0 tol=0.01: H*=168 t=546 | tol=0.05: H*=289 t=538 | tol=0.2: H*=302 t=538 | H=1 t=9354
-C=500.0 tol=0.01: H*=168 t=1362 | tol=0.05: H*=289 t=1091 | tol=0.2: H*=1000 t=742 | H=1 t=46398
+C=5.0   tol=0.01: H*=140 t=335 (1.7x) | tol=0.05: H*=7 t=194 (2.9x) | tol=0.2: H*=12 t=184 (3.0x) | H=1 t=556
+C=20.0  tol=0.01: H*=140 t=370 (5.3x) | tol=0.05: H*=95 t=344 (5.7x) | tol=0.2: H*=29 t=304 (6.4x) | H=1 t=1945
+C=100.0 tol=0.01: H*=168 t=546 (17.1x) | tol=0.05: H*=289 t=538 (17.4x) | tol=0.2: H*=302 t=538 (17.4x) | H=1 t=9354
+C=500.0 tol=0.01: H*=168 t=1362 (34.1x) | tol=0.05: H*=289 t=1091 (42.5x) | tol=0.2: H*=1000 t=742 (62.5x) | H=1 t=46398
 
 E4. Heterogeneous speeds: fixed wall-clock window W, worker i does H_i = s_i * W steps (speeds s = 1..); bias and inflation
 steps per round [20, 20, 10, 10, 5, 5, 5, 5]; bias 0.0037; same total steps spread evenly (H=10) bias -0.0657

@@ -58,7 +58,7 @@ Pss = steady_prior(Q, R)
 Kss = Pss / (Pss + R)
 z = z_of_alpha(0.01)
 print("  steady prior variance %.4f, gain %.4f" % (Pss, Kss))
-print("  D     noise-free count  MC mean rejected  MC mean t_recover gated  t_gated/D^2  MC mean t_recover ungated")
+print("  D     noise-free count  MC mean rejected  MC rejected/count  MC mean t_recover gated  t_gated/D^2  MC mean t_recover ungated")
 rng = random.Random(5)
 N = 400
 for D in (3, 5, 8, 12, 20):
@@ -66,4 +66,5 @@ for D in (3, 5, 8, 12, 20):
     g = [simulate_recovery(D, z, Q, R, Kss, rng, True) for _ in range(N)]
     u = [simulate_recovery(D, z, Q, R, Kss, rng, False) for _ in range(N)]
     tg = sum(t for _, t in g) / N
-    print("  %-4g  %-16d  %-16.1f  %-24.1f  %-11.1f  %.1f" % (D, f, sum(a for a, _ in g) / N, tg, tg / D ** 2, sum(t for _, t in u) / N))
+    rej = sum(a for a, _ in g) / N
+    print("  %-4g  %-16d  %-16.1f  %-17.2f  %-24.1f  %-11.1f  %.1f" % (D, f, rej, rej / f, tg, tg / D ** 2, sum(t for _, t in u) / N))

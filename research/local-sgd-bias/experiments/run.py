@@ -24,10 +24,10 @@ for h in (5, 50, 500):
 print("\nE3. Wall-clock optimal H under a bias tolerance (t_step=1, t_comm=C, contract error by 1e-3)")
 for comm in (5.0, 20.0, 100.0, 500.0):
     row = []
+    h1 = time_to_eps(a, 1, eta, 1.0, comm)
     for tol in (0.01, 0.05, 0.2):
         r = best_H(a, c, eta, 1.0, comm, tol, Hmax=1000)
-        row.append(f"tol={tol}: H*={r[0]} t={r[1]:.0f}" if r else f"tol={tol}: infeasible")
-    h1 = time_to_eps(a, 1, eta, 1.0, comm)
+        row.append(f"tol={tol}: H*={r[0]} t={r[1]:.0f} ({h1 / r[1]:.1f}x)" if r else f"tol={tol}: infeasible")
     print(f"C={comm:<6}" + " | ".join(row) + f" | H=1 t={h1:.0f}")
 
 print("\nE4. Heterogeneous speeds: fixed wall-clock window W, worker i does H_i = s_i * W steps (speeds s = 1..); bias and inflation")

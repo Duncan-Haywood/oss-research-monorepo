@@ -38,9 +38,9 @@ real sensor: N(0,R) w.p. 0.95, N(0,(10)^2 R) w.p. 0.05 (outliers); gate |nu| <= 
 
 == 5. Lockout after a jump D in a random walk (Q=0.01, R=1, z=2.576): rejected updates and time to |error|<=1 ==
   steady prior variance 0.1051, gain 0.0951
-  D     noise-free count  MC mean rejected  MC mean t_recover gated  t_gated/D^2  MC mean t_recover ungated
-  3     26                6.8               21.2                      2.4          11.8
-  5     267               523.5             546.4                     21.9         16.6
-  8     855               3982.2            4009.5                    62.6         21.4
-  12    2060              10887.8           10918.3                   75.8         25.4
-  20    5919              30481.4           30511.7                   76.3         30.4
+  D     noise-free count  MC mean rejected  MC rejected/count  MC mean t_recover gated  t_gated/D^2  MC mean t_recover ungated
+  3     26                6.8               0.26               21.2                      2.4          11.8
+  5     267               523.5             1.96               546.4                     21.9         16.6
+  8     855               3982.2            4.66               4009.5                    62.6         21.4
+  12    2060              10887.8           5.29               10918.3                   75.8         25.4
+  20    5919              30481.4           5.15               30511.7                   76.3         30.4
