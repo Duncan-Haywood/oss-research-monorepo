@@ -1,0 +1,37 @@
+==== experiments/run_experiment.py
+## 1. Regret per round vs best-in-regime oracle (mean ± sd, 10 seeds)
+| period | equal | Hedge | Hedge+FS | WSWM f=.5 | WSWM f=1 | WSWM+FS f=.5 | WSWM+FS f=1 |
+|---|---|---|---|---|---|---|---|
+| 25 | 0.0288 ± 0.0022 | 0.0488 ± 0.0021 | 0.0217 ± 0.0012 | 0.0498 ± 0.0028 | 0.0521 ± 0.0049 | 0.0195 ± 0.0016 | 0.0200 ± 0.0014 |
+| 100 | 0.0286 ± 0.0021 | 0.0489 ± 0.0022 | 0.0137 ± 0.0007 | 0.0507 ± 0.0020 | 0.0516 ± 0.0022 | 0.0158 ± 0.0013 | 0.0126 ± 0.0010 |
+| 400 | 0.0283 ± 0.0021 | 0.0490 ± 0.0026 | 0.0105 ± 0.0009 | 0.0524 ± 0.0023 | 0.0524 ± 0.0023 | 0.0133 ± 0.0014 | 0.0082 ± 0.0010 |
+
+## 2. (f, alpha) grid, regret per round, period=100
+| f \ alpha | 0.0 | 0.01 | 0.03 | 0.1 | 0.3 |
+|---|---|---|---|---|---|
+| 0.1 | 0.0282 | 0.0183 | 0.0220 | 0.0261 | 0.0279 |
+| 0.25 | 0.0431 | 0.0166 | 0.0175 | 0.0233 | 0.0270 |
+| 0.5 | 0.0507 | 0.0186 | 0.0145 | 0.0199 | 0.0256 |
+| 1.0 | 0.0516 | 0.0222 | 0.0132 | 0.0160 | 0.0236 |
+
+## 3. Recovery after a regime switch: mean excess loss vs oracle by rounds since switch, period=100
+| offset | equal | Hedge | WSWM f=.5 | WSWM+FS f=.5 a=.03 |
+|---|---|---|---|---|
+| 0 | 0.0293 | 0.0372 | 0.0469 | 0.0283 |
+| 1 | 0.0328 | 0.0568 | 0.0398 | 0.0351 |
+| 2 | 0.0397 | 0.0657 | 0.0686 | 0.0354 |
+| 5 | 0.0395 | 0.0498 | 0.0487 | 0.0337 |
+| 10 | 0.0303 | 0.0619 | 0.0430 | 0.0259 |
+| 19 | 0.0283 | 0.0551 | 0.0542 | 0.0197 |
+
+## 4. Final wealth share (mean over seeds), period=100, 6000 rounds
+| mechanism | spec0 | spec1 | spec2 | lazy | adversary |
+|---|---|---|---|---|---|
+| WSWM f=.5 | 0.900 | 0.000 | 0.100 | 0.000 | 0.000 |
+| WSWM+FS a=.03 | 0.101 | 0.189 | 0.482 | 0.179 | 0.049 |
+
+## 5. Cost of the fixed-share tax to the adversary/lazy modules
+Mean net wealth change per round of the adversary and lazy modules:
+- alpha=0.0: lazy -0.00017, adversary -0.00017
+- alpha=0.03: lazy -0.00002, adversary -0.00013
+- alpha=0.1: lazy +0.00001, adversary -0.00007

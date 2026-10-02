@@ -1,11 +1,12 @@
 # oss-research-monorepo
 Duncan's open source software monorepo (MIT licensed). Portfolio homepage: <https://duncan-haywood.github.io/oss-research-monorepo/> (built from `site/` by `.github/workflows/pages.yml`).
 
-> **This repository has moved.** The research portfolio now lives in
-> [`Duncan-Haywood/fp-monorepo`](https://github.com/Duncan-Haywood/fp-monorepo) under
-> `research/`, with this repository's full history. Do not add new work here; this
-> copy is frozen and will be archived.
-
+Every project is produced with AI assistance (Claude, through Claude Code) from a research brief (`prompt.md`), and
+checked by code: `python tools/check.py` runs all unit tests and checks that each project's `experiments/run.py`
+reproduces its committed `results.txt`, and flags numbers in a write-up that no experiment prints. CI runs it on
+every pull request, plus a weekly reproducibility audit of a random sample. Most results so far are stylised
+simulations, not measurements of real systems. `meta/REPORT.md` is a running self-analysis of how the work is
+produced: throughput, review, rework and audited error rates.
 
 - [`research/decentralized-verification-markets`](research/decentralized-verification-markets) — peer-prediction and prediction-market mechanisms for verifying decentralized ML training, with adversarial evaluation.
 - [`research/market-routing`](research/market-routing) — cost-function markets as expert routers: LMSR = Hedge, quadratic potential = sparsemax; regret/loss bounds verified, continual-learning simulation.

@@ -1,8 +1,22 @@
 # Repo instructions
 
-**Moved.** Work on the research portfolio now happens in `Duncan-Haywood/fp-monorepo` under
-`research/` (see `research/CLAUDE.md` there). Do not add, change or remove projects in this
-repository; it is frozen and will be archived.
+Read `prompt.md` first. It is the standing brief: direction, validation contract, quality budget, review gate and run log.
+
+## Status
+A move into `Duncan-Haywood/fp-monorepo` under `research/` is proposed in
+<https://github.com/Duncan-Haywood/fp-monorepo/pull/6143>, which is open and not merged. Until the owner merges
+it, this repository is where the work happens. If it merges, bring this repository's later commits across
+before archiving this one.
+
+## Checks
+- `python tools/check.py` runs every project's unit tests plus the layout, AI-disclosure, number-tracing, citation
+  and duplicate checks. Before every PR run `python tools/check.py --changed origin/main`: it is strict on the
+  projects you changed, re-runs their `experiments/run.py` against `results.txt`, and requires a new line in
+  `meta/runs.jsonl`. CI (`.github/workflows/checks.yml`) runs the same, plus a weekly reproducibility audit.
+- `python meta/process.py --write` regenerates `meta/REPORT.md`. Log your run in `meta/runs.jsonl` and your audits
+  in `meta/audits.jsonl` (schemas in `prompt.md`); open debt and follow-ups live in `meta/QUEUE.md`.
+- Some projects import sibling packages. `tools/check.py` puts every `research/*/src` on `PYTHONPATH`; by hand, use
+  the `PYTHONPATH` line in the project's README.
 
 ## Keep the GitHub Pages homepage up to date
 

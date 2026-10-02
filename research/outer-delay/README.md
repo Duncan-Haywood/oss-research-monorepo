@@ -7,4 +7,7 @@ cd research/outer-delay
 PYTHONPATH=src python3 -m unittest discover -s tests -v   # 13 tests, ~4 s
 PYTHONPATH=src python3 experiments/run.py                 # ~1 min; output in experiments/results.txt
 ```
+
+**Related projects.** [`delayed-outer`](../delayed-outer), written about two hours later and independently, re-derives this project's stability law `αs < 2 sin(π/(4τ+2))` for the same delayed recursion. In both it is the classical stability condition for `x_{t+1} − x_t + c x_{t−τ} = 0` (Levin & May 1976), so the law itself is new in neither. This project adds outer momentum (useless once `τ ≥ 1`), the tuned rate across a curvature spectrum, the wall-clock comparison with blocking averaging, and fresh weight above ½. `delayed-outer` adds gradient noise (the exact delayed noise floor), the single-mode double-root rate and the delay `⌈L/T_c⌉`. The wall-clock verdicts look opposite: here overlap never beats blocking, there it beats no overlap by several times. The comparisons differ, so this is not a contradiction. Here the problem is noiseless and ill-conditioned, the tuned step sits at the stability edge, and the blocking baseline may lengthen `H` to amortise the sync. There `H` is fixed and the step is set by a noise-floor target, small enough that delay is nearly free. Neither project tests the other's baseline.
+
 Noise-free quadratics, shared Hessian, one common delay; MIT.

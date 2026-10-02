@@ -1,0 +1,38 @@
+== E1 flat slash: min audits k vs stake F (T=100, g=1; threshold F >= T*g) ==
+F=  50  k*=None
+F=  90  k*=None
+F=  99  k*=None
+F= 100  k*=1
+F= 101  k*=1
+F= 150  k*=1
+
+== E2 proportional slash: min audits k vs per-hit slash f (predicted ceil(T*g/f)) ==
+f=  2  k*=50  ceil(Tg/f)=50
+f=  5  k*=20  ceil(Tg/f)=20
+f= 10  k*=10  ceil(Tg/f)=10
+f= 25  k*=4  ceil(Tg/f)=4
+f= 50  k*=2  ceil(Tg/f)=2
+
+== E3 hybrid (f=10): capital/compute frontier min k vs F ==
+F=  10  k*=None
+F=  20  k*=None
+F=  30  k*=None
+F=  40  k*=None
+F=  60  k*=None
+F=  80  k*=None
+F= 100  k*=10
+
+== E4 cheapest deterrent, cost = r*F + c*k, hybrid f=10 ==
+r=0.01  c=1.0   -> F=100 k= 10 cost=11.00
+r=0.1   c=1.0   -> F=100 k= 10 cost=20.00
+r=1.0   c=1.0   -> F=100 k= 10 cost=110.00
+r=1.0   c=0.1   -> F=100 k= 10 cost=101.00
+r=1.0   c=0.01  -> F=100 k= 10 cost=100.10
+
+== E5 best response under-deterred: hybrid F=40 f=10, vary k ==
+k=1  j*=100  gain=90.00
+k=2  j*=100  gain=80.00
+k=3  j*=100  gain=70.00
+k=4  j*=100  gain=60.00
+k=5  j*=100  gain=60.00
+k=8  j*=100  gain=60.00

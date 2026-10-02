@@ -1,0 +1,42 @@
+equilibrium x*=0.250 y*=0.200  omega=1.732
+
+[1] period of small oscillations: predicted 2*pi/(eta*omega) vs measured (Hedge, start near eq.)
+  eta=0.002: predicted   1813.8  measured   1814.3
+  eta=0.005: predicted    725.5  measured    725.9
+  eta=0.01: predicted    362.8  measured    362.9
+
+[2] potential H=KL(x*||x)+KL(y*||y): flow conserves, Hedge grows, optimistic Hedge shrinks
+  replicator (RK4, t=20): H 0.03190 -> 0.03190
+  eta=0.01: Hedge H 0.032 -> 0.126 | OptHedge final (x,y)=(0.2557,0.1547)
+  eta=0.05: Hedge H 0.032 -> 7.094 | OptHedge final (x,y)=(0.2500,0.2000)
+  eta=0.1: Hedge H 0.032 -> 8.474 | OptHedge final (x,y)=(0.2500,0.2000)
+
+[3] how bad are the cycles? (Hedge, T=20000, start at equilibrium+perturbation)
+  eta   avg x   avg y  | frac rounds x>2x*  frac rounds y<y*/2 | mean x_t*y_t vs x*y*  | last-iterate (x,y)
+  0.005  0.250  0.201  |      0.000              0.188        |  0.0503 vs 0.0500  | (0.154,0.404)
+   0.02  0.246  0.199  |      0.223              0.652        |  0.0490 vs 0.0500  | (0.970,0.000)
+   0.05  0.240  0.200  |      0.236              0.742        |  0.0490 vs 0.0500  | (0.171,0.000)
+    0.1  0.233  0.200  |      0.232              0.757        |  0.0483 vs 0.0500  | (0.200,0.000)
+
+[3b] time-average error of Hedge: |avg x - x*| vs horizon T (eta=0.05)
+  T=  1000: |avg x-x*|=0.0105  |avg y-y*|=0.0110
+  T=  4000: |avg x-x*|=0.0108  |avg y-y*|=0.0049
+  T= 16000: |avg x-x*|=0.0041  |avg y-y*|=0.0005
+  T= 64000: |avg x-x*|=0.0086  |avg y-y*|=0.0003
+
+[4] optimistic Hedge last-iterate distance to equilibrium (eta=0.1)
+  T=  100: |x-x*|=2.40e-02 |y-y*|=5.52e-03
+  T=  300: |x-x*|=8.61e-04 |y-y*|=5.38e-04
+  T= 1000: |x-x*|=5.28e-09 |y-y*|=1.52e-08
+  T= 3000: |x-x*|=1.11e-16 |y-y*|=5.55e-17
+
+[5] Hedge on sampled actions, eta_t=eta0/sqrt(t) (mean of 20 seeds)
+  T=  1000: empirical-freq err x 0.0404 y 0.0487 | last-iterate err x 0.3344 y 0.2007
+  T= 10000: empirical-freq err x 0.0136 y 0.0182 | last-iterate err x 0.3909 y 0.1706
+  T=100000: empirical-freq err x 0.0065 y 0.0039 | last-iterate err x 0.2513 y 0.2803
+
+[6] scale-free step: hold eta*C fixed (C=(s+S)(lam S+h)) so stake does not change the effective step; Hedge T=5000, x0=x*+.05
+  S=  2.0: x*=0.500 y*=0.333 min y_t=2.70e-01 max x_t=0.569 H0=0.0050 H_T=0.010
+  S=  4.0: x*=0.250 y*=0.200 min y_t=1.50e-01 max x_t=0.309 H0=0.0062 H_T=0.009
+  S=  8.0: x*=0.125 y*=0.111 min y_t=7.08e-02 max x_t=0.179 H0=0.0094 H_T=0.011
+  S= 16.0: x*=0.062 y*=0.059 min y_t=2.65e-02 max x_t=0.114 H0=0.0146 H_T=0.015

@@ -7,4 +7,7 @@ cd research/interval-scores
 PYTHONPATH=src python3 -m unittest discover -s tests -v   # 7 tests, ~1 s
 PYTHONPATH=src python3 experiments/run.py                  # output in experiments/results.txt
 ```
+
+**Related projects.** Most of this re-derives the result of [`interval-elicitation`](../interval-elicitation), committed seconds earlier and written independently. That project already has the propriety of the Winkler score, its regret integral, the shift regret, finite regret under Cauchy drift, and a scale-misreport formula whose value at the honest report is `4sφ(z)/α`. What this project adds: a closed-form Cauchy regret, the level-dependent sign of the misreport asymmetry, paired score differences as the rule for heavy-tailed drift, and detection by score compared with detection by coverage count. `interval-elicitation` also covers the bounded width-plus-miss loss, the shortest interval on skewed drift and the sample cost of a bounded payment, which are not here.
+
 Risk-neutral verifiers, known location family, one interval per task; MIT.

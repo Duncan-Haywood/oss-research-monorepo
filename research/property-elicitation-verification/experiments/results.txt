@@ -1,0 +1,14 @@
+tau=0.95, Student-t df=3, 500 calibration samples, mean of 20 seeds
+strategy    pinball loss  coverage  fault detect
+empirical         0.1970    0.9465        0.9898
+gaussian          0.1985    0.9476        0.9885
+median            0.5201    0.5015        0.9997
+max_pad           1.3493    0.9998        0.0034
+
+tau=0.99, Student-t df=3, 500 calibration samples, mean of 20 seeds
+strategy    pinball loss  coverage  fault detect
+empirical         0.0792    0.9873        0.8952
+gaussian          0.0911    0.9711        0.9713
+median            0.5334    0.5015        0.9997
+max_pad           0.2709    0.9998        0.0034
+

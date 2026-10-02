@@ -1,0 +1,36 @@
+== E1: reduction-order drift, canonical vs shuffled (units of u*sum|p| and u*|result|) ==
+kind      n    | abs: q99.9  gaussfit  kurt | rel: median  q99.9  gaussfit  hill
+positive    64 |       7.88     7.68    0.9 |       1.81      7.9      7.7   4.38
+positive   512 |      17.45    19.13    0.6 |       3.93     17.4     19.1   5.83
+gaussian    64 |       3.60     2.18    9.4 |       2.93   4318.6    807.3   0.90
+gaussian   512 |       3.19     2.06    6.5 |       7.37   1881.8   2357.4   1.12
+canonical vs canonical (RepOps, any 'hardware'): max drift = 0.0
+
+== E2: honest false-slash rate vs tolerance tau (T=40 steps, 100 problems) ==
+bitwise commitments: honest 'shuffled' hardware disagrees with canonical trace in 100/100 runs
+one-step linf drift (units of u): median 0.2  q99 1.0  q99.9 2.0  max 2.0  kurt 0.5
+free-running final-state drift (units of u): median 1.0 max 2.0
+tau (units of u) | empirical false-slash per step | gaussian(rms-matched) prediction
+     0.5         |   0.18225                    |   0.33113
+     1.0         |   0.00325                    |   0.05193
+     2.0         |   0.00000                    |   0.00010
+     4.0         |   0.00000                    |   0.00000
+     8.0         |   0.00000                    |   0.00000
+    16.0         |   0.00000                    |   0.00000
+
+== E3: cumulative hidden deviation under a per-step tolerance ==
+  contraction bound: delta/(lr*mu) = 20.0 * delta
+  delta(per-step bias) | final deviation | bound delta/(lr*mu) | verifier(tau=1.05*delta, other order) flags?
+     1e-06             |  7.194e-06      |  2.000e-05           | no
+     1e-05             |  7.227e-05      |  2.000e-04           | no
+     1e-04             |  7.227e-04      |  2.000e-03           | no
+     1e-03             |  7.227e-03      |  2.000e-02           | no
+
+== E4: single-step cheat detection, tau=0 (RepOps) vs tau=drift q99.9 (mixed hardware) ==
+  cheat size (units of u) | caught tau=0 same order | caught tau=4u mixed hardware
+         0.0            |       0/20             |       0/20
+         1.0            |      20/20             |       0/20
+         2.0            |      20/20             |       0/20
+         4.0            |      20/20             |       0/20
+         8.0            |      20/20             |      20/20
+        64.0            |      20/20             |      20/20

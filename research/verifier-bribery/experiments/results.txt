@@ -1,0 +1,28 @@
+Collusion-proof stake S_c (s=1, lam=.5, h=0, no jackpots) vs verifiers m
+m=1: S_c=2.00
+m=2: S_c=1.00
+m=4: S_c=0.50
+m=8: S_c=0.25
+
+Bribing solver's max profit (s=3,k=.5,lam=.5,m=1) vs stake, no jackpot: S, profit, cheat rate at optimum
+S= 2: profit=2.500 cheat=1.000
+S= 4: profit=1.500 cheat=1.000
+S= 6: profit=0.500 cheat=1.000
+S= 7: profit=0.429 cheat=0.143
+S= 8: profit=0.375 cheat=0.125
+S=12: profit=0.250 cheat=0.083
+S=24: profit=0.125 cheat=0.042
+
+Same with jackpots (phi=.05): J, phi*J, profit at S=4 (A=2) and S=6 (A=3), s=3
+J= 0 phi*J=0.00 S=4: 1.526 S=6: 0.526
+J= 5 phi*J=0.25 S=4: 1.263 S=6: 0.263
+J=10 phi*J=0.50 S=4: 1.000 S=6: 0.000
+J=20 phi*J=1.00 S=4: 0.474 S=6: 0.000
+J=40 phi*J=2.00 S=4: 0.000 S=6: 0.000
+
+Bribe floor b*(x) (S=4,lam=.5,k=.5,h=0) without / with phi*J=k jackpots
+x=0.05: none=-8.00 jackpot=+2.00
+x=0.10: none=-3.00 jackpot=+2.00
+x=0.25: none=+0.00 jackpot=+2.00
+x=0.50: none=+1.00 jackpot=+2.00
+x=1.00: none=+1.50 jackpot=+2.00

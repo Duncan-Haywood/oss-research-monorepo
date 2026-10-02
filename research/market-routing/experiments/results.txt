@@ -1,0 +1,17 @@
+==== experiments/switching.py
+n=16 experts, T=3000, best switches every 500, 6 seeds, forgetting decay 0.99
+(active = experts with weight > 1e-3; no-forgetting baseline shown at the end)
+
+| b | LMSR regret | LMSR active | sparsemax regret | sparsemax active |
+|---|---|---|---|---|
+| 0.1 | 74.3 | 1.1 | 74.1 | 1.0 |
+| 0.25 | 74.8 | 1.2 | 74.2 | 1.0 |
+| 0.5 | 76.9 | 1.5 | 74.5 | 1.0 |
+| 1 | 84.4 | 2.6 | 75.0 | 1.1 |
+| 2 | 116.8 | 8.5 | 78.1 | 1.2 |
+| 4 | 228.1 | 15.9 | 86.5 | 1.4 |
+| 8 | 357.8 | 16.0 | 113.7 | 2.1 |
+
+no forgetting, b=1, LMSR: switching regret 374.6
+
+no forgetting, b=1, sparsemax: switching regret 372.7

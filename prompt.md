@@ -1,12 +1,19 @@
 # Repository prompt
 
-The standing brief for work on this repository.
+The standing brief for work on this repository. Prompt version 1 (2026-10-02): the owner's rewrite of version 0
+(kept in `meta/prompts/prompt-0.md`). Add `Prompt-Version: 1` to every commit.
 
 ## Mission
 Build a public research portfolio (MIT-licensed) that supports PhD applications in ML/AI, robotics & autonomy, operations research, or industrial engineering in a CS / math / econ / finance department. Produce work a faculty member would take seriously: white papers written to publishable standard, reproducible code, implementations, and benchmarks. Quality beats volume.
 
-## Central theme
-Simulating and training with digital clones (digital twins) of physical-world systems, including sim-to-real transfer, simulation fidelity, and learning in simulation for real benefit. Every project should connect to this theme where it reasonably can.
+## Direction
+Computer science and AI applied to robotics and to other domains **where success can be measured and validated by a program**. Three tracks:
+
+1. **Simulation and robotics.** Learning, estimation, planning and control where a simulator or dataset supplies ground truth: sim-to-real gaps, digital twins, perception and SLAM, manipulation, UAVs. Use an established simulator (MuJoCo, PyBullet, Gymnasium) or a public benchmark or log (e.g. EuRoC, KITTI, TUM RGB-D, D4RL, Open X-Embodiment) when the question is about real behaviour; a pure-Python model is fine when a closed form is the point, but then validate it against something independent.
+2. **Empirical data analysis.** Public data from the empirical sciences and engineering (weather and climate, seismology, energy, materials, transport, biology, robot logs). Pose the question and the test before looking at the held-out part, and validate findings out of sample: a later period, another site, or a second dataset. Report effect sizes with uncertainty. A clean negative result is a result.
+3. **Self-analysis of this repository's development.** The git history, `meta/runs.jsonl` and `meta/audits.jsonl` are a dataset about AI-agent research work: success and error rates, what predicts failures, and whether changes to this brief help. Treat changes to the brief as experiments (see Self-analysis).
+
+The existing mechanism-design projects (scoring rules, markets, verification games, decentralised training) stay, but do not start new ones unless they have a simulator- or data-validated component. Improve old projects only where it raises their validation or fixes an error.
 
 ## Research groups to build on
 Read their recent papers, code and project pages. Implement, reproduce, extend, and follow up the implications of their work.
@@ -25,12 +32,65 @@ Robotics & autonomy (priority):
 - RECUV (unmanned vehicles): https://www.colorado.edu/recuv/
   Directions: UAV and field-robot simulation, targeted observation of severe weather, safe autonomy with verification.
 
-## Output standards
-- Each artifact lives in its own directory with a README covering motivation, which group's work it builds on (with citations), method, how to reproduce, results, limitations, and next steps.
-- Never fabricate results. Report only what the code actually produced. Mark anything preliminary or negative as such.
-- White papers use proper citations (BibTeX) and credit prior work accurately.
-- Tag each artifact with the lab(s) it relates to, so it can be cited when contacting that faculty member.
-- Prefer lightweight, runnable simulators (e.g. MuJoCo, PyBullet, Isaac or Gazebo only when needed) and small experiments that finish on modest hardware.
+## Validation contract
+Every new project, and every project a run changes substantively, meets all of these. `tools/check.py` enforces the mechanical parts on changed projects in CI.
+
+- **A success criterion stated before the experiment.** The README opens with the question and a criterion with a threshold that a program decides, e.g. "the closed form agrees with a 10⁵-run Monte Carlo within 2 standard errors at every grid point", "the policy tuned in the twin keeps ≥ 90% of its return in the higher-fidelity simulator", "the effect has the same sign and p < 0.01 on 2020–2024 data held out from fitting". `experiments/run.py` prints `PASS` or `FAIL` for each criterion, and a unit test asserts it.
+- **Independent validation.** The check compares against something the code under test did not produce: a closed form against simulation, a second implementation, an established simulator, a published number, or held-out data. Tests that only show the code agrees with itself are smoke tests; keep them, but they do not validate anything.
+- **Every reported number comes from code.** Every number in the README and paper is printed by `experiments/run.py` into `experiments/results.txt`, and the run is seeded and deterministic. `tools/check.py --changed` re-runs it and fails on any difference or on a number it cannot trace.
+- **Data is pinned.** Download it by script from a stable URL with a recorded sha256; commit small samples or derived summaries only. CI must be able to run the analysis on what is committed.
+- **Dependencies.** Prefer the standard library. A project that needs packages pins them in `research/<slug>/requirements.txt`; CI installs every such file.
+- **Prior art first.** Before writing, search for the closest existing results and cite them at the point of use. If the result is textbook, say so and present the work as a reproduction, a check, or a teaching example. Attribute a direction to a lab only when the lab's own pages or papers show it, and cite the specific paper.
+- **No duplicates.** Search `research/` and the open PRs for a project on the same question first; extend it instead of starting a near-copy. Parallel sessions have built the same slug twice, so pick a slug no open PR uses and re-check before merging. If two projects overlap, each links the other and says what it adds.
+- **Layout.** `README.md`, `paper/whitepaper.md` (motivation, related work, method, results, limitations, next steps, references), `src/<package>/`, `tests/`, `experiments/run.py`, `experiments/results.txt`, `pyproject.toml`. White papers and the site carry the AI-assistance disclosure.
+
+## Quality budget
+At least a third of every run goes to quality and reliability, done before new work and in the same PR:
+
+1. **Red first.** If CI on `main` is red, or `python tools/check.py` reports an error, fix that before anything else.
+2. **Audit one project at random.** `python tools/check.py --no-tests --repro-sample 1` picks and re-runs one. Then check its README and paper numbers against `results.txt`, verify every reference on the web, check its claims against its results and against prior art, and fix what you find. Append one line per check to `meta/audits.jsonl` (schema below), including a clean result.
+3. **Pay down one debt item** from `python meta/process.py` (open debt) or `meta/QUEUE.md`: an untraced number, an uncited reference, a duplicate pair to merge, a missing validation criterion, a stale PR.
+
+Then new work: **at most one new project per run**, and only one that meets the validation contract. Deepening an existing project (real data, a real simulator, an independent check) counts as new work and is usually worth more.
+
+## Review gate
+Before merging any PR:
+
+1. `python tools/check.py --changed origin/main` passes locally, and `python site/build.py` prints `ok`.
+2. A fresh subagent reviews the diff adversarially against this brief: numbers trace, claims follow from results, prior art is credited, citations are real and accurate, novelty is not overstated, and nothing duplicates an existing project. Fix every finding, or record why not in the run log. Count the findings.
+3. CI is green on the PR's latest commit. Do not merge a PR in the minute it was opened; the review step comes first.
+
+Merge other ready PRs only after they pass the same gate. Close PRs whose work already reached `main`, with a one-line comment.
+
+## Run log
+Every run appends exactly one line to `meta/runs.jsonl`; CI fails a PR that changes `research/` without one. Never edit past lines; append a correction line that references the original instead.
+```json
+{"date": "YYYY-MM-DD", "session": "<session url>", "prompt_version": 1,
+ "input": "<the user or trigger message that started the run, verbatim>", "follow_up_inputs": ["<later user messages>"],
+ "model": "<model id that made the commits>", "models_seen": ["<every model that served a turn>"],
+ "started": "<ISO time>", "ended": "<ISO time>", "wall_minutes": 0,
+ "tokens_in": null, "tokens_out": null, "cost_usd": null, "tool_calls": null,
+ "task": "new-project|extend|fix|audit|merge|meta", "projects": ["<slug>"], "pr": "<url or null>",
+ "commits": ["<sha>"], "lines_added": 0, "lines_removed": 0, "quality_share": 0.33,
+ "merged": true, "ci_failures_before_green": 0, "review_findings": 0, "review_findings_fixed": 0,
+ "audit_problems_found": 0, "tests_added": 0, "build_ok": true,
+ "outcome": "success|partial|failed",
+ "errors": ["short description of anything that went wrong"], "integrity_issues": [], "notes": ""}
+```
+Record every field you can observe and use `null` for the rest; take the model from the session metadata, not from memory. Redact secrets and personal data. A failed or abandoned run is data: log it.
+
+`meta/audits.jsonl` takes one line per check of one project:
+```json
+{"date": "YYYY-MM-DD", "session": "<session url>", "auditor": "agent|human|ci", "kind": "repro|numbers|citations|claims|review",
+ "slug": "<project>", "checked": 0, "problems": 0, "score": null,
+ "findings": [{"kind": "citation-error|unverifiable-reference|uncited-reference|missing-prior-art|overclaim|text-error|unsupported-claim|unreproduced-number|duplicate|layout", "summary": "...", "fixed": true}]}
+```
+
+## Self-analysis
+- End every run with `python meta/process.py --write`, which regenerates `meta/REPORT.md` (throughput, merge flow, rework, run outcomes by prompt version and model, audit error rates, open debt). Commit it with the run.
+- Review session, about every 20 live runs: compare prompt versions and models on success rate, CI failures and review findings per run, audit problem rates, and tokens and time per merged project, with counts and intervals. Do not draw conclusions from fewer than about 10 runs per arm. Group runs by their starting input too.
+- Candidate briefs live in `meta/prompts/prompt-<n>.md`, one focused change each, with the hypothesis and the metric it should move in `meta/prompts/experiments.md`. `meta/prompts/routing.json` (e.g. `{"champion": 1, "candidate": 2, "candidate_share": 0.2}`) routes runs: draw a uniform number at the start of a run and follow the candidate if it falls below the share. Promote a candidate only if it has no more integrity issues than the champion and is clearly better; retire it if it is worse.
+- Copy the integrity, licensing and attribution sections unchanged into every candidate.
 
 ## Licensing & attribution
 - Original work is MIT-licensed.
@@ -38,10 +98,7 @@ Robotics & autonomy (priority):
 - Never imply affiliation with, or endorsement by, any lab, professor or company. Say "builds on" or "reproduces", never "with" or "for".
 
 ## Portfolio site
-Maintain a GitHub Pages site listing each artifact: a one-line summary, related lab, and links to the paper, code and results. Keep it current as work merges.
-
-## Workflow
-Work on feature branches. Before merging, make sure tests and CI pass, READMEs are complete, and citations are checked. Merge changes when done, and merge other branches and PRs that are ready for merge and haven't been merged yet.
+Maintain a GitHub Pages site listing each artifact: a one-line summary, related lab, and links to the paper, code and results. Keep it current as work merges (see `CLAUDE.md`).
 
 ## Research integrity
 The goal is useful, publishable work that faculty are glad to see, never work that embarrasses them or the author. These rules hold in every prompt version and no experiment may relax them.
@@ -52,49 +109,3 @@ The goal is useful, publishable work that faculty are glad to see, never work th
 - Do not overstate novelty or results. Say "stylised", "toy", "preliminary" or "negative" where it applies, and keep simulated results clearly separated from any claim about real systems.
 - State that the work was produced with AI assistance in each white paper and in the portfolio site.
 - Never contact, tag, mention or open issues on repositories of the professors, labs or authors cited. Outreach is the repository owner's decision.
-
-## Prompt experiments (about 5% of effort)
-Improve this brief by measuring what works. Spend about 5% of each session on this, and no more: a few minutes logging the run, plus one fuller review session roughly every 20 runs.
-
-Files:
-- `prompt.md` is the current champion, prompt 0 or its latest promoted successor.
-- `prompts/prompt-<n>.md` is a complete candidate brief, numbered in order. Only one candidate is active at a time.
-- `prompts/routing.json` names the active candidate and its share of runs, e.g. `{"champion": 0, "candidate": 1, "candidate_share": 0.2}`. No file or `"candidate": null` means every run uses `prompt.md`.
-- `prompts/runs.jsonl` holds one JSON line per run.
-- `prompts/experiments.md` records each candidate: the change, the hypothesis, the metric it should move, and the result.
-
-At the start of each run:
-1. Read `prompts/routing.json`. Draw a uniform random number; if it is below `candidate_share`, follow `prompts/prompt-<candidate>.md` for this run instead of this file. Record which version you used.
-2. Add a `Prompt-Version: <n>` trailer to every commit, alongside the existing `Co-Authored-By` (model) and `Claude-Session` trailers, so prompt version, model and session can be traced from git history.
-
-At the end of each run, append a line to `prompts/runs.jsonl`:
-```json
-{"date": "YYYY-MM-DD", "session": "<session url>", "prompt_version": 0,
- "input": "<the user or trigger message that started the run, verbatim>", "input_sha256": "<hash of input>",
- "follow_up_inputs": ["<later user messages in the session, verbatim>"],
- "model": "<model id that made the commits>", "models_seen": ["<every model that served a turn, incl. fallbacks>"],
- "started": "<ISO time>", "ended": "<ISO time>", "wall_minutes": 0,
- "tokens_in": null, "tokens_out": null, "cost_usd": null, "tool_calls": null,
- "task": "new-project|extend|fix|merge|meta", "projects": ["<slug>"], "pr": "<url or null>",
- "commits": ["<sha>"], "lines_added": 0, "lines_removed": 0,
- "merged": true, "ci_failures_before_green": 0, "review_findings": 0, "tests_added": 0, "build_ok": true,
- "outcome": "success|partial|failed",
- "errors": ["short description of anything that went wrong"], "integrity_issues": [], "notes": ""}
-```
-Record every field you can observe; use `null` for anything unavailable rather than guessing (token counts and cost may only be visible to the owner). Take the model from the session metadata, not from memory. Redact secrets, tokens and personal data from recorded inputs.
-
-Report honestly: a failed or abandoned run is data. Never edit past lines except to append a correction line that references the original.
-
-Measures, in order of importance:
-1. Integrity issues (fabricated or unverifiable numbers, wrong or invented citations, missing attribution, overclaiming). Target zero; any single issue outweighs every other metric.
-2. Success rate: runs whose PR merged with CI green and a complete README.
-3. Error rates: CI failures per PR, review findings per PR, reverts or follow-up fixes within two weeks, abandoned runs.
-4. Quality: in each review session, audit a random sample of about five recent projects. Re-run their code, check that README numbers match the output, and check every citation. Log what you find as integrity issues or errors against the run that produced the project.
-
-Review session (about every 20 runs, or when `runs.jsonl` gains 20 lines since the last review):
-1. On the first review, backfill `runs.jsonl` from prior runs, one line per `Claude-Session` trailer in git history. Take the model from each commit's `Co-Authored-By` trailer, timing and diff size from the commits, and outcomes from merged PRs, CI history, review comments and fix-up commits. Where a session's transcript is still readable, recover its prompt inputs, models served, duration and token use from it. Mark backfilled lines `"backfilled": true`, use `prompt_version: 0`, and leave unrecoverable fields `null`.
-2. Group runs by input as well as by prompt version: the same brief with different starting messages is a different treatment, so note which inputs led to the best and worst outcomes and to the most tokens or time per merged project.
-3. Compute success and error rates, and tokens, time and cost per merged project, per prompt version and per model, with counts. Do not draw conclusions from fewer than about 10 runs per version, and say how uncertain the comparison is.
-4. Decide the active candidate's fate: promote it (copy it to `prompt.md`) if it has no more integrity issues than the champion and is clearly better on success or error rate; retire it if it is worse; otherwise keep collecting runs.
-5. If no candidate is active, write `prompts/prompt-<n+1>.md` targeting the most common failure in the log, make one focused change so its effect can be measured, log the hypothesis in `prompts/experiments.md`, and route about 20% of runs to it.
-6. Copy the integrity, licensing and attribution sections unchanged into every candidate.

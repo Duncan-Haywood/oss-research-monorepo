@@ -7,4 +7,7 @@ cd research/compressed-sync
 PYTHONPATH=src python3 -m unittest discover -s tests -v   # 9 tests, ~5 s
 PYTHONPATH=src python3 experiments/run.py                 # output in experiments/results.txt
 ```
+
+**Related projects.** [`compressed-outer`](../compressed-outer) was written about a quarter of an hour later, independently, on the same model. It re-derives this project's coordinate-wise result: its floor `α V_w (1+ω)/(M s (2−αsc))`, `c = 1+ω/M`, is the formula above, with the same stability limit. It adds that random participation is the same compressor (`ω = 1/p−1`), additive dithered quantisation (which costs floor but not stability), and the fixed-bandwidth split between workers and bits. This project adds norm-scaled (QSGD-style) compression across modes, the redistribution of error onto stiff modes, and the comparison of compressing with syncing less often.
+
 Quadratics, Gaussian noise, independent unbiased compressors; MIT.

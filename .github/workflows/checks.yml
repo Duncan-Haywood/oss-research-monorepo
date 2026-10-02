@@ -1,0 +1,62 @@
+name: Checks
+
+# tools/check.py on every PR and push: all unit tests, layout, AI disclosure, number tracing and citations.
+# On a PR it is strict on the projects the PR changes, re-runs their experiments and requires a meta/runs.jsonl line.
+# Weekly, it re-runs a random sample of experiments as a reproducibility audit.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: "Projects to re-run in the reproducibility audit"
+        default: "15"
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Project dependencies
+        run: |
+          shopt -s nullglob
+          for f in research/*/requirements.txt; do pip install -r "$f"; done
+      - name: Checks (strict on changed projects)
+        if: github.event_name == 'pull_request'
+        run: python tools/check.py --changed origin/${{ github.base_ref }}
+      - name: Checks
+        if: github.event_name == 'push'
+        run: python tools/check.py
+      - name: Process report
+        if: always()
+        run: python meta/process.py --check
+
+  reproducibility-audit:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Project dependencies
+        run: |
+          shopt -s nullglob
+          for f in research/*/requirements.txt; do pip install -r "$f"; done
+      - run: python tools/check.py --no-tests --repro-sample ${{ inputs.sample || '15' }}

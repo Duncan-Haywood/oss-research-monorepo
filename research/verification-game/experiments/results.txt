@@ -1,0 +1,28 @@
+Stake sweep (s=1,k=.5,lam=.5): S, cheat x*, audit y*
+   1 1.000 0.000
+   2 0.500 0.333
+   4 0.250 0.200
+   8 0.125 0.111
+  16 0.062 0.059
+  32 0.031 0.030
+
+Verifier count m (S=4): cheat rate, total check cost
+    1 0.250 0.100
+    2 0.264 0.106
+    4 0.271 0.109
+    8 0.275 0.110
+   32 0.278 0.111
+ 1000 0.279 0.112
+
+Jackpot spend phi*J to hold cheat<=eps (S=4, phi=.05) vs eps
+0.00 0.500
+0.05 0.405
+0.10 0.310
+0.20 0.120
+0.25 0.025
+
+Optimal (tau,S) vs hardware noise sigma
+sigma=0.5: tau=1.4 S=19.5 p_fp=0.0051 cheat=0.005 audit=0.067 loss=0.083
+sigma=1: tau=2.7 S=27.0 p_fp=0.0069 cheat=0.004 audit=0.091 loss=0.115
+sigma=2: tau=5.2 S=37.5 p_fp=0.0093 cheat=0.003 audit=0.122 loss=0.160
+sigma=4: tau=9.7 S=51.0 p_fp=0.0153 cheat=0.002 audit=0.160 loss=0.220
