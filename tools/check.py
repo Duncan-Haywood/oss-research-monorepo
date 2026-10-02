@@ -14,13 +14,16 @@ Checks, per project:
   citations   every entry under "## References" is cited in the text of the paper
   duplicates  no two slugs are the same once hyphens are removed
   repro       (on request) experiments/run.py reproduces experiments/results.txt byte for byte
-  run log     (with --changed) a change under research/ appends a line to meta/runs.jsonl
+  run log     (with --changed) a change under research/ adds or updates meta/runs/<session-id>.json
 
-With --changed, the heuristic checks (numbers, citations, duplicates) are errors for new projects and for the lines
-the change adds, and warnings elsewhere, so old debt stays visible without blocking unrelated work; experiments are
-re-run for new projects and for projects whose src/, experiments/ or tests/ changed. Exits 1 on any error.
+With --changed (compared against the merge-base), the heuristic checks (numbers, citations, duplicates) are errors
+for new projects and for the lines the change adds, and warnings elsewhere, so old debt stays visible without blocking
+unrelated work. For projects whose src/, experiments/ or tests/ changed, experiments are re-run and a number that
+traced before the change but no longer does is an error. A renamed project is not new. Exits 1 on any error.
+Numbers: only decimals are checked (integers and percentages are not), after labels such as "Section 4.3" are skipped.
 """
 import argparse
+import io
 import json
 import os
 import random
@@ -28,6 +31,7 @@ import re
 import subprocess
 import sys
 import time
+import tokenize
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -47,6 +51,13 @@ DISCLOSURE = re.compile(r"AI assistance", re.I)
 DECIMAL = re.compile(r"(?<![\w.\-/])-?\d+\.\d+(?:\s*[·×x*]\s*10\^?[⁻\-−]?[⁰¹²³⁴⁵⁶⁷⁸⁹\d]+|[eE][-+]?\d+)?(?![\w.])")
 SUPERSCRIPT = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻−", "0123456789--")
 SKIP_LINE = re.compile(r"arxiv|doi|https?://|\bpp?\.\s|\(\d{4}\)\.|^\s*python3? |PYTHONPATH", re.I)
+# A decimal right after one of these is a label ("Section 4.3", "Prop. 2.1"), not a result.
+LABEL = re.compile(r"(?:section|sec\.|§|proposition|prop\.|theorem|lemma|corollary|definition|eqs?\.|equation|"
+                   r"fig\.|figure|table|appendix|algorithm|step|v)\s*$", re.I)
+
+
+def git(*args, check=True):
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=check).stdout
 
 
 def slugs():
@@ -90,16 +101,42 @@ def check_disclosure(slug):
 
 # ---- numbers ---------------------------------------------------------------------------------
 
-def _source_values(slug):
-    d = RESEARCH / slug / "experiments"
-    text = "".join(f.read_text(errors="ignore") for f in sorted(d.glob("*.txt")) + sorted(d.glob("*.py"))) if d.exists() else ""
+def _read(slug, rel, rev=None):
+    """A project file's text in the working tree, or at git revision rev; '' if absent."""
+    if rev is None:
+        f = RESEARCH / slug / rel
+        return f.read_text(errors="ignore") if f.exists() else ""
+    return git("show", f"{rev}:research/{slug}/{rel}", check=False)
+
+
+def _experiment_files(slug, rev=None):
+    if rev is None:
+        d = RESEARCH / slug / "experiments"
+        return sorted(f.name for f in d.iterdir() if f.is_file()) if d.exists() else []
+    out = git("ls-tree", "--name-only", f"{rev}:research/{slug}/experiments", check=False)
+    return sorted(out.split())
+
+
+def _source_values(slug, rev=None):
+    """Printed output (experiments/*.txt) as text, plus every number in it and every numeric literal in
+    experiments/*.py code (comments and docstrings excluded)."""
+    names = _experiment_files(slug, rev)
+    text = "".join(_read(slug, f"experiments/{n}", rev) for n in names if n.endswith(".txt"))
     text = re.sub(r"(?<=\d),(?=\d{3}\b)", "", text)  # 2,155,728 -> 2155728
     vals = []
     for tok in re.findall(r"-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?", text):
-        try:
-            vals.append(abs(float(tok)))
-        except ValueError:
-            pass
+        vals.append(abs(float(tok)))
+    for n in names:
+        if n.endswith(".py"):
+            try:
+                for t in tokenize.generate_tokens(io.StringIO(_read(slug, f"experiments/{n}", rev)).readline):
+                    if t.type == tokenize.NUMBER:
+                        try:
+                            vals.append(abs(float(t.string.replace("_", ""))))
+                        except ValueError:
+                            pass
+            except (tokenize.TokenError, IndentationError, SyntaxError):
+                pass
     return text, vals
 
 
@@ -114,7 +151,7 @@ def _parse(tok):
 
 
 def _traced(tok, text, vals):
-    if tok in text:
+    if re.search(r"(?<![\d.])" + re.escape(tok) + r"(?!\d)", text):
         return True
     v, rel, dp = _parse(tok)
     if rel is not None:
@@ -127,20 +164,30 @@ def _traced(tok, text, vals):
     return False
 
 
-def check_numbers(slug):
-    text, vals = _source_values(slug)
-    if not text:
+def check_numbers(slug, rev=None):
+    """Decimals in README.md and the paper that no experiment output or code value accounts for.
+    Returns (file, line, token, message) tuples."""
+    text, vals = _source_values(slug, rev)
+    if not text and not vals:
         return []
     out = []
-    for doc in filter(None, [RESEARCH / slug / "README.md", paper_path(slug)]):
-        rel = str(doc.relative_to(RESEARCH / slug))
-        for line in strip_references(doc.read_text()).splitlines():
+    for rel in ("README.md", "paper/whitepaper.md"):
+        for line in strip_references(_read(slug, rel, rev)).splitlines():
             if SKIP_LINE.search(line):
                 continue
-            for tok in DECIMAL.findall(line):
-                if not _traced(tok, text, vals):
-                    out.append((rel, line.strip(), f"{rel}: {tok} not found in experiments/ output or code"))
+            for m in DECIMAL.finditer(line):
+                tok = m.group(0)
+                if LABEL.search(line[:m.start()]) or _traced(tok, text, vals):
+                    continue
+                out.append((rel, line.strip(), tok, f"{rel}: {tok} not found in experiments/ output or code"))
     return list(dict.fromkeys(out))
+
+
+def number_regressions(slug, base):
+    """Numbers in the write-up that traced at base and no longer do: the code changed under the text."""
+    before = {(rel, tok) for rel, _, tok, _ in check_numbers(slug, base)}
+    docs = {rel: _read(slug, rel, base) for rel in ("README.md", "paper/whitepaper.md")}
+    return [x for x in check_numbers(slug) if (x[0], x[2]) not in before and x[2] in docs[x[0]]]
 
 
 # ---- citations -------------------------------------------------------------------------------
@@ -156,6 +203,9 @@ def check_citations(slug):
     body, refs = parts[0], re.split(r"^#+\s", parts[1], flags=re.M)[0]
     out = []
     for full, entry in re.findall(r"^(\s*[-*]\s+(.+))$", refs, re.M):
+        label = re.match(r"\[([^\]]+)\]", entry)
+        if label and re.search(r"\[[^\]]*(?<![\w-])" + re.escape(label.group(1)) + r"(?![\w-])[^\]]*\]", body):
+            continue
         m = re.match(r"(?:\[[^\]]*\]\s*)?([^\s,.(]+(?:\s(?:de|van|der|von|da|di|la|le)\s?[^\s,.(]+)*)", entry)
         if not m:
             continue
@@ -207,64 +257,80 @@ def run_repro(slug, timeout=1800):
     run, res = d / "experiments" / "run.py", d / "experiments" / "results.txt"
     if not (run.exists() and res.exists()):
         return slug, None, 0.0, "no experiments/run.py + results.txt pair"
+    want, mtime = res.read_text(), res.stat().st_mtime_ns
     t0 = time.time()
     try:
         r = subprocess.run([sys.executable, "experiments/run.py"], cwd=d, env=_env(), capture_output=True, text=True,
                            timeout=timeout)
     except subprocess.TimeoutExpired:
         return slug, False, time.time() - t0, f"timed out after {timeout} s"
+    finally:
+        # Some run.py scripts write results.txt themselves: take what they wrote, then restore the committed file.
+        wrote = res.exists() and res.stat().st_mtime_ns != mtime
+        got_file = res.read_text() if wrote else None
+        if wrote:
+            res.write_text(want)
     if r.returncode != 0:
         return slug, False, time.time() - t0, r.stderr[-1500:]
-    want = res.read_text()
-    if r.stdout == want:
+    got = got_file if wrote else r.stdout
+    if got == want:
         return slug, True, time.time() - t0, ""
     diff = next((f"line {i + 1}: committed {a!r} vs re-run {b!r}"
-                 for i, (a, b) in enumerate(zip(want.splitlines(), r.stdout.splitlines())) if a != b),
+                 for i, (a, b) in enumerate(zip(want.splitlines(), got.splitlines())) if a != b),
                 "output length differs")
     return slug, False, time.time() - t0, diff
 
 
 # ---- changed projects and run log --------------------------------------------------------------
 
+RUN_KEYS = ("date", "session", "prompt_version", "model", "task", "outcome", "projects")
+
+
 def changed_since(ref):
-    """Files changed since ref; per project, the lines added to each file; new projects; projects whose code changed."""
-    git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, check=True).stdout
-    files = git("diff", "--name-only", f"{ref}...HEAD").split()
+    """Against the merge-base of ref and HEAD: changed files with status, the lines added per project file,
+    new projects (renames map back to their old slug), projects whose code changed, and the base itself."""
+    base = git("merge-base", ref, "HEAD").strip()
+    status, renamed = {}, {}
+    for line in git("diff", "--name-status", "-M", base, "HEAD").splitlines():
+        parts = line.split("\t")
+        status[parts[-1]] = parts[0][0]
+        if parts[0].startswith("R") and parts[1].startswith("research/") and parts[2].startswith("research/"):
+            renamed[parts[2].split("/")[1]] = parts[1].split("/")[1]
     added, path = {}, None
-    for line in git("diff", "-U0", f"{ref}...HEAD", "--", "research/").splitlines():
+    for line in git("diff", "-U0", "-M", base, "HEAD", "--", "research/").splitlines():
         if line.startswith("+++ "):
             path = line[6:] if line.startswith("+++ b/") else None
         elif path and path.count("/") >= 2 and line.startswith("+") and not line.startswith("+++"):
             _, slug, rel = path.split("/", 2)
             added.setdefault(slug, {}).setdefault(rel, set()).add(line[1:].strip())
-    touched = {f.split("/")[1] for f in files if f.startswith("research/") and f.count("/") >= 2}
-    new = {s for s in touched if subprocess.run(["git", "cat-file", "-e", f"{ref}:research/{s}"], cwd=ROOT,
-                                                capture_output=True).returncode != 0}
-    code = {f.split("/")[1] for f in files if re.match(r"research/[^/]+/(src|experiments|tests)/", f)}
-    return files, added, new, code
+    touched = {f.split("/")[1] for f in status if f.startswith("research/") and f.count("/") >= 2}
+    exists = lambda s: subprocess.run(["git", "cat-file", "-e", f"{base}:research/{s}"], cwd=ROOT,
+                                      capture_output=True).returncode == 0
+    new = {s for s in touched if not exists(renamed.get(s, s))}
+    code = {f.split("/")[1] for f in status if re.match(r"research/[^/]+/(src|experiments|tests)/", f)}
+    return status, added, new, code, base
 
 
-def check_run_log(ref, files):
-    if not any(f.startswith("research/") for f in files):
+def check_run_log(status):
+    """A change under research/ adds or updates its run's record, meta/runs/<session-id>.json."""
+    if not any(f.startswith("research/") for f in status):
         return []
-    log = ROOT / "meta" / "runs.jsonl"
-    old = subprocess.run(["git", "show", f"{ref}:meta/runs.jsonl"], cwd=ROOT, capture_output=True, text=True).stdout
-    new = log.read_text() if log.exists() else ""
-    added = [l for l in new.splitlines()[len(old.splitlines()):] if l.strip()]
     errs = []
-    if not new.startswith(old):
-        errs.append("meta/runs.jsonl: existing lines were edited; only append (add a correction line instead)")
-    if not added:
-        errs.append("meta/runs.jsonl: this change touches research/ but appends no run line (see prompt.md, Run log)")
-    for l in added:
+    records = [f for f, st in status.items() if re.fullmatch(r"meta/runs/[^/]+\.json", f) and st in "AMR"]
+    if not records:
+        errs.append("meta/runs/: this change touches research/ but adds or updates no run record "
+                    "(meta/runs/<session-id>.json; see prompt.md, Run log)")
+    for f in [f for f, st in status.items() if f.startswith("meta/runs/") and st == "M" and f.endswith(".jsonl")]:
+        errs.append(f"{f}: a historical log was edited; never edit other runs' records")
+    for f in records:
         try:
-            rec = json.loads(l)
-        except json.JSONDecodeError as e:
-            errs.append(f"meta/runs.jsonl: bad JSON in appended line ({e})")
+            rec = json.loads((ROOT / f).read_text())
+        except (json.JSONDecodeError, FileNotFoundError) as e:
+            errs.append(f"{f}: not a JSON object ({e})")
             continue
-        missing = [k for k in ("date", "session", "prompt_version", "model", "task", "outcome", "projects") if k not in rec]
+        missing = [k for k in RUN_KEYS if k not in rec] if isinstance(rec, dict) else list(RUN_KEYS)
         if missing:
-            errs.append(f"meta/runs.jsonl: appended line lacks {', '.join(missing)}")
+            errs.append(f"{f}: lacks {', '.join(missing)}")
     return errs
 
 
@@ -284,9 +350,9 @@ def main():
 
     all_slugs = slugs()
     targets = [s for s in all_slugs if args.only is None or s in args.only]
-    files, added, new, code = [], {}, set(), set()
+    status, added, new, code, base = {}, {}, set(), set(), None
     if args.changed:
-        files, added, new, code = changed_since(args.changed)
+        status, added, new, code, base = changed_since(args.changed)
         new, code = new & set(all_slugs), code & set(all_slugs)
     strict = new | code | {s for s in added if s in all_slugs}
     errors, warnings = [], []
@@ -294,15 +360,18 @@ def main():
     for s in targets:
         errors += [f"{s}: {e}" for e in check_layout(s) + check_disclosure(s)]
         for name, fn in (("numbers", check_numbers), ("citations", check_citations)):
-            for rel, line, msg in fn(s):
+            for rel, line, *_, msg in fn(s):
                 # Strict on new projects and on lines this change adds; old debt elsewhere is a warning.
                 hard = s in new or line in added.get(s, {}).get(rel, ())
                 (errors if hard else warnings).append(f"{s}: [{name}] {msg}")
+        if s in code - new:
+            errors += [f"{s}: [numbers] {msg} (it traced before this change: re-run experiments/run.py or fix the text)"
+                       for *_, msg in number_regressions(s, base)]
     for a, b in duplicate_pairs(all_slugs):
         msg = f"{a} and {b}: near-duplicate slugs; merge them or rename one to say how it differs"
         (errors if new & {a, b} else warnings).append(msg)
     if args.changed:
-        errors += check_run_log(args.changed, files)
+        errors += check_run_log(status)
 
     report = {"tests": {}, "repro": {}}
     with ThreadPoolExecutor(args.jobs) as pool:

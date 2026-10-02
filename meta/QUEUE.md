@@ -13,7 +13,7 @@ Remove an item in the PR that finishes it; add new items as you find them.
   or narrow their claims to the stylised model.
 - [ ] Start the self-analysis track as a research project: pre-register hypotheses about agent-built research
   (e.g. "the version-1 quality budget lowers the audit problem rate per project") and test them on
-  `meta/runs.jsonl` and `meta/audits.jsonl` once about 10 live runs exist.
+  `meta/runs/` and `meta/audits/` once about 10 live runs exist.
 - [ ] Add a stated pass/fail success criterion (printed `PASS`/`FAIL` by `run.py`, asserted by a test) to existing
   projects, starting with the featured ones in `site/projects.json`.
 

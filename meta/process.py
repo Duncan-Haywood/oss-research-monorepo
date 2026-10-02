@@ -1,15 +1,16 @@
 """Self-analysis of how this repository is built: throughput, merge flow, rework, reproducibility and audit error rates.
 
     python meta/process.py              # print the report (markdown)
-    python meta/process.py --write      # also write meta/REPORT.md
-    python meta/process.py --backfill   # append a backfilled line to meta/runs.jsonl for each session in git history
-                                        # that has none yet (needs full history: git fetch --unshallow)
-    python meta/process.py --check      # validate meta/runs.jsonl and meta/audits.jsonl, then print the report
+    python meta/process.py --write      # also write meta/REPORT.md (review sessions; refuses on a shallow clone)
+    python meta/process.py --backfill   # add a line to meta/runs/backfill-v0.jsonl for each session in git history
+                                        # that has no record yet (needs full history: git fetch --unshallow)
+    python meta/process.py --check      # validate the run and audit records, then print the report
 
-Sources: git history (Claude-Session and Co-Authored-By trailers, "Merge pull request #N" commits), meta/runs.jsonl
-(one line per agent run; see prompt.md) and meta/audits.jsonl (one line per audit of one project). Nothing here
-calls the network; PR outcomes that git cannot see (closed without merging, CI failures, review comments) must be
-recorded by the run itself in meta/runs.jsonl.
+Sources: git history (Claude-Session and Co-Authored-By trailers, "Merge pull request #N" commits), meta/runs/
+(meta/runs/<session-id>.json, one record per agent run, plus the historical backfill-v0.jsonl; see prompt.md) and
+meta/audits/ (meta/audits/<session-id>.jsonl, one line per check of one project). One file per run keeps parallel
+PRs from conflicting. Nothing here calls the network; PR outcomes that git cannot see (closed without merging, CI
+failures, review comments) must be recorded by the run itself.
 """
 import argparse
 import json
@@ -23,7 +24,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-RUNS, AUDITS, REPORT = ROOT / "meta" / "runs.jsonl", ROOT / "meta" / "audits.jsonl", ROOT / "meta" / "REPORT.md"
+RUNS, AUDITS, REPORT = ROOT / "meta" / "runs", ROOT / "meta" / "audits", ROOT / "meta" / "REPORT.md"
+BACKFILL = RUNS / "backfill-v0.jsonl"
 RUN_KEYS = ("date", "session", "prompt_version", "model", "task", "outcome", "projects")
 AUDIT_KEYS = ("date", "session", "auditor", "kind", "slug", "checked", "problems")
 BULK = 20  # a commit touching more projects than this is a repo-wide edit, not rework of a project
@@ -54,7 +56,13 @@ def commits():
                     "model": model, "prompt_version": int(pv) if pv.strip().isdigit() else None, "added": added,
                     "removed": removed, "files": files,
                     "projects": sorted({f.split("/")[1] for f in files if f.startswith("research/") and f.count("/") >= 2}),
-                    "new": sorted({f.split("/")[1] for f in files if re.fullmatch(r"research/[^/]+/README\.md", f)})})
+                    "new": []})
+    added = {}
+    for block in git("log", "--no-merges", "--diff-filter=A", "--name-only", "--format=\x1e%H").split("\x1e")[1:]:
+        sha, *paths = block.split()
+        added[sha] = sorted({f.split("/")[1] for f in paths if re.fullmatch(r"research/[^/]+/README\.md", f)})
+    for c in out:
+        c["new"] = added.get(c["sha"], [])
     return out
 
 
@@ -82,33 +90,39 @@ def created_projects(cs):
     return first
 
 
-def load_jsonl(path):
-    if not path.exists():
-        return []
+def load(directory):
+    """(location, record) for every record in directory: *.json files hold one object, *.jsonl one per line."""
     rows = []
-    for i, line in enumerate(path.read_text().splitlines(), 1):
-        if line.strip():
-            rows.append((i, json.loads(line)))
+    for f in sorted(directory.glob("*.json*")) if directory.exists() else []:
+        rel = f.relative_to(ROOT)
+        if f.suffix == ".json":
+            rows.append((str(rel), json.loads(f.read_text())))
+        else:
+            rows += [(f"{rel}:{i}", json.loads(l)) for i, l in enumerate(f.read_text().splitlines(), 1) if l.strip()]
     return rows
 
 
 def validate():
     errs = []
-    for path, keys in ((RUNS, RUN_KEYS), (AUDITS, AUDIT_KEYS)):
+    for directory, keys in ((RUNS, RUN_KEYS), (AUDITS, AUDIT_KEYS)):
         try:
-            rows = load_jsonl(path)
+            rows = load(directory)
         except json.JSONDecodeError as e:
-            errs.append(f"{path.relative_to(ROOT)}: bad JSON ({e})")
+            errs.append(f"{directory.relative_to(ROOT)}: bad JSON ({e})")
             continue
-        for i, r in rows:
+        for where, r in rows:
             missing = [k for k in keys if k not in r]
             if missing:
-                errs.append(f"{path.relative_to(ROOT)}:{i}: missing {', '.join(missing)}")
+                errs.append(f"{where}: missing {', '.join(missing)}")
+            elif directory == AUDITS and not (isinstance(r["checked"], int) and isinstance(r["problems"], int)
+                                              and 0 <= r["problems"] <= r["checked"]):
+                errs.append(f"{where}: need integers 0 <= problems <= checked (problems counts checked items "
+                            "with at least one problem; list each problem under findings)")
     return errs
 
 
 def wilson(k, n, z=1.96):
-    if n == 0:
+    if n == 0 or not 0 <= k <= n:
         return (float("nan"), float("nan"))
     p = k / n
     d = 1 + z * z / n
@@ -127,7 +141,7 @@ def pct(k, n):
 # ---- backfill ------------------------------------------------------------------------------------
 
 def backfill(cs):
-    have = {r.get("session") for _, r in load_jsonl(RUNS)}
+    have = {r.get("session") for _, r in load(RUNS)}
     by_session = defaultdict(list)
     for c in cs:
         if c["session"]:
@@ -154,7 +168,8 @@ def backfill(cs):
             "merged": True, "ci_failures_before_green": None, "review_findings": None,
             "tests_added": None, "build_ok": None, "outcome": "success", "errors": [], "integrity_issues": [],
             "notes": "backfilled from git history: merged work only; abandoned runs and CI history are not visible"})
-    with RUNS.open("a") as f:
+    RUNS.mkdir(parents=True, exist_ok=True)
+    with BACKFILL.open("a") as f:
         for l in lines:
             f.write(json.dumps(l, ensure_ascii=False) + "\n")
     return len(lines)
@@ -164,12 +179,12 @@ def backfill(cs):
 
 def report():
     cs, ms = commits(), merges()
-    runs = [r for _, r in load_jsonl(RUNS)]
-    audits = [r for _, r in load_jsonl(AUDITS)]
+    runs = [r for _, r in load(RUNS)]
+    audits = [r for _, r in load(AUDITS)]
     created = created_projects(cs)
     out = ["# Process report", "",
            f"Generated by `meta/process.py` from git history up to `{git('rev-parse', '--short', 'HEAD').strip()}`, "
-           f"`meta/runs.jsonl` ({len(runs)} runs) and `meta/audits.jsonl` ({len(audits)} audit lines). "
+           f"`meta/runs/` ({len(runs)} runs) and `meta/audits/` ({len(audits)} audit lines). "
            "Rates carry Wilson 95% intervals; small samples are wide on purpose.", ""]
 
     # Throughput
@@ -215,7 +230,7 @@ def report():
     # Runs
     if runs:
         live = [r for r in runs if not r.get("backfilled")]
-        out += ["## Runs (meta/runs.jsonl)", "",
+        out += ["## Runs (meta/runs/)", "",
                 f"- {len(runs)} runs ({len(runs) - len(live)} backfilled from git, {len(live)} logged live).", ""]
         if live:
             out += ["| prompt | model | runs | success | CI failures / run | review findings / run | integrity issues |",
@@ -235,7 +250,7 @@ def report():
 
     # Audits
     if audits:
-        out += ["## Audits (meta/audits.jsonl)", "", "| kind | projects audited | items checked | problems | rate |", "|---|---|---|---|---|"]
+        out += ["## Audits (meta/audits/)", "", "| kind | projects audited | items checked | problems | rate |", "|---|---|---|---|---|"]
         by = defaultdict(list)
         for a in audits:
             by[a["kind"]].append(a)
@@ -274,7 +289,10 @@ def main():
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
     if git("rev-parse", "--is-shallow-repository").strip() == "true":
-        print("warning: shallow clone; history-based numbers are incomplete (git fetch --unshallow)", file=sys.stderr)
+        if args.write or args.backfill:
+            sys.exit("refusing --write/--backfill on a shallow clone: history-based numbers would be wrong "
+                     "(git fetch --unshallow origin main)")
+        print("warning: shallow clone; history-based numbers below are incomplete (git fetch --unshallow)")
     if args.check:
         errs = validate()
         for e in errs:

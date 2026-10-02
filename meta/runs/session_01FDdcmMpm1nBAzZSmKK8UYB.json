@@ -1,0 +1,42 @@
+{
+ "date": "2026-10-02",
+ "session": "https://claude.ai/code/session_01FDdcmMpm1nBAzZSmKK8UYB",
+ "prompt_version": 1,
+ "input": "how's progress going here. how's the quality here",
+ "follow_up_inputs": [
+  "I want to pivot this repo more towards cs/ai applied to robotics and other domins where success can be measured clearly and validated clearly. like programmatic validation. simluations for example. also maybe analyzing data from domains and looking for insights from it. empirical sciences etc. also to do self analysis on the actual development process and error rates and success rates of it.",
+  "work on fixing it and updating the instructions so future runs will spend some effort increasing quality reliabilty and whatnot"
+ ],
+ "model": "claude-opus-5-5",
+ "models_seen": [
+  "claude-opus-5-5"
+ ],
+ "started": "2026-10-02T08:11:56Z",
+ "ended": null,
+ "wall_minutes": null,
+ "tokens_in": null,
+ "tokens_out": null,
+ "cost_usd": null,
+ "tool_calls": null,
+ "task": "audit",
+ "projects": [],
+ "pr": null,
+ "commits": [],
+ "lines_added": null,
+ "lines_removed": null,
+ "quality_share": 1.0,
+ "merged": null,
+ "ci_failures_before_green": null,
+ "review_findings": 10,
+ "review_findings_fixed": null,
+ "audit_problems_found": null,
+ "tests_added": 1,
+ "build_ok": true,
+ "outcome": "partial",
+ "errors": [
+  "first version of tools/check.py had 10 defects found by the review gate (stale-results repro pass, ref vs merge-base, per-PR log conflicts, wilson crash, regression numbers only warned, tracing false positives/negatives, concurrency group, renames counted as new, shallow-clone stats, brief contradictions)",
+  "a text replacement in site/projects.json matched inside a corrupted 71 KB summary; found and the summary restored"
+ ],
+ "integrity_issues": [],
+ "notes": "First run on prompt v1. Quality-only run: audit, CI checks, process self-analysis, brief rewrite, fixes to 13 projects. Fields filled in the final commit."
+}

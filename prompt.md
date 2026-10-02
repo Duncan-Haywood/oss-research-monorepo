@@ -11,7 +11,7 @@ Computer science and AI applied to robotics and to other domains **where success
 
 1. **Simulation and robotics.** Learning, estimation, planning and control where a simulator or dataset supplies ground truth: sim-to-real gaps, digital twins, perception and SLAM, manipulation, UAVs. Use an established simulator (MuJoCo, PyBullet, Gymnasium) or a public benchmark or log (e.g. EuRoC, KITTI, TUM RGB-D, D4RL, Open X-Embodiment) when the question is about real behaviour; a pure-Python model is fine when a closed form is the point, but then validate it against something independent.
 2. **Empirical data analysis.** Public data from the empirical sciences and engineering (weather and climate, seismology, energy, materials, transport, biology, robot logs). Pose the question and the test before looking at the held-out part, and validate findings out of sample: a later period, another site, or a second dataset. Report effect sizes with uncertainty. A clean negative result is a result.
-3. **Self-analysis of this repository's development.** The git history, `meta/runs.jsonl` and `meta/audits.jsonl` are a dataset about AI-agent research work: success and error rates, what predicts failures, and whether changes to this brief help. Treat changes to the brief as experiments (see Self-analysis).
+3. **Self-analysis of this repository's development.** The git history, `meta/runs/` and `meta/audits/` are a dataset about AI-agent research work: success and error rates, what predicts failures, and whether changes to this brief help. Treat changes to the brief as experiments (see Self-analysis).
 
 The existing mechanism-design projects (scoring rules, markets, verification games, decentralised training) stay, but do not start new ones unless they have a simulator- or data-validated component. Improve old projects only where it raises their validation or fixes an error.
 
@@ -37,7 +37,7 @@ Every new project, and every project a run changes substantively, meets all of t
 
 - **A success criterion stated before the experiment.** The README opens with the question and a criterion with a threshold that a program decides, e.g. "the closed form agrees with a 10⁵-run Monte Carlo within 2 standard errors at every grid point", "the policy tuned in the twin keeps ≥ 90% of its return in the higher-fidelity simulator", "the effect has the same sign and p < 0.01 on 2020–2024 data held out from fitting". `experiments/run.py` prints `PASS` or `FAIL` for each criterion, and a unit test asserts it.
 - **Independent validation.** The check compares against something the code under test did not produce: a closed form against simulation, a second implementation, an established simulator, a published number, or held-out data. Tests that only show the code agrees with itself are smoke tests; keep them, but they do not validate anything.
-- **Every reported number comes from code.** Every number in the README and paper is printed by `experiments/run.py` into `experiments/results.txt`, and the run is seeded and deterministic. `tools/check.py --changed` re-runs it and fails on any difference or on a number it cannot trace.
+- **Every reported number comes from code.** Every number in the README and paper is printed by `experiments/run.py` into `experiments/results.txt`, derived values included, and the run is seeded and deterministic. `tools/check.py --changed` re-runs it and fails on any difference, and on a decimal it cannot trace in a new project, on a line you added, or that stopped tracing because you changed the code. It cannot check integers, percentages or what a number means, so that part is yours and the reviewer's.
 - **Data is pinned.** Download it by script from a stable URL with a recorded sha256; commit small samples or derived summaries only. CI must be able to run the analysis on what is committed.
 - **Dependencies.** Prefer the standard library. A project that needs packages pins them in `research/<slug>/requirements.txt`; CI installs every such file.
 - **Prior art first.** Before writing, search for the closest existing results and cite them at the point of use. If the result is textbook, say so and present the work as a reproduction, a check, or a teaching example. Attribute a direction to a lab only when the lab's own pages or papers show it, and cite the specific paper.
@@ -48,7 +48,7 @@ Every new project, and every project a run changes substantively, meets all of t
 At least a third of every run goes to quality and reliability, done before new work and in the same PR:
 
 1. **Red first.** If CI on `main` is red, or `python tools/check.py` reports an error, fix that before anything else.
-2. **Audit one project at random.** `python tools/check.py --no-tests --repro-sample 1` picks and re-runs one. Then check its README and paper numbers against `results.txt`, verify every reference on the web, check its claims against its results and against prior art, and fix what you find. Append one line per check to `meta/audits.jsonl` (schema below), including a clean result.
+2. **Audit one project at random.** `python tools/check.py --no-tests --repro-sample 1` picks and re-runs one. Then check its README and paper numbers against `results.txt`, verify every reference on the web, check its claims against its results and against prior art, and fix what you find. Record one line per check in `meta/audits/<session-id>.jsonl` (schema below), including a clean result.
 3. **Pay down one debt item** from `python meta/process.py` (open debt) or `meta/QUEUE.md`: an untraced number, an uncited reference, a duplicate pair to merge, a missing validation criterion, a stale PR.
 
 Then new work: **at most one new project per run**, and only one that meets the validation contract. Deepening an existing project (real data, a real simulator, an independent check) counts as new work and is usually worth more.
@@ -63,7 +63,7 @@ Before merging any PR:
 Merge other ready PRs only after they pass the same gate. Close PRs whose work already reached `main`, with a one-line comment.
 
 ## Run log
-Every run appends exactly one line to `meta/runs.jsonl`; CI fails a PR that changes `research/` without one. Never edit past lines; append a correction line that references the original instead.
+Every run keeps one record, `meta/runs/<session-id>.json` (the id is the last part of the session URL). Create it in the run's first commit that touches `research/`, and update it in later commits of the same run; CI fails a PR that changes `research/` without adding or updating one. One file per run keeps parallel PRs from conflicting. Never edit another run's record or `meta/runs/backfill-v0.jsonl`; to correct one, say so in your own record's `notes`.
 ```json
 {"date": "YYYY-MM-DD", "session": "<session url>", "prompt_version": 1,
  "input": "<the user or trigger message that started the run, verbatim>", "follow_up_inputs": ["<later user messages>"],
@@ -77,9 +77,9 @@ Every run appends exactly one line to `meta/runs.jsonl`; CI fails a PR that chan
  "outcome": "success|partial|failed",
  "errors": ["short description of anything that went wrong"], "integrity_issues": [], "notes": ""}
 ```
-Record every field you can observe and use `null` for the rest; take the model from the session metadata, not from memory. Redact secrets and personal data. A failed or abandoned run is data: log it.
+Record every field you can observe and use `null` for the rest; take the model from the session metadata, not from memory. Fill `pr`, `ci_failures_before_green`, `review_findings` and `ended` in the PR's last commit, once CI has run; `merged` means the record reached `main`. Redact secrets and personal data. A failed or abandoned run is data: log it.
 
-`meta/audits.jsonl` takes one line per check of one project:
+`meta/audits/<session-id>.jsonl` takes one line per check of one project. `checked` counts the items examined (references, numbers, or 1 for a re-run or a review) and `problems` counts those with at least one problem, so `0 ≤ problems ≤ checked`; list each problem under `findings`:
 ```json
 {"date": "YYYY-MM-DD", "session": "<session url>", "auditor": "agent|human|ci", "kind": "repro|numbers|citations|claims|review",
  "slug": "<project>", "checked": 0, "problems": 0, "score": null,
@@ -87,7 +87,7 @@ Record every field you can observe and use `null` for the rest; take the model f
 ```
 
 ## Self-analysis
-- End every run with `python meta/process.py --write`, which regenerates `meta/REPORT.md` (throughput, merge flow, rework, run outcomes by prompt version and model, audit error rates, open debt). Commit it with the run.
+- `python meta/process.py` prints the process report (throughput, merge flow, rework, run outcomes by prompt version and model, audit error rates, open debt); CI prints it on every PR. Read it at the start of a run to pick the quality work. Only review sessions regenerate and commit `meta/REPORT.md` (`--write`, which needs full history: `git fetch --unshallow origin main`), so ordinary runs never conflict over it.
 - Review session, about every 20 live runs: compare prompt versions and models on success rate, CI failures and review findings per run, audit problem rates, and tokens and time per merged project, with counts and intervals. Do not draw conclusions from fewer than about 10 runs per arm. Group runs by their starting input too.
 - Candidate briefs live in `meta/prompts/prompt-<n>.md`, one focused change each, with the hypothesis and the metric it should move in `meta/prompts/experiments.md`. `meta/prompts/routing.json` (e.g. `{"champion": 1, "candidate": 2, "candidate_share": 0.2}`) routes runs: draw a uniform number at the start of a run and follow the candidate if it falls below the share. Promote a candidate only if it has no more integrity issues than the champion and is clearly better; retire it if it is worse.
 - Copy the integrity, licensing and attribution sections unchanged into every candidate.

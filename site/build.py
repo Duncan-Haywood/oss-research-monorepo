@@ -58,7 +58,7 @@ def validate(data, ledes):
                 if not p.get(k):
                     errors.append(f"site/projects.json: research/{p.get('slug')} has no {k}")
             summary = p.get("summary", "")
-            if len(summary) > 2000 or re.search(r"</?(p|h\d|div|section|a)\b", summary):
+            if len(summary) > 2000 or re.search(r"</?(p|h\d|div|section)\b", summary):
                 errors.append(f"site/projects.json: research/{p.get('slug')} summary is not one inline-HTML paragraph"
                               f" under 2,000 characters ({len(summary)})")
     return errors

@@ -1,7 +1,7 @@
 name: Checks
 
 # tools/check.py on every PR and push: all unit tests, layout, AI disclosure, number tracing and citations.
-# On a PR it is strict on the projects the PR changes, re-runs their experiments and requires a meta/runs.jsonl line.
+# On a PR it is strict on the projects the PR changes, re-runs their experiments and requires the run's record in meta/runs/
 # Weekly, it re-runs a random sample of experiments as a reproducibility audit.
 
 on:
@@ -17,7 +17,7 @@ on:
         default: "15"
 
 concurrency:
-  group: checks-${{ github.ref }}
+  group: checks-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

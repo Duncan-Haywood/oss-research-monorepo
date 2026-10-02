@@ -11,10 +11,11 @@ before archiving this one.
 ## Checks
 - `python tools/check.py` runs every project's unit tests plus the layout, AI-disclosure, number-tracing, citation
   and duplicate checks. Before every PR run `python tools/check.py --changed origin/main`: it is strict on the
-  projects you changed, re-runs their `experiments/run.py` against `results.txt`, and requires a new line in
-  `meta/runs.jsonl`. CI (`.github/workflows/checks.yml`) runs the same, plus a weekly reproducibility audit.
-- `python meta/process.py --write` regenerates `meta/REPORT.md`. Log your run in `meta/runs.jsonl` and your audits
-  in `meta/audits.jsonl` (schemas in `prompt.md`); open debt and follow-ups live in `meta/QUEUE.md`.
+  projects you changed, re-runs their `experiments/run.py` against `results.txt`, and requires your run's record in
+  `meta/runs/`. CI (`.github/workflows/checks.yml`) runs the same, plus a weekly reproducibility audit.
+- `python meta/process.py` prints the process report (review sessions commit it as `meta/REPORT.md`). Keep your
+  run's record in `meta/runs/<session-id>.json` and your audits in `meta/audits/<session-id>.jsonl` (schemas in
+  `prompt.md`); open debt and follow-ups live in `meta/QUEUE.md`.
 - Some projects import sibling packages. `tools/check.py` puts every `research/*/src` on `PYTHONPATH`; by hand, use
   the `PYTHONPATH` line in the project's README.
 

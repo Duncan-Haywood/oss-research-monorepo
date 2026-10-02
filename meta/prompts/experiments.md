@@ -4,8 +4,8 @@ One entry per brief version: what changed, why, the metric it should move, and t
 
 ## Version 0 (2026-09-28 to 2026-10-01): original brief
 Throughput-oriented: no quality budget, CI built only the homepage, no run log in practice. The runs are backfilled in
-`meta/runs.jsonl` (`"backfilled": true`) from git history, so only merged work is visible. Baseline from the audit of
-2026-10-02 (`meta/audits.jsonl`): 10 of 10 sampled experiments reproduced byte for byte, but no paper disclosed AI
+`meta/runs/backfill-v0.jsonl` from git history, so only merged work is visible. Baseline from the audit of
+2026-10-02 (`meta/audits/`): 16 of 16 re-run experiments reproduced byte for byte, but no paper disclosed AI
 assistance, 6 of 15 audited projects missed directly relevant prior art, and the checker could not trace at least one
 number in the write-up of about 1 project in 3 (some of those are derived values, so this is an upper bound).
 
