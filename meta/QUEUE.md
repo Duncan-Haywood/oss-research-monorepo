@@ -25,7 +25,6 @@ PR, then close it with a one-line comment.
   #198 `backlash-twin`, #191 `sync-twin`, #151 `loop-closure-twin`, #146 `grasp-twin`, #118 `delayed-outer`,
   #67 `ordinal-scores`.
 - [ ] #34 `tail-elicitation` is not on `main`; check whether `tail-risk-elicitation` supersedes it.
-- [ ] #227 is identical to `main` for every project it touches: close it.
 
 ## Duplicates
 Each pair now links the other in a "Related projects" section (2026-10-02). Recommendations from that review; merge
