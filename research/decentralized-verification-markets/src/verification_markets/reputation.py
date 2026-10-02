@@ -3,10 +3,11 @@
 Motivated by two limitations flagged in this package's README as "natural
 next steps":
 
-1. Correlated Agreement's pooled delta-matrix estimate is not
-   collusion-resistant against a *simultaneously* deviating block, because
-   it pools every reporter's history into one shared same-task-correlation
-   estimate (see ``peer_prediction.py``'s module docstring and
+1. This package's *simplified* Correlated Agreement variant (pooled delta
+   matrix, no cross-task penalty term) is not collusion-resistant against
+   a *simultaneously* deviating block, because it pays every reporter from
+   one shared same-task-correlation estimate (see ``peer_prediction.py``'s
+   module docstring and
    ``tests/test_simulation.py::test_ca_is_vulnerable_to_simultaneous_correlated_deviation``).
    The README names "per-agent-pair delta estimation ... or an explicit
    collusion-detection pass before scoring" as the fix.

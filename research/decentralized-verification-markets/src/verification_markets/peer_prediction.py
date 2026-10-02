@@ -6,40 +6,36 @@ Implements two mechanisms from the peer-prediction literature, specialized
 to binary reports (e.g. "this training step's gradient update was computed
 correctly" vs. not):
 
-- Peer Truth Serum (PTS): Jurca & Faltings (2009); see also Faltings &
-  Radanovic, "Game Theory for Data Science: Eliciting Truthful Information"
-  (2017), ch. 4. Pays agent i by comparing to a single reference peer j,
-  scaled by the (empirical) population report frequency, so that truthful
-  reporting is a strict Bayes-Nash equilibrium whenever reports are
-  "stochastically relevant" to the hidden state, while any *uninformative*
-  fixed/random strategy earns expected payment 0.
+- Peer Truth Serum (PTS): Faltings, Jurca, Pu & Tran (2014); Radanovic,
+  Faltings & Jurca (2016) (PTSC, the multi-task version with an empirical
+  prior); see also Faltings & Radanovic, "Game Theory for Data Science:
+  Eliciting Truthful Information" (2017). Pays agent i by comparing to a
+  single reference peer j, scaled by the (empirical) population report
+  frequency, so that truthful reporting is an equilibrium under the belief
+  conditions given in those papers, while any *uninformative* fixed/random
+  strategy earns expected payment ~0.
 
-- Correlated Agreement (CA): Dasgupta & Ghosh (2013), "Crowdsourced Judgement
-  Elicitation with Endogenous Proficiency". The version here is a
-  deliberately simplified, practically-implementable variant: it estimates
-  the "same task" joint report distribution against a "different task"
-  baseline (via random cross-task pairing) and scores agreement by how much
-  more correlated same-task reports are than the baseline. This captures the
-  core CA idea -- reward reports that are *surprisingly* correlated with
-  peers on the same task, not just reports that match -- but does not
-  reproduce the full generality of the original theorem (which requires a
-  richer signal structure and a matrix-decomposition argument for strict
-  properness).
+- Correlated Agreement (CA): Shnayder, Agarwal, Frongillo & Parkes (2016),
+  "Informed Truthfulness in Multi-Task Peer Prediction", generalising the
+  binary-signal mechanism of Dasgupta & Ghosh (2013). The ``ca_payment``
+  used by the simulation is a deliberately *simplified* variant: it
+  estimates the delta matrix ``P_same(x, y) - P_diff(x, y)`` by pooling
+  every agent's reports (including deviators'), and pays ``delta[r_i, r_j]``
+  on the shared task only. CA as specified pays ``S(r_i, r_j)`` on a bonus
+  task *minus* ``S`` on a pair of reports from two unrelated (penalty)
+  tasks, with ``S = 1[delta > 0]``; the penalty term makes any
+  signal-independent strategy earn 0 in expectation.
 
-  Concretely: the delta matrix below is estimated by pooling reports across
-  the *whole* population, including any deviating agents' own reports. The
-  original theorem's incentive-compatibility guarantee is for a single agent
-  unilaterally deviating while the rest of the population reports honestly;
-  it says nothing about a sub-population deviating *simultaneously* in a
-  correlated way (e.g. a colluding block that always reports the majority
-  label). See tests/test_simulation.py::test_ca_is_vulnerable_to_simultaneous_correlated_deviation
-  for a concrete demonstration: under a skewed base rate and a large enough
-  colluding/lazy block, the pooled delta matrix gets dominated by genuine
-  honest-honest correlation, and the colluding block can free-ride on it and
-  out-earn honest reporting. Peer Truth Serum's prior-normalization does not
-  have this failure mode in the same setting, because dividing by the peer's
-  marginal report probability directly cancels out the "always guess the
-  popular answer" exploit.
+  Dropping the penalty term is what breaks the simplified variant: with
+  ``delta[(1, 1)] > 0``, an agent that always reports 1 collects a positive
+  payment on every task, and under a skewed base rate this can out-earn
+  honest reporting (tests/test_simulation.py::test_ca_is_vulnerable_to_simultaneous_correlated_deviation).
+  ``ca_penalty_payoffs`` implements the penalty-term payment rule on the
+  same pooled delta estimate; in the same populations it keeps honest
+  reporting ahead (test_ca_with_penalty_term_resists_the_same_deviation),
+  so the failure belongs to this simplification, not to CA. Peer Truth
+  Serum avoids it differently: dividing by the peer's marginal report
+  probability cancels the "always guess the popular answer" exploit.
 """
 
 from __future__ import annotations
@@ -135,6 +131,42 @@ def ca_payment(report_i: int, report_peer: int, delta: Dict[Tuple[int, int], flo
     with a peer is more common on shared tasks than on random cross-task
     pairings, i.e. Delta[report_i][report_peer]."""
     return delta.get((report_i, report_peer), 0.0)
+
+
+def ca_penalty_payoffs(
+    reports_by_agent: Dict[int, Dict[int, int]],
+    delta: Dict[Tuple[int, int], float],
+    rng: random.Random,
+) -> Dict[int, float]:
+    """Total CA payoff per agent under the payment rule of Shnayder, Agarwal,
+    Frongillo & Parkes (2016), for comparison with the simplified
+    ``ca_payment`` above.
+
+    For each agent ``i`` and each (bonus) task ``t``: pick a random peer
+    ``j`` and two distinct penalty tasks ``t1 != t2``, both different from
+    ``t``; pay ``S(r_i[t], r_j[t]) - S(r_i[t1], r_j[t2])`` with
+    ``S(x, y) = 1 if delta[(x, y)] > 0 else 0``. The penalty term is what
+    ``ca_payment`` leaves out: a report that ignores the signal (e.g. always
+    1) has the same expected score on the bonus and penalty pairs, so it
+    earns 0 in expectation whatever the other agents do. Assumes every agent
+    reports on the same tasks (as in ``simulation.py``) and at least 3 tasks.
+    """
+    agents = list(reports_by_agent)
+    tasks = sorted(reports_by_agent[agents[0]])
+    score = {k: (1.0 if v > 0 else 0.0) for k, v in delta.items()}
+    out = {i: 0.0 for i in agents}
+    for t in tasks:
+        for i in agents:
+            j = rng.choice([a for a in agents if a != i])
+            t1 = t2 = t
+            while t1 == t:
+                t1 = rng.choice(tasks)
+            while t2 in (t, t1):
+                t2 = rng.choice(tasks)
+            out[i] += score.get((reports_by_agent[i][t], reports_by_agent[j][t]), 0.0) - score.get(
+                (reports_by_agent[i][t1], reports_by_agent[j][t2]), 0.0
+            )
+    return out
 
 
 def empirical_prior(reports: Iterable[int]) -> float:

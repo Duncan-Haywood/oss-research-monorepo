@@ -1,3 +1,4 @@
+import random
 import unittest
 
 from verification_markets.metrics import (
@@ -11,6 +12,7 @@ from verification_markets.metrics import (
     scoring_window_market_brier_scores,
     theoretical_manipulation_bound,
 )
+from verification_markets.peer_prediction import ca_penalty_payoffs, correlated_agreement_matrix
 from verification_markets.simulation import SimulationConfig, run_simulation
 
 
@@ -66,17 +68,15 @@ class TestIncentiveCompatibility(unittest.TestCase):
         self.assertGreater(gap, 0.0)
 
     def test_ca_is_vulnerable_to_simultaneous_correlated_deviation(self):
-        # This is a documented *limitation*, not a bug: the population-pooled
-        # delta matrix used here (see peer_prediction.correlated_agreement_matrix)
-        # is estimated across the whole population, including the deviators'
-        # own reports. When a large, simultaneously-deviating sub-population
-        # all report the (skewed) majority label, the matrix gets dominated
-        # by genuine honest-honest correlation and a coordinated "always
-        # report the popular answer" block can free-ride on it -- something
-        # the original unilateral-deviation theorem never promised to
-        # prevent. Peer Truth Serum, which normalizes by the empirical
-        # report prior, does not have this failure mode in the same setting
-        # (see test_honest_beats_deviations_under_pts).
+        # This is a documented *limitation* of the simplified CA variant
+        # (peer_prediction.ca_payment), not of CA as specified: it pays
+        # delta[r_i, r_j] on the shared task with no cross-task penalty term,
+        # using a delta matrix pooled over the whole population, so an
+        # "always report the popular answer" block collects delta[(1, 1)] > 0
+        # on every task. test_ca_with_penalty_term_resists_the_same_deviation
+        # shows the penalty-term payment rule (Shnayder et al. 2016) does not
+        # fail here. Peer Truth Serum, which normalizes by the empirical
+        # report prior, does not fail either (test_honest_beats_deviations_under_pts).
         config = SimulationConfig(
             n_tasks=800,
             n_honest=14,
@@ -91,6 +91,26 @@ class TestIncentiveCompatibility(unittest.TestCase):
         payoff_by_strategy = average_payoff_by_strategy(result, result.ca_payoff)
         gap = incentive_compatibility_gap(payoff_by_strategy)
         self.assertLess(gap, 0.0)
+
+    def test_ca_with_penalty_term_resists_the_same_deviation(self):
+        # Same population and seed as the test above, same pooled delta
+        # estimator, but paid with CA's bonus-minus-penalty rule.
+        config = SimulationConfig(
+            n_tasks=800,
+            n_honest=14,
+            n_lazy=3,
+            n_colluding=3,
+            n_adversarial=2,
+            corruption_rate=0.15,
+            signal_noise=0.1,
+            seed=7,
+        )
+        result = run_simulation(config)
+        rng = random.Random(7)
+        delta = correlated_agreement_matrix(result.reports, rng)
+        payoff = ca_penalty_payoffs(result.reports, delta, rng)
+        gap = incentive_compatibility_gap(average_payoff_by_strategy(result, payoff))
+        self.assertGreater(gap, 0.0)
 
 
 class TestTrustWeightedRepair(unittest.TestCase):

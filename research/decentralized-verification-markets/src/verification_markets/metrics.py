@@ -1,12 +1,13 @@
 """Evaluation metrics for a SimulationResult.
 
-Includes an empirical analogue of the manipulation-vulnerability bound from
-Gensyn's "Credibly Neutral AI Oracles" (Monroe & Andrade): that paper bounds
-the probability a supermajority-dispute mechanism reaches the wrong verdict
-by eps * (1 - eps), where eps is the fraction of misreporting participants.
-Here we measure the empirical wrong-verdict rate of a majority-vote
-aggregator as a function of the fraction of non-honest verifiers, for
-comparison against that theoretical curve.
+Includes a loose, illustrative comparison with the eps * (1 - eps) curve
+from Gensyn's "Credibly Neutral AI Oracles" (Monroe, 2026). There, eps is
+the report layer's error rate Pr[report != truth], and eps * (1 - eps) is
+the worst-case manipulation vulnerability of a token-weighted dispute layer
+whose overturn threshold is set to 1 - eps. Here we measure the empirical
+wrong-verdict rate of a plain majority vote as a function of the fraction
+of non-honest verifiers -- a different mechanism and a different eps, so
+the two curves are not a test of that result.
 """
 
 from __future__ import annotations

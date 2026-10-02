@@ -9,6 +9,7 @@ Usage:
 """
 
 import os
+import random
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -19,6 +20,7 @@ from verification_markets.metrics import (  # noqa: E402
     average_trust_weight_by_strategy,
     incentive_compatibility_gap,
     majority_vote_error_rate,
+    majority_vote_verdicts,
     market_brier_score,
     non_honest_fraction,
     scoring_window_market_brier_scores,
@@ -58,6 +60,21 @@ def main() -> None:
             print(f"  {strategy:>12}: {payoff_value:+.4f}")
         verdict = "OK, incentive-compatible" if gap > 0 else "NEGATIVE -- see README §Limitations"
         print(f"  honest advantage over best deviation: {gap:+.4f} ({verdict})")
+
+    # The CA above is a simplified variant (pays delta[r_i, r_j] on the shared
+    # task, no penalty term). Same reports, same pooled delta estimator, but
+    # paid with the bonus-minus-penalty rule of Shnayder et al. (2016):
+    from verification_markets.peer_prediction import ca_penalty_payoffs, correlated_agreement_matrix  # noqa: E402
+
+    ca_rng = random.Random(base_config.seed)
+    ca_delta = correlated_agreement_matrix(result.reports, ca_rng)
+    by_strategy = average_payoff_by_strategy(result, ca_penalty_payoffs(result.reports, ca_delta, ca_rng))
+    gap = incentive_compatibility_gap(by_strategy)
+    print("\nCorrelated Agreement with cross-task penalty term (same pooled delta estimate):")
+    for strategy, payoff_value in sorted(by_strategy.items()):
+        print(f"  {strategy:>12}: {payoff_value:+.4f}")
+    verdict = "OK, incentive-compatible" if gap > 0 else "NEGATIVE"
+    print(f"  honest advantage over best deviation: {gap:+.4f} ({verdict})")
 
     print_header("Aggregate accuracy")
     print(f"LMSR market Brier score (0=perfect, 0.25=uninformed): "
@@ -99,14 +116,17 @@ def main() -> None:
     print(f"  plain:           {scoring_brier['plain']:.4f}")
     print(f"  trust-weighted:  {scoring_brier['trust_weighted']:.4f}")
 
-    print_header("Audit cost savings vs. full recomputation (Verde baseline)")
+    print_header("Audit fraction (configuration input)")
     print(f"Fraction of tasks NOT requiring ground-truth recomputation: "
           f"{audit_cost_savings(result):.1%}")
+    print(f"(= 1 - audit_fraction, a configuration input of {base_config.audit_fraction:.0%}; "
+          "not a measured result -- the audited sample is not used by any mechanism)")
 
-    print_header("Manipulation vulnerability sweep "
-                  "(empirical majority-vote error vs. Credibly Neutral AI Oracles' eps(1-eps) bound)")
-    print(f"{'non-honest frac (eps)':>24} | {'empirical error':>16} | {'eps*(1-eps) bound':>18}")
-    print("-" * 64)
+    print_header("Majority-vote error vs. non-honest fraction, next to the eps(1-eps) curve "
+                  "of Credibly Neutral AI Oracles (illustrative: a different mechanism and eps)")
+    print(f"{'non-honest frac (eps)':>24} | {'empirical error':>16} | {'eps*(1-eps)':>18} | "
+          f"{'faulty frac':>11} | vote always 'correct'?")
+    print("-" * 104)
     sweep_points = [
         dict(n_honest=19, n_lazy=1, n_colluding=0, n_adversarial=0),
         dict(n_honest=16, n_lazy=2, n_colluding=1, n_adversarial=1),
@@ -127,7 +147,9 @@ def main() -> None:
         eps = non_honest_fraction(sweep_result)
         empirical_err = majority_vote_error_rate(sweep_result)
         bound = theoretical_manipulation_bound(eps)
-        print(f"{eps:>24.2f} | {empirical_err:>16.4f} | {bound:>18.4f}")
+        faulty = 1 - sum(sweep_result.ground_truth) / len(sweep_result.ground_truth)
+        always_one = all(v == 1 for v in majority_vote_verdicts(sweep_result))
+        print(f"{eps:>24.2f} | {empirical_err:>16.4f} | {bound:>18.4f} | {faulty:>11.4f} | {always_one}")
 
     print_header("Trust-farming 'sleeper' adversary: frozen vs. rolling trust (5 seeds)")
     from verification_markets.adaptive import brier, defection_lag, rolling_trust_market  # noqa: E402
@@ -149,6 +171,19 @@ def main() -> None:
         detected = [x for x in lags if x >= 0]
         lag = f"{sum(detected) / len(detected):.0f} ({len(detected)}/5 detected)" if detected else "never"
         print(f"{block_size:>6} {decay:>6.1f} | {sum(frozen)/5:>12.4f} | {sum(rolling)/5:>13.4f} | {lag}")
+    acc = [0.0] * 4
+    for seed in range(1, 6):
+        r = run_simulation(SimulationConfig(
+            n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0, n_adversarial=0, n_sleeper=7, seed=seed))
+        tw = average_trust_weight_by_strategy(r)
+        sids = [v.id for v in r.verifiers if v.strategy == "sleeper"]
+        rr = rolling_trust_market(r, 50, 0.5, seed)
+        for k, x in enumerate((tw["honest"], tw["sleeper"], scoring_window_market_brier_scores(r)["plain"],
+                               sum(rr.trust_history[i][-1] for i in sids) / len(sids))):
+            acc[k] += x
+    a = [x / 5 for x in acc]
+    print(f"frozen trust weight: honest {a[0]:.3f}, sleeper {a[1]:.3f}; plain (unweighted) Brier {a[2]:.4f}; "
+          f"sleeper weight in last block (rolling, block 50, decay 0.5): {a[3]:.3f}")
 
     print_header("Intermittent adversary: symmetric vs. asymmetric rolling trust (5 seeds)")
     print("12 honest + 10 intermittent (period 100, block 50). asym = decay 0.2 down / 0.9 up")
@@ -194,13 +229,44 @@ def main() -> None:
             acc[2] += brier(minority_trust_market(r), r, r.scoring_tasks)
             acc[3] += brier(minority_trust_market(r, scale_liquidity=False), r, r.scoring_tasks)
         print(f"{prob:>8.2f} | " + " | ".join(f"{a / 5:>{w}.4f}" for a, w in zip(acc, (7, 13, 14, 16))))
+    from verification_markets.stealth import minority_pts_scores, minority_trust_weights  # noqa: E402
+
+    print("\nPer verifier, mean over 5 seeds: PTS payoff per task (full stream), averaged-PTS trust weight,")
+    print("minority-label trust weight (both from the calibration window)")
+    print(f"{'lie prob':>8} | {'PTS/task honest':>15} | {'PTS/task whitewash':>18} | "
+          f"{'avg trust h / w':>15} | {'minority trust h / w':>20}")
+    for prob in (0.25, 0.5, 1.0):
+        acc = [0.0] * 6
+        for seed in range(1, 6):
+            r = run_simulation(SimulationConfig(
+                n_tasks=1500, n_honest=14, n_lazy=0, n_colluding=0, n_adversarial=0,
+                n_whitewash=8, whitewash_prob=prob, seed=seed))
+            pts = average_payoff_by_strategy(r, r.pts_payoff)
+            tw = average_trust_weight_by_strategy(r)
+            mw = minority_trust_weights(minority_pts_scores(r, r.calibration_tasks), 12.0, r.config.trust_floor)
+            hid = [v.id for v in r.verifiers if v.strategy == "honest"]
+            wid = [v.id for v in r.verifiers if v.strategy == "whitewash"]
+            for k, x in enumerate((pts["honest"] / r.config.n_tasks, pts["whitewash"] / r.config.n_tasks,
+                                   tw["honest"], tw["whitewash"],
+                                   sum(mw[i] for i in hid) / len(hid), sum(mw[i] for i in wid) / len(wid))):
+                acc[k] += x
+        a = [x / 5 for x in acc]
+        print(f"{prob:>8.2f} | {a[0]:>15.3f} | {a[1]:>18.3f} | {a[2]:>6.3f} / {a[3]:.3f} | "
+              f"{a[4]:>11.3f} / {a[5]:.3f}")
+    acc = [0.0] * 2
+    for seed in range(1, 6):
+        h = run_simulation(SimulationConfig(n_tasks=1500, n_honest=22, n_lazy=0, n_colluding=0,
+                                            n_adversarial=0, seed=seed))
+        acc[0] += brier(h.market_price_scoring, h, h.scoring_tasks)
+        acc[1] += brier(minority_trust_market(h), h, h.scoring_tasks)
+    print(f"all-honest (22 honest) Brier: plain {acc[0] / 5:.4f}, minority trust {acc[1] / 5:.4f}")
 
     print_header("Sleeper+whitewash ('late_whitewash'): frozen vs. rolling minority trust (5 seeds)")
     from verification_markets.stealth import rolling_minority_trust_market  # noqa: E402
 
-    print("14 honest + 8 late_whitewash; Brier on scoring window")
+    print("14 honest + 8 late_whitewash; Brier on scoring window; rolling = block 100, decay 0.5")
     print(f"{'lie prob':>8} | {'plain':>7} | {'frozen minority':>15} | {'rolling sym':>11} | {'rolling asym':>12}")
-    for prob in (0.5, 1.0):
+    for prob in (0.1, 0.25, 0.5, 0.75, 1.0):
         acc = [0.0] * 4
         for seed in range(1, 6):
             r = run_simulation(SimulationConfig(
