@@ -39,6 +39,13 @@ by folding the later project's genuinely new results into the survivor and remov
 - [ ] `cfar-family-twin` into `radar-detection-twin` (re-derives the 30×/35× inflation and "CA best after repair").
 - `alias-twin` and `aliasing-twin`: keep both (different estimators and repairs); they now cross-link.
 
+## Open review findings
+- [ ] `spot-check-slashing`: the headline deterrence condition `min(F, f·k) ≥ T·g` is immediate (at `j = T` the hit
+  count is exactly `k`) and is Becker-style deterrence with a capped fine; "no capital/compute frontier" is an artefact
+  of the linear model. Present it as such, or extend the model so the result is not immediate (reviewer score 1/5).
+- [ ] Reviewer scores for the 8 projects reviewed on 2026-10-02 average about 2/5: mostly textbook results with a
+  "twin" relabel. The validation upgrades above are the main lever.
+
 ## Debt reported by `tools/check.py` (warnings)
 - [ ] Numbers in write-ups that no experiment prints (`[numbers]` warnings, about 80 projects). Make `run.py` print
   the value, or correct the text.
