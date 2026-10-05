@@ -2,6 +2,10 @@
 
 The standing brief for work on this repository.
 
+> **Frozen.** This repository is frozen (see `CLAUDE.md`). Until the owner lifts the freeze, a run started from
+> this brief creates no branch, commit, pull request or run-log line, and merges nothing. Reply in one line that
+> the repository is frozen, and stop. Delete this note when the freeze ends.
+
 ## Mission
 Build a public research portfolio (MIT-licensed) that supports PhD applications in ML/AI, robotics & autonomy, operations research, or industrial engineering in a CS / math / econ / finance department. Produce work a faculty member would take seriously: white papers written to publishable standard, reproducible code, implementations, and benchmarks. Quality beats volume.
 
@@ -40,8 +44,20 @@ Robotics & autonomy (priority):
 ## Portfolio site
 Maintain a GitHub Pages site listing each artifact: a one-line summary, related lab, and links to the paper, code and results. Keep it current as work merges.
 
-## Workflow
-Work on feature branches. Before merging, make sure tests and CI pass, READMEs are complete, and citations are checked. Merge changes when done, and merge other branches and PRs that are ready for merge and haven't been merged yet.
+## Landing work
+A run is done when its work is on `main`. A pushed branch or an open pull request is not done: nobody sees the work, and the next run redoes it. Dozens of branches here never landed: the same project built by parallel runs in the same minute, finished projects pushed with no pull request, and run logs committed after the merge.
+
+This brief is the owner's explicit request to open a pull request for every branch you push, and to merge it yourself once checks pass. Do both in every run, without asking.
+
+1. **Start from `main`.** Branch from the latest `origin/main`. Never build on another unmerged branch: land it first (step 2), or leave it alone.
+2. **Land before you build.** First work through open pull requests and `claude/*` branches that have no pull request. Merge what is ready. Fix and merge what is close. Close duplicates and superseded work with a one-line reason, and delete the branch. A branch whose project is not on `main` yet is unfinished work: finish it rather than starting a new one. Start new work only when nothing in this queue can land without the owner.
+3. **Claim before you build.** Other runs start in the same minute as you. Before choosing a project, check for the same slug or idea in three places: `research/` on `main`, open pull requests, and branches pushed in the last three hours. If it is taken, pick something else or help land the other one. Once you have chosen, push your first commit and open the pull request within your first few minutes, with the slug in its title, so the next run sees your claim.
+4. **One project per pull request.** Keep it small enough to merge in this run. If `main` moves, merge it into your branch (do not rebase) and rerun `python site/build.py`.
+5. **Merge it.** Before merging, check that tests pass, `python site/build.py` prints `ok`, CI is green, the README is complete and citations are checked. Then merge with a merge commit and delete the branch. Confirm the work reached `main` with `git fetch origin main && git merge-base --is-ancestor <sha> origin/main`.
+6. **Blocked? Leave a note where the next run will look.** If you cannot land a pull request, comment the blocker on it and name the pull request in your final message. The blocker might be a failure you cannot fix or a decision only the owner can make. Step 2 of the next run picks it up. Never leave a branch without a pull request.
+7. **No change, no push.** A run that ends with nothing worth merging creates no branch, commit or pull request.
+8. **Never push to a merged branch.** Anything after the merge goes on a new branch from `main`, with its own pull request.
+9. **Check before you stop.** List every branch you pushed this run. Each one must either be merged into `main` or have an open pull request with a blocker comment. Put that list in your final message.
 
 ## Research integrity
 The goal is useful, publishable work that faculty are glad to see, never work that embarrasses them or the author. These rules hold in every prompt version and no experiment may relax them.
@@ -67,7 +83,7 @@ At the start of each run:
 1. Read `prompts/routing.json`. Draw a uniform random number; if it is below `candidate_share`, follow `prompts/prompt-<candidate>.md` for this run instead of this file. Record which version you used.
 2. Add a `Prompt-Version: <n>` trailer to every commit, alongside the existing `Co-Authored-By` (model) and `Claude-Session` trailers, so prompt version, model and session can be traced from git history.
 
-At the end of each run, append a line to `prompts/runs.jsonl`:
+Before you merge, append a line to `prompts/runs.jsonl` as the last commit on your work branch, so the record lands in the same pull request as the work. Never commit a run line on a branch of its own or after the merge. A run with nothing to merge records nothing in git (Landing work, step 7); it reports in its final message instead. If `prompts/` is not on `main` yet, the first run that merges work creates it. Write `null` for `merged`; the review session fills it in from the pull request.
 ```json
 {"date": "YYYY-MM-DD", "session": "<session url>", "prompt_version": 0,
  "input": "<the user or trigger message that started the run, verbatim>", "input_sha256": "<hash of input>",
@@ -77,7 +93,7 @@ At the end of each run, append a line to `prompts/runs.jsonl`:
  "tokens_in": null, "tokens_out": null, "cost_usd": null, "tool_calls": null,
  "task": "new-project|extend|fix|merge|meta", "projects": ["<slug>"], "pr": "<url or null>",
  "commits": ["<sha>"], "lines_added": 0, "lines_removed": 0,
- "merged": true, "ci_failures_before_green": 0, "review_findings": 0, "tests_added": 0, "build_ok": true,
+ "merged": null, "ci_failures_before_green": 0, "review_findings": 0, "tests_added": 0, "build_ok": true,
  "outcome": "success|partial|failed",
  "errors": ["short description of anything that went wrong"], "integrity_issues": [], "notes": ""}
 ```
@@ -88,7 +104,7 @@ Report honestly: a failed or abandoned run is data. Never edit past lines except
 Measures, in order of importance:
 1. Integrity issues (fabricated or unverifiable numbers, wrong or invented citations, missing attribution, overclaiming). Target zero; any single issue outweighs every other metric.
 2. Success rate: runs whose PR merged with CI green and a complete README.
-3. Error rates: CI failures per PR, review findings per PR, reverts or follow-up fixes within two weeks, abandoned runs.
+3. Error rates: CI failures per PR, review findings per PR, reverts or follow-up fixes within two weeks, abandoned runs, and leaked work. Leaked work is a branch or pull request a run pushed that was not on `main` 24 hours later. At each review, count leaked work per run, then land or close it.
 4. Quality: in each review session, audit a random sample of about five recent projects. Re-run their code, check that README numbers match the output, and check every citation. Log what you find as integrity issues or errors against the run that produced the project.
 
 Review session (about every 20 runs, or when `runs.jsonl` gains 20 lines since the last review):
