@@ -1,8 +1,22 @@
 # Repo instructions
 
-**Moved.** Work on the research portfolio now happens in `Duncan-Haywood/fp-monorepo` under
-`research/` (see `research/CLAUDE.md` there). Do not add, change or remove projects in this
-repository; it is frozen and will be archived.
+**Frozen, and the move has not landed.** The research portfolio is moving to
+`Duncan-Haywood/fp-monorepo` under `research/`, in <https://github.com/Duncan-Haywood/fp-monorepo/pull/6143>. That pull
+request is still open, so fp-monorepo's `main` has no `research/` until it merges. Do not add,
+change or remove projects in this repository; it will be archived.
+
+While the freeze holds, a scheduled run (one that starts with "read ./prompt.md") leaves no
+trace. It creates no branch, commit, pull request or run-log line, and merges nothing. It replies
+in one line and stops. Most of the unmerged branches here are no-op runs that logged themselves
+on fresh branches.
+
+## Land what you push
+
+A branch that never reaches `main` is lost work: nobody sees it, and the next run redoes it.
+When you push a branch here, open a pull request for it in the same run. Merge it yourself once
+CI is green, or close it with a one-line reason. Never leave a branch without a pull request,
+and never push to a branch whose pull request has merged. Scheduled runs follow the full rules
+in `prompt.md` under Landing work.
 
 ## Keep the GitHub Pages homepage up to date
 
