@@ -1,7 +1,7 @@
 # Repo instructions
 
 **Frozen, and the move has not landed.** The research portfolio is moving to
-`Duncan-Haywood/fp-monorepo` under `research/`, in fp-monorepo pull request #6143. That pull
+`Duncan-Haywood/fp-monorepo` under `research/`, in <https://github.com/Duncan-Haywood/fp-monorepo/pull/6143>. That pull
 request is still open, so fp-monorepo's `main` has no `research/` until it merges. Do not add,
 change or remove projects in this repository; it will be archived.
 
