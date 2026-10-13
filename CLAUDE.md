@@ -1,14 +1,14 @@
 # Repo instructions
 
-**Frozen, and the move has not landed.** The research portfolio is moving to
-`Duncan-Haywood/fp-monorepo` under `research/`, in <https://github.com/Duncan-Haywood/fp-monorepo/pull/6143>. That pull
-request is still open, so fp-monorepo's `main` has no `research/` until it merges. Do not add,
-change or remove projects in this repository; it will be archived.
+**Moved and frozen.** The research portfolio lives in `Duncan-Haywood/oss-monorepo` under
+`research/`, merged in <https://github.com/Duncan-Haywood/oss-monorepo/pull/6832> with this
+repository's full history. Do not add, change or remove projects here; work on them there. This
+repository will be archived.
 
-While the freeze holds, a scheduled run (one that starts with "read ./prompt.md") leaves no
-trace. It creates no branch, commit, pull request or run-log line, and merges nothing. It replies
-in one line and stops. Most of the unmerged branches here are no-op runs that logged themselves
-on fresh branches.
+A scheduled run (one that starts with "read ./prompt.md") leaves no trace here. It creates no
+branch, commit, pull request or run record, and merges nothing. It replies in one line that the
+work moved to oss-monorepo, and stops. Point the routine at oss-monorepo instead: its
+`prompt.md` routes runs to the research track.
 
 ## Land what you push
 

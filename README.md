@@ -2,9 +2,11 @@
 Duncan's open source software monorepo (MIT licensed). Portfolio homepage: <https://duncan-haywood.github.io/oss-research-monorepo/> (built from `site/` by `.github/workflows/pages.yml`).
 
 > **This repository has moved.** The research portfolio now lives in
-> [`Duncan-Haywood/fp-monorepo`](https://github.com/Duncan-Haywood/fp-monorepo) under
-> `research/`, with this repository's full history. Do not add new work here; this
-> copy is frozen and will be archived.
+> [`Duncan-Haywood/oss-monorepo`](https://github.com/Duncan-Haywood/oss-monorepo/tree/main/research)
+> under `research/`, with this repository's full history
+> ([oss-monorepo#6832](https://github.com/Duncan-Haywood/oss-monorepo/pull/6832)). Its brief is
+> now the research track of that repository's prompt system (`prompts/research/`). Do not add
+> new work here; this copy is frozen and will be archived.
 
 
 - [`research/decentralized-verification-markets`](research/decentralized-verification-markets) — peer-prediction and prediction-market mechanisms for verifying decentralized ML training, with adversarial evaluation.

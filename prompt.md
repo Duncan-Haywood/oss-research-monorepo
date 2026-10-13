@@ -2,9 +2,10 @@
 
 The standing brief for work on this repository.
 
-> **Frozen.** This repository is frozen (see `CLAUDE.md`). Until the owner lifts the freeze, a run started from
-> this brief creates no branch, commit, pull request or run-log line, and merges nothing. Reply in one line that
-> the repository is frozen, and stop. Delete this note when the freeze ends.
+> **Moved.** This repository is frozen and will be archived (see `CLAUDE.md`). The research portfolio, and this
+> brief as the research track of its prompt system, now live in `Duncan-Haywood/oss-monorepo`. A run started
+> from this brief creates no branch, commit, pull request or run record, and merges nothing. Reply in one line
+> that the work moved to oss-monorepo, and stop.
 
 ## Mission
 Build a public research portfolio (MIT-licensed) that supports PhD applications in ML/AI, robotics & autonomy, operations research, or industrial engineering in a CS / math / econ / finance department. Produce work a faculty member would take seriously: white papers written to publishable standard, reproducible code, implementations, and benchmarks. Quality beats volume.
