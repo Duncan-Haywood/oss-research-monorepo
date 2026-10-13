@@ -1,0 +1,64 @@
+## 1. Base position sweep (default arm: opening 60 mm, push 12 N, payload 150 g)
+base_x_m  printed_assembled/8  printed_mass_frac  first_blockers
+0.000  4  0.640  insertion force over push limit; needs a screwdriver; pick unreachable; place unreachable
+0.025  5  0.764  insertion force over push limit; needs a screwdriver; pick unreachable
+0.050  5  0.764  insertion force over push limit; needs a screwdriver; pick unreachable
+0.075  5  0.764  insertion force over push limit; needs a screwdriver
+0.100  5  0.764  insertion force over push limit; needs a screwdriver
+0.125  5  0.764  insertion force over push limit; needs a screwdriver
+0.150  5  0.764  insertion force over push limit; needs a screwdriver
+0.175  5  0.764  insertion force over push limit; needs a screwdriver
+0.200  5  0.764  insertion force over push limit; needs a screwdriver
+0.225  0  0.000  pick unreachable
+0.250  0  0.000  pick unreachable
+0.275  0  0.000  pick unreachable
+0.300  0  0.000  pick unreachable
+0.325  0  0.000  pick unreachable; place unreachable
+0.350  0  0.000  pick unreachable; place unreachable
+0.375  0  0.000  pick unreachable; place unreachable
+0.400  0  0.000  place unreachable
+0.425  0  0.000  place unreachable
+0.450  0  0.000  place unreachable
+0.475  0  0.000  place unreachable
+0.500  5  0.764  insertion force over push limit; needs a screwdriver; pick unreachable
+0.525  5  0.764  insertion force over push limit; needs a screwdriver; pick unreachable
+0.550  5  0.764  insertion force over push limit; needs a screwdriver; pick unreachable
+0.575  5  0.764  insertion force over push limit; needs a screwdriver; pick unreachable
+0.600  5  0.764  insertion force over push limit; needs a screwdriver
+0.625  5  0.764  insertion force over push limit; needs a screwdriver
+0.650  5  0.764  insertion force over push limit; needs a screwdriver
+0.675  5  0.764  insertion force over push limit; needs a screwdriver
+0.700  5  0.764  insertion force over push limit; needs a screwdriver
+0.725  5  0.764  insertion force over push limit; needs a screwdriver
+0.750  0  0.000  pick unreachable
+0.775  0  0.000  pick unreachable
+0.800  0  0.000  pick unreachable
+best printed-mass fraction 0.764 first reached at base_x=0.025
+
+## 2. Opening x push sweep, best base position per cell (printed-mass fraction assembled)
+opening_mm  push 4N  push 8N  push12N  push16N  push20N  push24N
+       20     0.000    0.000    0.000    0.000    0.000    0.000
+       30     0.000    0.000    0.000    0.000    0.000    0.000
+       40     0.000    0.000    0.000    0.000    0.000    0.000
+       50     0.466    0.714    0.764    1.000    1.000    1.000
+       60     0.466    0.714    0.764    1.000    1.000    1.000
+       70     0.466    0.714    0.764    1.000    1.000    1.000
+
+## 3. Screwless redesign vs original (default arm, best base position)
+original (servo screwed on): assembled 5/11 parts, printed 5/8, printed-mass frac 0.764, all-mass frac 0.564 (base_x=0.025); blocked: pin_a: insertion force over push limit; pin_b: insertion force over push limit; cover: pick unreachable,insertion force over push limit; servo: pick unreachable,needs a screwdriver
+screwless (servo clips in): assembled 5/9 parts, printed 5/8, printed-mass frac 0.764, all-mass frac 0.569 (base_x=0.025); blocked: pin_a: insertion force over push limit; pin_b: insertion force over push limit; cover: pick unreachable,insertion force over push limit; servo: pick unreachable
+
+## 4. Gripper scale sweep: can an arm with a fixed 60 mm opening make a larger or smaller gripper?
+scale  largest_grasp_mm  printed_mass_frac(original)  printed_mass_frac(screwless, push 16 N)
+0.6      30.0            0.764                       1.000
+0.8      40.0            0.764                       1.000
+1.0      50.0            0.764                       1.000
+1.2      60.0            0.764                       1.000
+1.5      75.0            0.000                       0.000
+
+## 5. Push needed to assemble every printed part (screwless design, best base position)
+push 12 N: printed 5/8, printed-mass frac 0.764, base_x=0.025
+push 14 N: printed 7/8, printed-mass frac 0.814, base_x=0.025
+push 15 N: printed 7/8, printed-mass frac 0.814, base_x=0.025
+push 16 N: printed 8/8, printed-mass frac 1.000, base_x=0.050
+push 18 N: printed 8/8, printed-mass frac 1.000, base_x=0.050

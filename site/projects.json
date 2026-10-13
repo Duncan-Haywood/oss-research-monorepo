@@ -1324,6 +1324,11 @@
      "slug": "robofab-cell-bound",
      "title": "Where is the bottleneck of an arm, printer and inspection cell?",
      "summary": "A hand-written discrete-event twin of one arm that loads and unloads P 3D printers, plus an inspection station with reprints, against a utilisation bound. The bound names the bottleneck (printers up to 10 printers, the arm from 12, about 12.7 good parts/h) and the simulation reaches it within 1&ndash;2% far from the switch but sits 10&ndash;11% below it at 10&ndash;12 printers. A 25% faster arm lifts throughput from 11.34 to 12.68 parts/h at 12 printers while a second inspector does nothing; arm dispatch rules made no measurable gain, and WIP beyond one job per printer plus one only lengthens flow time. <em>Stylised parameters of my choosing, no travel or breakdowns, 20 seeds.</em>"
+    },
+    {
+     "slug": "robofab-selfparts",
+     "title": "Which limit of a small arm decides how much of its own printed gripper it can assemble?",
+     "summary": "A planar three-joint arm model asked to assemble a copy of its own gripper (8 printed parts, 3 vitamins) with grasp, payload, reach and insertion-force checks (stylised, chosen parameters). The widest root part gates everything: at an opening of 40&nbsp;mm or less nothing is assembled. Above that, push force decides: printed-mass fraction 0.47, 0.71 and 0.76 at 4, 8 and 12&nbsp;N and 1.00 from 16&nbsp;N. A band of base positions assembles nothing because the early steps fall in an unreachable fold under the base. Planar, no collisions or tolerances; simulation only."
     }
    ]
   },
