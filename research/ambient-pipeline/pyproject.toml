@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ambient-pipeline"
+version = "0.1.0"
+description = "Streaming VAD -> ASR -> LLM -> TTS pipeline on a CPU with per-stage latency, real-time factor and memory"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+models = ["numpy", "onnxruntime", "faster-whisper", "llama-cpp-python", "kokoro-onnx", "psutil", "soundfile"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
