@@ -6,6 +6,7 @@ import numpy as np
 from chip_systolic_batch import baseline_gen, flow, gen, model
 
 OUT = os.path.join(os.path.dirname(__file__), "results.txt")
+MAXPE = 32
 RS, CS, PS, WBS, NCHECK = (4, 8, 16), (2, 4, 8), (2, 4, 8), (4, 6), 32
 xtr, ytr = model.make_data(0, 400)
 xte, yte = model.make_data(1, 400)
@@ -21,6 +22,8 @@ for wb in WBS:
     base = {p: flow.score_baseline(q, p) for p in PS}
     for r in RS:
         for c in CS:
+            if r * c > MAXPE:
+                continue  # yosys exceeds 14 GB (OOM-killed) on 16x8; see README
             out, cs = flow.simulate(q, c, r, xi)
             ok = bool((out == ref).all()) and set(cs) == {gen.cycles(c, r)}
             s, cy = flow.score(q, c, r), gen.cycles(c, r)

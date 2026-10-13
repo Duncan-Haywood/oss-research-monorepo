@@ -1,0 +1,40 @@
+# Yosys 0.33 (git sha1 2584903a060); Icarus Verilog version 12.0 (stable) ()
+# cycles per batch of R vectors; cells = Yosys generic-gate cells incl. flip-flops; cells*cycles per batch
+
+WB R   design        MACs cycles  cells    depth  cells*cycles  cells*cycles/R  rtl==numpy(32 vecs)
+ 4  4  systolic 4x2     8     80   4077    41        326160          81540  True
+ 4  4  systolic 4x4    16     47   6605    42        310435          77608  True
+ 4  4  systolic 4x8    32     40  10998    43        439920         109980  True
+ 4  4  mac-lane P=2       2    224   1098    37        245952          61488  (r sequential runs; not re-simulated)
+ 4  4  mac-lane P=4       4    116   1674    36        194184          48546  (r sequential runs; not re-simulated)
+ 4  4  mac-lane P=8       8     80   2800    36        224000          56000  (r sequential runs; not re-simulated)
+
+ 4  8  systolic 8x2    16    104   8637    47        898248         112281  True
+ 4  8  systolic 8x4    32     59  13622    47        803698         100462  True
+ 4  8  mac-lane P=2       2    448   1098    37        491904          61488  (r sequential runs; not re-simulated)
+ 4  8  mac-lane P=4       4    232   1674    36        388368          48546  (r sequential runs; not re-simulated)
+ 4  8  mac-lane P=8       8    160   2800    36        448000          56000  (r sequential runs; not re-simulated)
+
+ 4 16  systolic 16x2    32    152  18050    49       2743600         171475  True
+ 4 16  mac-lane P=2       2    896   1098    37        983808          61488  (r sequential runs; not re-simulated)
+ 4 16  mac-lane P=4       4    464   1674    36        776736          48546  (r sequential runs; not re-simulated)
+ 4 16  mac-lane P=8       8    320   2800    36        896000          56000  (r sequential runs; not re-simulated)
+
+ 6  4  systolic 4x2     8     80   8708    67        696640         174160  True
+ 6  4  systolic 4x4    16     47  13033    66        612551         153137  True
+ 6  4  systolic 4x8    32     40  21407    66        856280         214070  True
+ 6  4  mac-lane P=2       2    224   1806    45        404544         101136  (r sequential runs; not re-simulated)
+ 6  4  mac-lane P=4       4    116   2900    45        336400          84100  (r sequential runs; not re-simulated)
+ 6  4  mac-lane P=8       8     80   4802    46        384160          96040  (r sequential runs; not re-simulated)
+
+ 6  8  systolic 8x2    16    104  24385    66       2536040         317005  True
+ 6  8  systolic 8x4    32     59  32520    66       1918680         239835  True
+ 6  8  mac-lane P=2       2    448   1806    45        809088         101136  (r sequential runs; not re-simulated)
+ 6  8  mac-lane P=4       4    232   2900    45        672800          84100  (r sequential runs; not re-simulated)
+ 6  8  mac-lane P=8       8    160   4802    46        768320          96040  (r sequential runs; not re-simulated)
+
+ 6 16  systolic 16x2    32    152  34403    69       5229256         326828  True
+ 6 16  mac-lane P=2       2    896   1806    45       1618176         101136  (r sequential runs; not re-simulated)
+ 6 16  mac-lane P=4       4    464   2900    45       1345600          84100  (r sequential runs; not re-simulated)
+ 6 16  mac-lane P=8       8    320   4802    46       1536640          96040  (r sequential runs; not re-simulated)
+
