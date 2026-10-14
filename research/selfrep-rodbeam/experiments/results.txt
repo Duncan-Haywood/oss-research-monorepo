@@ -1,0 +1,30 @@
+selfrep-rodbeam results (assumed moduli, loads and limits; see README)
+
+span 400 mm, simply supported centre load; clamped values in brackets
+
+== load light (carriage 0.25 kg): F = 2.45 N
+  steel        8 mm rod: sag 0.0813 mm [0.0203], own weight 0.03209 mm
+  birch_dowel  8 mm rod: sag 1.3553 mm [0.3388], own weight 0.04428 mm
+  pla_printed  8 mm rod: sag 6.5055 mm [1.6264], own weight 0.40548 mm
+  limit 0.05 mm: steel        min diameter   9.0 mm [  6.4]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.05 mm: birch_dowel  min diameter  18.3 mm [ 12.9]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.05 mm: pla_printed  min diameter  27.0 mm [ 19.1]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.2 mm: steel        min diameter   6.4 mm [  4.5]; 8 mm rod passes in 100.0% of modulus draws
+  limit 0.2 mm: birch_dowel  min diameter  12.9 mm [  9.1]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.2 mm: pla_printed  min diameter  19.1 mm [ 13.5]; 8 mm rod passes in   0.0% of modulus draws
+
+== load heavy (carriage 0.50 kg): F = 4.91 N
+  steel        8 mm rod: sag 0.1626 mm [0.0407], own weight 0.03209 mm
+  birch_dowel  8 mm rod: sag 2.7106 mm [0.6777], own weight 0.04428 mm
+  pla_printed  8 mm rod: sag 13.0109 mm [3.2527], own weight 0.40548 mm
+  limit 0.05 mm: steel        min diameter  10.7 mm [  7.6]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.05 mm: birch_dowel  min diameter  21.7 mm [ 15.3]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.05 mm: pla_printed  min diameter  32.1 mm [ 22.7]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.2 mm: steel        min diameter   7.6 mm [  5.4]; 8 mm rod passes in 100.0% of modulus draws
+  limit 0.2 mm: birch_dowel  min diameter  15.3 mm [ 10.9]; 8 mm rod passes in   0.0% of modulus draws
+  limit 0.2 mm: pla_printed  min diameter  22.7 mm [ 16.1]; 8 mm rod passes in   0.0% of modulus draws
+
+Equal-stiffness diameter to an 8 mm steel rod (nominal moduli):
+  steel          8.0 mm (range 7.9-8.1)
+  birch_dowel   16.2 mm (range 15.3-17.4)
+  pla_printed   23.9 mm (range 22.0-27.2)
