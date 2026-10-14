@@ -38,4 +38,4 @@ for pname, pw in PRIORS.items():
         for k in FIT_NAMES:
             extra = f"   {cnt(caps1)} | {cnt(caps2)}" if k == "dr_cf_sel" else ""
             log(f"{pname:11s} {eps:6.3f} {k:>16s} {ms(res[k]):>15s}{extra}")
-open("experiments/results.txt", "w").write("\n".join(out) + "\n")
+open(__import__("os").path.join(__import__("os").path.dirname(__file__), "results.txt"), "w").write("\n".join(out) + "\n")

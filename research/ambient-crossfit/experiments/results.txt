@@ -1,0 +1,51 @@
+oracle utility/h on held-out 12.71
+20 seeds, fits at hour 100; scored on fresh 100 h held-out streams, no exploration; '+-' is std over seeds
+prior          eps              fit       utility/h   chosen caps (outcome=clip10-cf | outcome=prior), counts
+uninformed   0.002           biased   1.59 +-  5.70
+uninformed   0.002           clip10 -33.17 +- 22.09
+uninformed   0.002         dr_plain -48.77 +- 72.71
+uninformed   0.002            dr_cf -49.54 +- 73.85
+uninformed   0.002        dr_cf_sel -30.35 +- 59.58   {'1': 4, '5': 1, '20': 1, '100': 6, 'inf': 8} | {'1': 14, '100': 4, 'inf': 2}
+uninformed   0.002  dr_cf_prior_sel   4.87 +-  2.10
+uninformed   0.002   random_matched  12.09 +-  0.62
+uninformed   0.002             full  12.72 +-  0.58
+uninformed   0.005           biased  -0.15 +-  6.29
+uninformed   0.005           clip10 -62.95 +- 34.21
+uninformed   0.005         dr_plain -15.89 +- 53.58
+uninformed   0.005            dr_cf -42.66 +- 74.51
+uninformed   0.005        dr_cf_sel -13.16 +- 28.85   {'1': 8, '5': 3, '20': 3, '100': 2, 'inf': 4} | {'1': 7, '20': 1, '100': 9, 'inf': 3}
+uninformed   0.005  dr_cf_prior_sel  -1.13 +- 36.27
+uninformed   0.005   random_matched  12.13 +-  0.62
+uninformed   0.005             full  12.72 +-  0.58
+uninformed   0.020           biased -13.08 +-  8.66
+uninformed   0.020           clip10 -96.19 +- 87.83
+uninformed   0.020         dr_plain -49.54 +- 77.25
+uninformed   0.020            dr_cf -36.17 +- 72.56
+uninformed   0.020        dr_cf_sel -17.54 +- 58.21   {'1': 9, '5': 1, '20': 4, '100': 6} | {'1': 2, '20': 9, '100': 9}
+uninformed   0.020  dr_cf_prior_sel   0.35 +- 39.22
+uninformed   0.020   random_matched   3.65 +- 38.93
+uninformed   0.020             full  12.72 +-  0.58
+informed     0.002           biased  10.62 +-  0.77
+informed     0.002           clip10  11.70 +-  0.78
+informed     0.002         dr_plain   0.26 +- 41.08
+informed     0.002            dr_cf   2.80 +- 29.09
+informed     0.002        dr_cf_sel   5.15 +- 29.44   {'1': 2, '5': 3, '20': 1, '100': 11, 'inf': 3} | {'5': 5, '20': 2, '100': 10, 'inf': 3}
+informed     0.002  dr_cf_prior_sel  11.79 +-  1.57
+informed     0.002   random_matched  12.48 +-  0.56
+informed     0.002             full  12.72 +-  0.58
+informed     0.005           biased  10.84 +-  0.81
+informed     0.005           clip10  12.15 +-  0.72
+informed     0.005         dr_plain  11.00 +-  1.27
+informed     0.005            dr_cf  10.85 +-  1.34
+informed     0.005        dr_cf_sel  12.13 +-  0.63   {'1': 4, '5': 3, '20': 5, '100': 7, 'inf': 1} | {'1': 1, '5': 4, '20': 2, '100': 11, 'inf': 2}
+informed     0.005  dr_cf_prior_sel  12.30 +-  0.71
+informed     0.005   random_matched  12.48 +-  0.58
+informed     0.005             full  12.72 +-  0.58
+informed     0.020           biased  11.42 +-  0.77
+informed     0.020           clip10  12.52 +-  0.58
+informed     0.020         dr_plain  12.35 +-  0.57
+informed     0.020            dr_cf  12.34 +-  0.57
+informed     0.020        dr_cf_sel  12.51 +-  0.60   {'1': 8, '5': 2, '20': 6, '100': 4} | {'1': 2, '5': 4, '20': 8, '100': 6}
+informed     0.020  dr_cf_prior_sel  12.28 +-  0.54
+informed     0.020   random_matched  12.53 +-  0.56
+informed     0.020             full  12.72 +-  0.58
