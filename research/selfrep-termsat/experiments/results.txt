@@ -1,0 +1,32 @@
+assumed inputs: a=1 per machine-hour; W=50.0 h per copy (selfrep-growth); k=1/W=0.0200/h (no failures); T=600 h; fleet starts at 1
+fluid model, cash free, Euler step 1 h; objective = revenue a c (1-exp(-g/c)) + s x (machines at T); s is a fraction of a/k (assumed)
+J values are Euler values; percentages are of the DP policy's simulated J
+
+== c=inf
+s=   0.0 (0.00 a/k): DP J=   2685743.1 N_T=  53451.6 u<0.5 from t=550 (  1 h interior) | bang-bang ts= 549 100.00% | DP table vs policy +5.56%
+s=  12.5 (0.25 a/k): DP J=   3440063.1 N_T=  68464.1 u<0.5 from t=562 (  1 h interior) | bang-bang ts= 562 100.00% | DP table vs policy +5.69%
+s=  25.0 (0.50 a/k): DP J=   4406246.3 N_T=  87692.9 u<0.5 from t=575 (  1 h interior) | bang-bang ts= 574 100.00% | DP table vs policy +5.77%
+s=  50.0 (1.00 a/k): DP J=   7228914.1 N_T= 143632.1 u<0.5 from t=600 (  1 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  75.0 (1.50 a/k): DP J=  10843371.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+
+== c=10000
+s=   0.0 (0.00 a/k): DP J=    930880.4 N_T=  18301.1 u<0.5 from t=492 ( 90 h interior) | bang-bang ts= 485  95.50% | DP table vs policy +0.25%
+s=  12.5 (0.25 a/k): DP J=   1925664.4 N_T= 128891.3 u<0.5 from t=600 ( 66 h interior) | bang-bang ts= 600  93.85% | DP table vs policy +5.11%
+s=  25.0 (0.50 a/k): DP J=   3633470.3 N_T= 141036.0 u<0.5 from t=600 ( 25 h interior) | bang-bang ts= 600  99.48% | DP table vs policy +5.28%
+s=  50.0 (1.00 a/k): DP J=   7228914.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  75.0 (1.50 a/k): DP J=  10843371.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+
+== c=1000
+s=   0.0 (0.00 a/k): DP J=    201596.4 N_T=   3936.7 u<0.5 from t=398 (194 h interior) | bang-bang ts= 393  93.35% | DP table vs policy -0.17%
+s=  12.5 (0.25 a/k): DP J=   1807228.5 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.35%
+s=  25.0 (0.50 a/k): DP J=   3614457.0 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  50.0 (1.00 a/k): DP J=   7228914.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  75.0 (1.50 a/k): DP J=  10843371.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+
+== c=100
+s=   0.0 (0.00 a/k): DP J=     31702.4 N_T=    615.9 u<0.5 from t=287 (302 h interior) | bang-bang ts= 287  93.51% | DP table vs policy -0.16%
+s=  12.5 (0.25 a/k): DP J=   1807228.5 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  25.0 (0.50 a/k): DP J=   3614457.0 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  50.0 (1.00 a/k): DP J=   7228914.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+s=  75.0 (1.50 a/k): DP J=  10843371.1 N_T= 144578.3 u<0.5 from t=600 (  0 h interior) | bang-bang ts= 600 100.00% | DP table vs policy +5.34%
+

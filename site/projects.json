@@ -1703,6 +1703,11 @@
      "slug": "selfrep-terminal",
      "title": "How does a resale value for the finished fleet move the switch from copies to goods?",
      "summary": "Follow-up to selfrep-reinvest. Giving each machine left at the horizon a value <em>s</em> shortens the goods phase from one e-folding time 1/<em>k</em> to 1/<em>k</em> &minus; <em>s</em>/<em>a</em>, so the switch moves later; at <em>s</em> &ge; <em>a</em>/<em>k</em> (50 per machine with no failures, 29% of the assumed vitamin cost) the shop copies to the end. The grid optimum of the Euler simulation agrees with this closed form to within 1&nbsp;h, and ignoring a terminal value of 12.5&ndash;50 per machine costs 3&ndash;26% of the optimum. Every input is assumed; cash is free and demand unlimited. Stylised."
+    },
+    {
+     "slug": "selfrep-termsat",
+     "title": "With a saturating goods market, how much does a resale value for the fleet change when the shop stops copying?",
+     "summary": "Follow-up to selfrep-terminal and selfrep-satmarket: dynamic programming with terminal reward <em>s</em> per machine in a market with revenue <em>a c</em>(1 &minus; e<sup>&minus;<em>g</em>/<em>c</em></sup>). With unlimited capacity it reproduces the closed-form switch (550&ndash;600&nbsp;h). With capacity 1000 machine-hours per hour or less, <em>s</em> = 0.25&nbsp;<em>a</em>/<em>k</em> is enough for the optimum to copy to the end, because about 1.4&times;10<sup>5</sup> machines at <em>s</em> each dwarf the revenue a saturated market can pay. The DP table is 5&ndash;6% above the simulated policy where the fleet nears the grid edge. Every input is assumed, and a real resale market would saturate too. Stylised."
     }
    ]
   },
