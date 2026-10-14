@@ -1,0 +1,30 @@
+== A. end states, 1.2 met, 0.5 clo, 50% rh, v 0.1, air = radiant temperature. Columns: tsk C, tcr C, wettedness, dry W/m2, evap W/m2 ==
+31 C ours 3h closed .15: 35.23 36.91 0.29    24.8   40.3
+31 C ours 3h open .8  : 34.99 36.89 0.25    31.0   34.1
+31 C ours ss closed .15: 35.23 36.91 0.29    24.8   40.3
+31 C ours ss open .8  : 34.99 36.89 0.25    31.0   34.1
+31 C ref  3h closed .15: 34.86 36.93 0.33    22.1   43.1
+31 C ref  3h open .8  : 34.66 36.92 0.29    27.6   37.5
+31 C ref  ss closed .15: 34.86 36.93 0.33    22.1   43.1
+31 C ref  ss open .8  : 34.66 36.92 0.29    27.6   37.5
+16 C ours 3h closed .15: 27.00 36.75 0.06    61.5    6.4
+16 C ours 3h open .8  : 25.55 36.72 0.06    69.4    5.7
+16 C ours ss closed .15: 27.00 36.75 0.06    61.5    6.4
+16 C ours ss open .8  : 25.55 36.72 0.06    69.4    5.7
+16 C ref  3h closed .15: 27.62 36.78 0.06    63.5    6.6
+16 C ref  3h open .8  : 26.15 36.73 0.06    71.7    5.9
+16 C ref  ss closed .15: 27.15 36.76 0.06    60.9    6.3
+16 C ref  ss open .8  : 25.72 36.72 0.06    68.6    5.7
+
+== B. open minus closed (the value of opening the gate) ==
+31 C ours 3h: dTsk -0.25 C  dTcr -0.02 C  dWet -0.039  dDry +6.2  dEvap -6.2 W/m2
+31 C ours ss: dTsk -0.25 C  dTcr -0.02 C  dWet -0.039  dDry +6.2  dEvap -6.2 W/m2
+31 C ref  3h: dTsk -0.20 C  dTcr -0.02 C  dWet -0.037  dDry +5.5  dEvap -5.5 W/m2
+31 C ref  ss: dTsk -0.20 C  dTcr -0.02 C  dWet -0.037  dDry +5.5  dEvap -5.5 W/m2
+16 C ours 3h: dTsk -1.45 C  dTcr -0.04 C  dWet +0.000  dDry +7.9  dEvap -0.7 W/m2
+16 C ours ss: dTsk -1.45 C  dTcr -0.04 C  dWet +0.000  dDry +7.9  dEvap -0.7 W/m2
+16 C ref  3h: dTsk -1.46 C  dTcr -0.05 C  dWet +0.000  dDry +8.2  dEvap -0.7 W/m2
+16 C ref  ss: dTsk -1.43 C  dTcr -0.04 C  dWet +0.000  dDry +7.7  dEvap -0.7 W/m2
+
+== C. steady state reached? max change tsk/tcr/dry/evap between 1440 and 2880 min ==
+worst change: 0.0000

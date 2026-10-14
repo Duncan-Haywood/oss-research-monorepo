@@ -1837,7 +1837,12 @@
      "slug": "garment-twonodesteady",
      "title": "Do the fabric-optics effects on thermal comfort change once the two-node model reaches steady state?",
      "summary": "Re-runs the switchable two-node comparison of fabric optics (infrared transmittance, emissivity, solar absorptance, insulation) for 24&nbsp;h of model time instead of one hour (stylised, preliminary). In the 28&nbsp;C room, with hot walls and in sun the one-hour effects are already steady. In the 16&nbsp;C room the one-hour disagreement between the repository&rsquo;s design choices and those of <code>pythermalcomfort</code> (ratio 1.9&ndash;2.7) shrinks to 0.89&ndash;0.98 at steady state, so it was mostly a transient-speed difference. A model fixed point, not a claim about people; no fabric or person was measured."
+    },    {
+     "slug": "garment-twonodegate",
+     "title": "Do the bounds for an infrared-gating textile survive other design choices and steady state?",
+     "summary": "Re-runs the closed (infrared transmittance 0.15) and open (0.8) bounds of <code>garment-thermal</code> in the switchable two-node model under the repository&rsquo;s design choices and those of <code>pythermalcomfort</code>, after 3&nbsp;h and at steady state (stylised, preliminary). Opening the gate lowers skin temperature by 0.25 (ours) and 0.20&nbsp;&deg;C (ref) at 31&nbsp;&deg;C and by about 1.45&nbsp;&deg;C at 16&nbsp;&deg;C under both; absolute levels differ by up to 0.4&nbsp;&deg;C. Gate states are held fixed (no switching dynamics) and the reference has no optics of its own, so agreement is between two implementations of one model family, not validation against people."
     },
+
     {
      "slug": "garment-comfortcost",
      "title": "What does a degree of comfort cost in fabric?",
