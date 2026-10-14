@@ -1,0 +1,21 @@
+Assumed: load 2.5 N per rod at midspan, span 405 mm, deflection tolerance 0.20 mm, steel E 200 GPa
+
+midspan deflection of an 8 mm rod (mm) and diameter needed to match steel / meet tolerance (mm)
+material            E(GPa)  defl@8mm  vs steel  d_match  d_tol  mass of 6-rod set at d_match (g)
+steel               200.0     0.086     1.0x     8.0    6.5       927
+beech, E=9.5          9.5     1.811    21.1x    17.1   13.9       379
+beech, E=11.9        11.9     1.446    16.8x    16.2   13.1       339
+beech, E=13          13.0     1.324    15.4x    15.8   12.8       324
+PLA, E=2              2.0     8.604   100.0x    25.3   20.5      1465
+PLA, E=3.5            3.5     4.917    57.1x    22.0   17.8      1107
+
+smooth-rod set mass: steel 8 mm 927 g (selfrep-closure: 2*140+2*160+2*165=930 g); beech 8 mm 83 g; beech matched (16.2 mm) 339 g; selfrep-redesign assumed 6*30 = 180 g
+
+closure (lines/mass/cost, printer+router+laser shop):
+  baseline (steel rods, LM8UU)                     43.1%/ 22.4%/ 15.9%   vitamin lines 29
+  redesign's assumed dowel (180 g, LM8UU kept)     46.9%/ 28.6%/ 17.5%   vitamin lines 26
+  beech 8 mm, geometric mass, LM8UU kept           46.9%/ 27.3%/ 17.5%   vitamin lines 26
+  beech matched 16.2 mm + printed bushings         49.0%/ 31.7%/ 20.8%   vitamin lines 25
+  redesign: printed bushings + assumed dowel       49.0%/ 29.8%/ 20.8%   vitamin lines 25
+
+note: closure counts the makeable share of part mass; a bigger makeable rod raises mass closure without the printer needing fewer vitamins. Vitamin lines are the fairer comparison.
