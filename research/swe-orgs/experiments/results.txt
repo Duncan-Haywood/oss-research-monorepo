@@ -1,0 +1,12 @@
+catalogue: 7 practices
+  by evidence: {'case-study': 3, 'measured': 3, 'opinion': 1}
+  by stage: {'growth': 3, 'large': 4}
+  by carries_over: {'no': 2, 'partly': 3, 'yes': 2}
+  by status: {'already-in-loop': 3, 'candidate': 2, 'not-proposed': 2}
+
+ledger headroom (prompts/runs.jsonl, 265 rows; share with the failure signal, Wilson 95%)
+  not_success                7/265 = 0.026  [0.013, 0.054]
+  ci_failed_before_green     0/177 = 0.000  [0.000, 0.021]
+  review_findings            0/193 = 0.000  [0.000, 0.020]
+  integrity_run              1/265 = 0.004  [0.001, 0.021]
+  parallel_collision         3/265 = 0.011  [0.004, 0.033]

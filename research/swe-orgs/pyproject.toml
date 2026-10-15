@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swe-orgs"
+version = "0.1.0"
+description = "A cited catalogue of engineering-organisation practices, mapped to this portfolio's agent loop, with a ledger headroom check"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
